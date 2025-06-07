@@ -1,0 +1,14 @@
+.page_content_dashboard{
+    display: grid;
+    grid-template-columns: 30vw 30vw 30vw;
+    grid-template-rows: auto;
+}
+
+.card_dashboard{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+    margin: 5%;
+
+    min-height: 25vh;
+
+    text-align: center;
+}
