@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, ButtonGroup, Card, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slider, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonGroup, Card, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slider, TextField, ToggleButton, Toolbar, Typography } from '@mui/material';
 import '../../../css/BottomMusicControl.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -8,15 +8,21 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import { useSelectedSongStore } from '../../../state_stores/MusicStateStores';
 
 export const BottomMusicControl = () => {
     const [seek, setSeek] = React.useState(30);
-    const [playState, setPlay] = React.useState(false);
+    const [volume, setVolume] = React.useState(50);
+
+    const updatePlayState = useSelectedSongStore((state) => state.setPlayState)
+    const PlayState = useSelectedSongStore((state) => state.playState)
 
     const userSeekChange = (event: Event, newValue: number) => {
         setSeek(newValue);
+    };
 
-        //add code to 
+    const userVolumeChange = (event: Event, newValue: number) => {
+        setVolume(newValue);
     };
 
 
@@ -32,7 +38,7 @@ export const BottomMusicControl = () => {
 
                             <div className='centered_control_bottommusiccontrol'>
                                 <Button><ArrowBackIosNewIcon/></Button>
-                                <Button><PlayCircleIcon/></Button>
+                                <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
                                 <Button><ArrowForwardIosIcon/></Button>
                             </div>
 
@@ -41,8 +47,13 @@ export const BottomMusicControl = () => {
                             </Toolbar>
                         </div>
                         
+                        <div>
+                            <div className='centered_control_bottommusiccontrol' style={{marginTop: "2.3vh"}}>
+                                Volume
+                            </div>
                         
-                        <Toolbar></Toolbar>
+                            <Toolbar> <Slider size="small" aria-label="Volume" value={seek} onChange={userSeekChange} /> </Toolbar>
+                        </div>
                     </div>
                     
                 </AppBar>

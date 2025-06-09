@@ -53,44 +53,56 @@ const dataRowSX: SxProps = {
 
 type SongTableProps = { //constructor variables
   sMetaData: SongMetaData[] | null
-  setSelectedDataFunction: (data:SongMetaData) => void
+  selectedPlayDataFunction: (data:SongMetaData) => void
+  selectedInfoCardFunction : (data:SongMetaData) => void
 };
 
-export const SongTable = ({sMetaData, setSelectedDataFunction}: SongTableProps) => { 
-    return (
-        <div className=''>
-            <TableContainer component={Paper} sx={{ maxHeight: "93vh", width: "80vw"}}>
-                <Table aria-label="simple table">
-                    <TableHead>
-                        <TableHeaderRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell align="right">Length</TableCell>
-                            <TableCell align="right">Artist</TableCell>
-                            <TableCell align="right">Genre</TableCell>
-                            <TableCell align="right">Play Count</TableCell>
-                            <TableCell align="right">Bit Rate</TableCell>
-                        </TableHeaderRow>
-                    </TableHead>
-                    <TableBody>
+export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCardFunction}: SongTableProps) => { 
+  const [highlighted, setHighlighted] = useState();
 
-                    {//https://stackoverflow.com/questions/54045094/use-buttonbase-for-ripple-effect-on-material-ui-tablerow
-                    sMetaData ? sMetaData.map((sMetaData) => (
-                        <ButtonBase key={sMetaData.id} component={TableRow} sx={dataRowSX} onClick={() => setSelectedDataFunction(sMetaData)}>  
-                                <TableCell component="th" scope="row">{sMetaData.name}</TableCell>
-                                <TableCell align="right">{Math.round(sMetaData.length)}</TableCell>
-                                <TableCell align="right">{sMetaData.artist}</TableCell>
-                                <TableCell align="right">{sMetaData.genre}</TableCell>
-                                <TableCell align="right">{sMetaData.playCount}</TableCell>
-                                <TableCell align="right">{Math.round(sMetaData.bitrate)}</TableCell>    
-                        </ButtonBase>
-                    )) : null
-                    }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </div>
+  function ActiveSong(){
+    
+  }
 
-    );
+  return (
+      <div className=''>
+          <TableContainer component={Paper} sx={{ maxHeight: "83vh", width: "80vw"}}>
+              <Table aria-label="simple table">
+                  <TableHead>
+                      <TableHeaderRow>
+                          <TableCell>Name</TableCell>
+                          <TableCell align="right">Length</TableCell>
+                          <TableCell align="right">Artist</TableCell>
+                          <TableCell align="right">Genre</TableCell>
+                          <TableCell align="right">Play Count</TableCell>
+                          <TableCell align="right">Bit Rate</TableCell>
+                      </TableHeaderRow>
+                  </TableHead>
+                  <TableBody>
+
+                  {//https://stackoverflow.com/questions/54045094/use-buttonbase-for-ripple-effect-on-material-ui-tablerow
+                  sMetaData ? sMetaData.map((sMetaData) => (
+                      <Button className='row_songtable' key={sMetaData.id} component={TableRow} sx={dataRowSX} onClick={() => selectedInfoCardFunction(sMetaData)} onDoubleClick=
+                      {(e) => {
+                        selectedPlayDataFunction(sMetaData);
+
+                      } }> 
+
+                              <TableCell component="th" scope="row">{sMetaData.name}</TableCell>
+                              <TableCell align="right">{Math.round(sMetaData.length)}</TableCell>
+                              <TableCell align="right">{sMetaData.artist}</TableCell>
+                              <TableCell align="right">{sMetaData.genre}</TableCell>
+                              <TableCell align="right">{sMetaData.playCount}</TableCell>
+                              <TableCell align="right">{Math.round(sMetaData.bitrate)}</TableCell>    
+                      </Button>
+                  )) : null
+                  }
+                  </TableBody>
+              </Table>
+          </TableContainer>
+      </div>
+
+  );
 
 
 

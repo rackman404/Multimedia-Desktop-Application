@@ -15,7 +15,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
   const [cover, setCover] = useState<string>(placeholderImage);
 
   useEffect(() => {
-    console.log("cover image" +  sMetaData?.coverImage);
+    //console.log("cover image" +  sMetaData?.coverImage);
     var cImg = placeholderImage;
       if(sMetaData.coverImage != null){
         cImg = sMetaData.coverImage;

@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { LeftAudioSidebar } from './components/static/Audio/LeftAudioSidebar';
 import { TopHeader } from './components/static/TopHeader';
 import { BottomMusicControl } from './components/static/Audio/BottomMusicControl';
+import MusicController from './views/audio/MusicController';
 
 const theme = createTheme({
   colorSchemes: {
@@ -58,7 +59,7 @@ export default function App() {
 
 
 
-        <Route path="/audio/music" element={<><BottomMusicControl/> <LeftAudioSidebar/> <Outlet/></>} > 
+        <Route path="/audio/music" element={<><MusicController/></>} > 
           <Route path="/audio/music/home" element={<MusicHome/>} />
           <Route path="/audio/music/playlists" element={<MusicPlayLists />} />
         </Route>

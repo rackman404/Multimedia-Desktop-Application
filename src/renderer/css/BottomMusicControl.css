@@ -3,17 +3,18 @@
     left:20vw;
     bottom:100px;
     height:1px;
-    width:60vw;  
+    width:80vw;  
     z-index: 10000;
 }
 
 .horizontal_grid_bottommusiccontrol{
     display: grid;
-    grid-template-columns: 10vw 40vw 10vw;
+    grid-template-columns: 10vw 40vw 30vw;
     grid-template-rows: auto;
 }
 
 .centered_control_bottommusiccontrol{
     display: flex;
     justify-content: center;
+    margin-top: 0.5vh;
 }
