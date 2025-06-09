@@ -5,24 +5,52 @@ import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import placeholderImage from '../../../../../../assets/icons/256x256.png';
-import { SongMetaData } from '../../../../../types';
+import { SongMetaData, SongMetaDataSimple } from '../../../../../types';
 
 type SongInfoProps = { //constructor variables
-  sMetaData: SongMetaData
+  sMetaData: SongMetaDataSimple
 }
 
 export const SongInfoCard = ({sMetaData} : SongInfoProps) => { 
   const [cover, setCover] = useState<string>(placeholderImage);
+  const [fullMetaData, setFullMetaData] = useState<SongMetaData>({
+format: sMetaData.metadataFormat,
+    fileSize: 0,
+    metadataFormat: "",
+    id: sMetaData.id,
+    name: sMetaData.name,
+    length: sMetaData.length,
+    artist: sMetaData.artist,
+    album: sMetaData.album,
+    genre: sMetaData.genre,
+    playCount: sMetaData.playCount,
+    bitrate: sMetaData.bitrate,
+    coverImage: "",
+    coverImageFormat: "",
+    songRawPath: "",
+    comment: "",
+  });
+
 
   useEffect(() => {
-    //console.log("cover image" +  sMetaData?.coverImage);
-    var cImg = placeholderImage;
-      if(sMetaData.coverImage != null){
-        cImg = sMetaData.coverImage;
-        cImg = 'data:' + sMetaData.coverImageFormat + ';base64,'+ cImg;
+
+    (async () => {
+      if (sMetaData.songRawPath != ""){
+        const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", sMetaData.id, sMetaData.songRawPath]);
+        //console.log("cover image" +  sMetaData?.coverImage);
+        var cImg = placeholderImage;
+        if(result.coverImage != null){
+          cImg = result.coverImage;
+          cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
+        }
+  
+        setFullMetaData(result);
+        setCover(cImg);
+
       }
 
-      setCover(cImg);
+    })();
+
 
   }, [sMetaData]);
 
@@ -45,24 +73,24 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
                   sx={{objectFit: "contain" }}
                 />
 
-                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{sMetaData?.artist}<br/></Typography>
+                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist}<br/></Typography>
 
                 <Divider/>
                 <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Song Detail<br/></Typography>
                 <div style={{ textAlign: "left", padding: "5px"}}>
-                  <Typography variant="body2" >Genre: {sMetaData?.genre}<br/></Typography>
-                  <Typography variant="body2" >Artist: {sMetaData?.artist}<br/></Typography>
-                  <Typography variant="body2" >Album: {sMetaData?.album}<br/></Typography>
-                  <Typography variant="body2" >Length: {sMetaData?.length}<br/></Typography>
+                  <Typography variant="body2" >Genre: {fullMetaData?.genre}<br/></Typography>
+                  <Typography variant="body2" >Artist: {fullMetaData?.artist}<br/></Typography>
+                  <Typography variant="body2" >Album: {fullMetaData?.album}<br/></Typography>
+                  <Typography variant="body2" >Length: {fullMetaData?.length}<br/></Typography>
                 </div>
 
                 <Divider/>
                 <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Technical Detail<br/></Typography>
                 <div style={{ textAlign: "left", paddingRight: "5px"}}>
-                  <Typography variant="body2" >Bitrate: {sMetaData?.bitrate}<br/></Typography>
-                  <Typography variant="body2" >Format: {sMetaData?.format}<br/></Typography>
-                  <Typography variant="body2" >Embedded Comment: {sMetaData?.comment}<br/></Typography>
-                  <Typography variant="body2" >File Location: {sMetaData?.songRawPath} <br/></Typography>
+                  <Typography variant="body2" >Bitrate: {fullMetaData?.bitrate}<br/></Typography>
+                  <Typography variant="body2" >Format: {fullMetaData?.format}<br/></Typography>
+                  <Typography variant="body2" >Embedded Comment: {fullMetaData?.comment}<br/></Typography>
+                  <Typography variant="body2" >File Location: {fullMetaData?.songRawPath} <br/></Typography>
                 </div>
 
                 <Divider/>

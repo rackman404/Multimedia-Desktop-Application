@@ -12,6 +12,8 @@ interface ISelectedSongState {
   setPlayState: (newPlayState: boolean) => void
   currentSeek: number
   setCurrentSeek: (newCurrentSeek: number) => void
+  currentVolume: number
+  setCurrentVolume: (newCurrentVolume: number) => void
 
   currentPlayer: Howl | null
   setCurrentPlayer: (newPlayer: Howl | null) => void
@@ -36,12 +38,14 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
     comment: ''
   },
   setSelectedPlaySongMetaData: (newSelectedPlaySongMetaData) =>set((state) => ({ selectedPlaySongMetaData: newSelectedPlaySongMetaData })),
-  playState: false, //note that this causes a trailing garbage error, likely hard
+  playState: false, 
   setPlayState: (newPlayState) =>set((state) => ({ playState: newPlayState })),
-  currentSeek: 0, //note that this causes a trailing garbage error, likely hard
+  currentSeek: 0, 
   setCurrentSeek: (newCurrentSeek) =>set((state) => ({ currentSeek: newCurrentSeek })),
-  currentPlayer: null, //note that this causes a trailing garbage error, likely hard
+  currentVolume: 100,
+  setCurrentVolume: (newCurrentVolume) =>set((state) => ({ currentVolume: newCurrentVolume })),
+  currentPlayer: null, 
   setCurrentPlayer: (newPlayer) =>set((state) => ({ currentPlayer: newPlayer })),
-  allSongMetaData: null, //note that this causes a trailing garbage error, likely hard
+  allSongMetaData: null, 
   setAllSongMetaData: (newAllSongMetaData) =>set((state) => ({ allSongMetaData: newAllSongMetaData }))
 }))

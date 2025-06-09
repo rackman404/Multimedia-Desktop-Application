@@ -16,17 +16,18 @@ import { useSelectedSongStore } from '../../../state_stores/MusicStateStores';
 
 type MusicControlProps = { //constructor variables
   setSeek: (newSeek:number) => void
-
+  setVolume: (newVolume: number)  => void
 };
 
-export const BottomMusicControl = ({setSeek}:MusicControlProps) => {
-    const [volume, setVolume] = React.useState(50);
+export const BottomMusicControl = ({setSeek, setVolume}:MusicControlProps) => {
+    
 
-    const updatePlayState = useSelectedSongStore((state) => state.setPlayState)
-    const PlayState = useSelectedSongStore((state) => state.playState)
-    const currentSeek = useSelectedSongStore((state) => state.currentSeek)
+    const updatePlayState = useSelectedSongStore((state) => state.setPlayState);
+    const PlayState = useSelectedSongStore((state) => state.playState);
+    const currentSeek = useSelectedSongStore((state) => state.currentSeek);
+    const currentVolume = useSelectedSongStore((state) => state.currentVolume);
 
-    const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData)
+    const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
 
     const userSeekChange = (event: Event, newValue: number) => {
         setSeek(newValue);
@@ -63,7 +64,7 @@ export const BottomMusicControl = ({setSeek}:MusicControlProps) => {
                                 Volume
                             </div>
                         
-                            <Toolbar> <Slider size="small" aria-label="Volume" value={volume} onChange={userSeekChange} /> </Toolbar>
+                            <Toolbar> <Slider size="small" aria-label="Volume" value={currentVolume} max={100} onChange={userVolumeChange} /> </Toolbar>
                         </div>
                     </div>
                     

@@ -9,14 +9,15 @@ import { BottomMusicControl } from '../../components/static/Audio/BottomMusicCon
 import { Outlet, useNavigate } from 'react-router-dom';
 import {useSelectedSongStore } from '../../state_stores/MusicStateStores';
 
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 
 export const Layout = () => {
     const playState = useSelectedSongStore((state) => state.playState);
     const setPlayState = useSelectedSongStore((state) => state.setPlayState);
 
-    const currentSeek = useSelectedSongStore((state) => state.currentSeek);
+    
     const setSeek = useSelectedSongStore((state) => state.setCurrentSeek);
+    const setVolume = useSelectedSongStore((state) => state.setCurrentVolume);
 
     const selectedPlaySongMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
     const setSelectedPlaySongMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
@@ -32,14 +33,19 @@ export const Layout = () => {
         
 
         if (allSongMetaData != null){
-            if (allSongMetaData[selectedPlaySongMetaData.id + 1] != undefined){
+            if ((selectedPlaySongMetaData.id + 1) < allSongMetaData.length ){
+                console.log((selectedPlaySongMetaData.id + 1) + " " + allSongMetaData[selectedPlaySongMetaData.id].name);
                 setSelectedPlaySongMetaData(allSongMetaData[selectedPlaySongMetaData.id + 1]);
+            }
+            else{
+                setPlayState(false);
+                setTrackObject(null);
             }
 
         }
         
-        //setTrackObject(null);
-        //setPlayState(false);
+
+
     });
     
     useEffect(() => {// pause and play song
@@ -51,7 +57,7 @@ export const Layout = () => {
             }
             else{
                 if (selectedPlaySongMetaData.songRawPath != ""){
-                    var newHowl = new Howl({src: selectedPlaySongMetaData.songRawPath, html5: false});
+                    var newHowl = new Howl({src: selectedPlaySongMetaData.songRawPath, html5: true});
                     newHowl.play();
                     setTrackObject(newHowl);
                 }
@@ -77,8 +83,7 @@ export const Layout = () => {
         trackObject?.unload();
         
         if (selectedPlaySongMetaData.songRawPath != ""){
-            var newHowl = new Howl({src: selectedPlaySongMetaData.songRawPath, html5: false});
-
+            var newHowl = new Howl({src: selectedPlaySongMetaData.songRawPath, html5: true});
             newHowl.play();
             setTrackObject(newHowl);
             setPlayState(true);
@@ -93,7 +98,7 @@ export const Layout = () => {
                 
                 if (playState == true){      
                     if (trackObject != null){        
-                        console.log("music controller, current song seek is: " + trackObject?.seek());             
+                        //console.log("music controller, current song seek is: " + trackObject?.seek());             
                         setSeek(trackObject.seek());                       
                     }
                 }
@@ -118,12 +123,19 @@ export const Layout = () => {
             setSeek(newSeek);
         }
     }
+
+    function changeVolume(newVolume: number){
+        if (trackObject != null){
+            Howler.volume(newVolume/100);
+            setVolume(newVolume);
+        }
+    }
     
 
     return (
         
         <div>
-            <><BottomMusicControl setSeek={changeSeek}/> <LeftAudioSidebar/> <Outlet/></>
+            <><BottomMusicControl setSeek={changeSeek} setVolume={changeVolume}/> <LeftAudioSidebar/> <Outlet/></>
         </div>
     )
   };

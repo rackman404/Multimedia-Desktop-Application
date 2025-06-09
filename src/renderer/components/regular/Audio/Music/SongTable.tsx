@@ -25,9 +25,9 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
 
   async function selectFullDataInfoCard(rowData: SongMetaDataSimple){
 
-    const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", rowData.id, rowData.songRawPath]);
+    //const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", rowData.id, rowData.songRawPath]);
     
-    selectedInfoCardFunction(result);
+    selectedInfoCardFunction(rowData);
   }
 
   return (
@@ -42,6 +42,7 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                           <TableCell align="right">Genre</TableCell>
                           <TableCell align="right">Play Count</TableCell>
                           <TableCell align="right">Bit Rate</TableCell>
+                          <TableCell align="right">Internal ID</TableCell>
                       </TableHeaderRow>
                   </TableHead>
                   <TableBody>
@@ -60,6 +61,7 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                               <TableCell align="right">{sMetaData.genre}</TableCell>
                               <TableCell align="right">{sMetaData.playCount}</TableCell>
                               <TableCell align="right">{Math.round(sMetaData.bitrate)}</TableCell>    
+                              <TableCell align="right">{Math.round(sMetaData.id)}</TableCell>    
                       </Button>
                   )) : null
                   }

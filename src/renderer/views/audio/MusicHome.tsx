@@ -23,14 +23,12 @@ export const Layout = () => {
         album: ''
     }]);
 
-    //const selectedPlayMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+    const selectedPlayMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
     const setSelectedPlayMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
     const setAllMetaData = useSelectedSongStore((state) => state.setAllSongMetaData);
 
-    const [selectedInfoCardMetaData, setSelectedInfoCardMetaData] = useState<SongMetaData>({
+    const [selectedInfoCardMetaData, setSelectedInfoCardMetaData] = useState<SongMetaDataSimple>({
         name: "NO MUSIC",
-        format: '',
-        fileSize: 0,
         metadataFormat: '',
         id: 0,
         length: 0,
@@ -38,21 +36,24 @@ export const Layout = () => {
         genre: [],
         playCount: 0,
         bitrate: 0,
-        coverImage: '',
         songRawPath: '',
-        album: '',
-        comment: '',
-        coverImageFormat: ''
+        album: ''
     });
 
-    useEffect(() => {
+    useEffect(() => {//initial load
         (async () => {
+            console.log("LOADING MUSIC DATA");
             const result = await window.electron.ipcRenderer.invoke('audio', ["get_all_metadata_simple"]);
             setMetaData(result);         
             setAllMetaData(result);
     })();
         
     }, []); 
+
+    useEffect(() => {
+        setSelectedInfoCardMetaData(selectedPlayMetaData);
+        
+    }, [selectedPlayMetaData, metaData]); 
 
     
     useEffect(() => {
@@ -67,8 +68,6 @@ export const Layout = () => {
     }, [refreshState]); 
     
 
-
-    
 
     return (
         <div className='content_musichome'>
