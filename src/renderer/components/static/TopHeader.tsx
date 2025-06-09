@@ -30,8 +30,9 @@ export const TopHeader = () => {
                         <Divider orientation="vertical" variant="middle" flexItem />
 
                         <Card >
-                            <Chip label="FFmpeg" variant="filled" sx={{margin: "5px"}}/>   
-                            <LinkButton component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Audio Edit")}} variant="contained">Conversion</LinkButton>
+                            <Chip label="Audio Utils" variant="filled" sx={{margin: "5px"}}/>   
+                            <LinkButton component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Audio Edit")}} variant="contained">FFmpeg</LinkButton>
+                            <LinkButton component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Audio Edit")}} variant="contained">Soulseek</LinkButton>
                         </Card>
                         
                         

@@ -14,7 +14,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { AudioManager } from '../services/audio_service/audio_controller';
+
+import { AudioManager } from './services/audio_service/audioManager';
 
 class AppUpdater {
   constructor() {
@@ -156,14 +157,22 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 
 ipcMain.on('audio', async (event, arg) => {
-  if (arg == ""){
-    audioManager.broker.eventHandle(event, arg);
+  if (arg != ""){
+    audioManager.broker.eventOn(event, arg);
   }
   else{
-    event.reply('audio', console.log("Undefined ipc request from bus audio"));
+    event.reply('audio', console.log("Undefined ipc one way from bus audio"));
   }
 
 });
+
+ipcMain.handle('audio', async (event, arg) => {
+    if (arg != ""){
+      return audioManager.broker.eventHandle(event, arg);
+    }
+  }
+
+);
 
 //-----------------
 

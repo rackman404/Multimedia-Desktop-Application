@@ -1,9 +1,10 @@
 import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, Checkbox, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import './SongTable.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { TableHeaderRow } from '../../../../elements/CustomButtons';
+import { SongMetaData } from '../../../../../types';
 
 
 function sampleCreateData(
@@ -49,12 +50,16 @@ const dataRowSX: SxProps = {
   },
 };
 
-export const SongTable = () => { 
-    const [currentViewText, setCurrentViewText] = React.useState("Dashboard");
 
+type SongTableProps = { //constructor variables
+  sMetaData: SongMetaData[] | null
+  setSelectedDataFunction: (data:SongMetaData) => void
+};
+
+export const SongTable = ({sMetaData, setSelectedDataFunction}: SongTableProps) => { 
     return (
-        <div className='songtable'>
-            <TableContainer component={Paper} sx={{ maxHeight: "93vh", width: "99vw"}}>
+        <div className=''>
+            <TableContainer component={Paper} sx={{ maxHeight: "93vh", width: "80vw"}}>
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableHeaderRow>
@@ -67,18 +72,19 @@ export const SongTable = () => {
                         </TableHeaderRow>
                     </TableHead>
                     <TableBody>
+
                     {//https://stackoverflow.com/questions/54045094/use-buttonbase-for-ripple-effect-on-material-ui-tablerow
-                    sampleRows.map((sampleRows) => (
-                        <ButtonBase key={sampleRows.name} component={TableRow} sx={dataRowSX}>  
-                                <TableCell component="th" scope="row">{sampleRows.name}</TableCell>
-                                <TableCell align="right">{sampleRows.length}</TableCell>
-                                <TableCell align="right">{sampleRows.artist}</TableCell>
-                                <TableCell align="right">{sampleRows.genre}</TableCell>
-                                <TableCell align="right">{sampleRows.playCount}</TableCell>
-                                <TableCell align="right">{sampleRows.bitrate}</TableCell>
-                            
+                    sMetaData ? sMetaData.map((sMetaData) => (
+                        <ButtonBase key={sMetaData.id} component={TableRow} sx={dataRowSX} onClick={() => setSelectedDataFunction(sMetaData)}>  
+                                <TableCell component="th" scope="row">{sMetaData.name}</TableCell>
+                                <TableCell align="right">{Math.round(sMetaData.length)}</TableCell>
+                                <TableCell align="right">{sMetaData.artist}</TableCell>
+                                <TableCell align="right">{sMetaData.genre}</TableCell>
+                                <TableCell align="right">{sMetaData.playCount}</TableCell>
+                                <TableCell align="right">{Math.round(sMetaData.bitrate)}</TableCell>    
                         </ButtonBase>
-                    ))}
+                    )) : null
+                    }
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -15,7 +15,7 @@ export const LeftAudioSidebar = () => {
     };
 
       const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box sx={{ width: '20vw' }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
           <ListItem key={text} disablePadding>
