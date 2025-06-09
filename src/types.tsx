@@ -15,6 +15,7 @@ export type SongMetaData = {
     bitrate: number, //in kbps (-1 if no bitrate can be provided)
 
     coverImage: string
+    coverImageFormat: string
 
     //misc data
     songRawPath: string,

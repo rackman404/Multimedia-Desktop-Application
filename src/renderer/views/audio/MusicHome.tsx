@@ -21,7 +21,8 @@ export const Layout = () => {
         coverImage: '',
         songRawPath: '',
         album: '',
-        comment: ''
+        comment: '',
+        coverImageFormat: ''
     }]);
 
     const [selectedMetaData, setSelectedMetaData] = useState<SongMetaData>({
@@ -38,7 +39,8 @@ export const Layout = () => {
         coverImage: '',
         songRawPath: '',
         album: '',
-        comment: ''
+        comment: '',
+        coverImageFormat: ''
     });
 
         useEffect(() => {

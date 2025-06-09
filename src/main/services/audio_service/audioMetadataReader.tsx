@@ -32,6 +32,16 @@ const defaultSomeType = {
 }
     */
 
+function _arrayBufferToBase64( buffer: any ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return btoa( binary );
+}
+
 export class AudioMetadataReader{
     
 
@@ -52,14 +62,21 @@ export class AudioMetadataReader{
 
 
         const metadata = await mm.parseFile(file_path);
-        var temp = mm.selectCover(metadata.common.picture) ?? null;
-        
-        //https://stackoverflow.com/questions/44725664/extract-album-art-image-from-html5-audio-after-metadata-loads-using-javascript 
+        if (metadata.common.picture?.length != undefined){
+            var temp = metadata.common.picture[0] ?? null;
+            
 
-        //to read image: imgElement.src = `data:${picture.format};base64,${base64String}`;
-        if (temp != null){
-            //sMetadata.coverImage = btoa(String.fromCharCode(...new Uint8Array(temp.data)));
+            //https://stackoverflow.com/questions/44725664/extract-album-art-image-from-html5-audio-after-metadata-loads-using-javascript 
+
+            //to read image: imgElement.src = `data:${picture.format};base64,${base64String}`;
+            if (temp != null){
+                //sMetadata.coverImage = btoa(String.fromCharCode(...new Uint8Array(temp.data)));
+                sMetadata.coverImage = _arrayBufferToBase64(temp.data);
+                sMetadata.coverImageFormat = metadata.common.picture[0].format;
+                
+            }
         }
+        
         
         sMetadata.bitrate = metadata.format.bitrate ?? -1 
         if (sMetadata.bitrate != -1){
