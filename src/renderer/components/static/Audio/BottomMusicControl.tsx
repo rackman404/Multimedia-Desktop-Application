@@ -10,12 +10,23 @@ import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { useSelectedSongStore } from '../../../state_stores/MusicStateStores';
 
-export const BottomMusicControl = () => {
-    const [seek, setSeek] = React.useState(30);
+
+
+
+
+type MusicControlProps = { //constructor variables
+  setSeek: (newSeek:number) => void
+
+};
+
+export const BottomMusicControl = ({setSeek}:MusicControlProps) => {
     const [volume, setVolume] = React.useState(50);
 
     const updatePlayState = useSelectedSongStore((state) => state.setPlayState)
     const PlayState = useSelectedSongStore((state) => state.playState)
+    const currentSeek = useSelectedSongStore((state) => state.currentSeek)
+
+    const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData)
 
     const userSeekChange = (event: Event, newValue: number) => {
         setSeek(newValue);
@@ -43,7 +54,7 @@ export const BottomMusicControl = () => {
                             </div>
 
                             <Toolbar>
-                                <Slider size="small" aria-label="Volume" value={seek} onChange={userSeekChange} />
+                                <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} onChange={userSeekChange} />
                             </Toolbar>
                         </div>
                         
@@ -52,7 +63,7 @@ export const BottomMusicControl = () => {
                                 Volume
                             </div>
                         
-                            <Toolbar> <Slider size="small" aria-label="Volume" value={seek} onChange={userSeekChange} /> </Toolbar>
+                            <Toolbar> <Slider size="small" aria-label="Volume" value={volume} onChange={userSeekChange} /> </Toolbar>
                         </div>
                     </div>
                     

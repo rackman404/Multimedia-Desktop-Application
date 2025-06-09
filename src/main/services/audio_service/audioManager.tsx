@@ -5,15 +5,22 @@ import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
-import { SongMetaData } from "../../../types";
+import { SongMetaData, SongMetaDataSimple } from "../../../types";
+import { PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
 
-
+type MetaDatas = {
+    full: SongMetaData[],
+    simple: SongMetaDataSimple[]
+}
 
 export class AudioManager{
     broker: AudioBroker;
     audioPlayback: AudioPlayBackController;
     audioMetadata: AudioMetadataReader;
     fileMusicPath: string;
+
+    songMetaDataFull: SongMetaData[] | undefined
+    songMetaDataSimple: SongMetaDataSimple[] | undefined
 
     constructor() {
         this.broker = new AudioBroker(this);
@@ -25,27 +32,100 @@ export class AudioManager{
             this.fileMusicPath = path.join(this.fileMusicPath, '../../_sample_development_folder/sample_music');
 
             console.log("audio manager dev file path: " + this.fileMusicPath);
-            
-
-            this.getAllSongData();
         }
         else{
-            this.fileMusicPath = __dirname;
+            this.fileMusicPath = PRODUCTIONMUSICFILEDIRECTORY;
+            //this.fileMusicPath = "";
         }
     }
 
-    async getAllSongData(): Promise<SongMetaData[]>{
+    async refreshData(){
+        this.getSongDataAll().then((result) => {
+            this.songMetaDataFull = result.full;
+            this.songMetaDataSimple = result.simple;
+        });
+    }
+
+    async getSongDataAll(): Promise<MetaDatas>{
+        var songsPath = fs.readdirSync(this.fileMusicPath);
+
+        var datas = {} as MetaDatas;
+
+        var songDataSimple = [] as SongMetaDataSimple[];
+        var songData = [] as SongMetaData[];
+
+        for (var i = 0; i < songsPath.length; i++){
+            songData.push(await this.audioMetadata.readMetaData(i, path.join(this.fileMusicPath, songsPath[i])));
+            songDataSimple.push({
+                metadataFormat: songData[i].metadataFormat,
+                id: i,
+                name: songData[i].metadataFormat,
+                length: songData[i].length,
+                artist: songData[i].artist,
+                album: songData[i].album,
+                genre: songData[i].genre,
+                playCount: songData[i].playCount,
+                bitrate: songData[i].bitrate,
+                songRawPath: songData[i].metadataFormat
+            })
+        }
+
+        datas.full = songData;
+
+        return datas;
+    }
+
+    async requestSimple(): Promise<SongMetaDataSimple[] | undefined>{
+        return this.songMetaDataSimple;
+    }
+
+    async requestFull(): Promise<SongMetaDataSimple[] | undefined>{
+        return this.songMetaDataFull;
+    }
+
+    //TEMP
+    async getAllSongData(): Promise<SongMetaData[] | undefined>{
         var songsPath = fs.readdirSync(this.fileMusicPath);
 
         var songData = [] as SongMetaData[];
 
         for (var i = 0; i < songsPath.length; i++){
             songData.push(await this.audioMetadata.readMetaData(i, path.join(this.fileMusicPath, songsPath[i])));
-        }
-
-        
+        }  
         return songData;
-
     }
 
+    //------- public methods
+
+
+    async getAllSongDataSimple(): Promise<SongMetaDataSimple[] | undefined>{
+        var songsPath = fs.readdirSync(this.fileMusicPath);
+
+        var songData = [] as SongMetaDataSimple[];
+
+        for (var i = 0; i < songsPath.length; i++){
+            songData.push(await this.audioMetadata.readMetaDataSimple(i, path.join(this.fileMusicPath, songsPath[i])));
+        }  
+        return songData;
+    }
+
+   async getAllSongDataFull(): Promise<SongMetaData[] | undefined>{
+        var songsPath = fs.readdirSync(this.fileMusicPath);
+
+        var songData = [] as SongMetaData[];
+
+        for (var i = 0; i < songsPath.length; i++){
+            songData.push(await this.audioMetadata.readMetaDataFull(i, path.join(this.fileMusicPath, songsPath[i])));
+        }  
+        return songData;
+    }
+
+    async getSpecifiedSongDataFull(id: number, song_path: string): Promise<SongMetaDataSimple | undefined>{
+        var songsPath = fs.readdirSync(this.fileMusicPath);
+        var songDataFull: SongMetaData;
+
+        songDataFull = (await this.audioMetadata.readMetaDataFull(id, song_path)); 
+
+        return songDataFull;
+    }
 }

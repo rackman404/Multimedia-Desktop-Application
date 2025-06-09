@@ -19,8 +19,8 @@ import * as fs from "fs"
 import { AudioManager } from './services/audio_service/audioManager';
 
 
-const PRODUCTIONMUSICFILEDIRECTORY = __dirname + '../../../../' + "music";
-
+export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' + "music");
+//export const PRODUCTIONMUSICFILEDIRECTORY = __dirname + '../../../../' + "music";
 
 
 class AppUpdater {
@@ -66,16 +66,17 @@ const installExtensions = async () => {
 const createWindow = async () => {
   //backend folder setup
   if (app.isPackaged == false){ // fork process directly from main.py when not packaged (compiled into exe)
-    
-  }
-  else{
-  // Use fs.promises.mkdir() to create the directory asynchronously
-  fs.promises.mkdir(PRODUCTIONMUSICFILEDIRECTORY)
-    .then(() => console.log(`Directory '${PRODUCTIONMUSICFILEDIRECTORY}' created.`))
-    .catch(err => console.error(`Error creating directory: ${err.message}`));
-    
 
   }
+  else{
+    
+    if (!fs.existsSync(PRODUCTIONMUSICFILEDIRECTORY)){
+      fs.mkdirSync(PRODUCTIONMUSICFILEDIRECTORY);
+    }
+    //fs.writeFileSync(PRODUCTIONMUSICFILEDIRECTORY, "Hey there!");
+  }; 
+
+      
   //---------------------------------
   
 

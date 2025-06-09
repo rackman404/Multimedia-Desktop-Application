@@ -22,3 +22,20 @@ export type SongMetaData = {
     comment: string
 
 }
+
+//simplified for performance
+export type SongMetaDataSimple = {
+    //Format specific metadata
+    metadataFormat: string,
+    id: number,
+    name: string,
+    length: number, //in seconds
+    artist: string[],
+    album: string,
+    genre: string[],
+    playCount: number,
+    bitrate: number, //in kbps (-1 if no bitrate can be provided)
+
+    //misc data
+    songRawPath: string,
+}

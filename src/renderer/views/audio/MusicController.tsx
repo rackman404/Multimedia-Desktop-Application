@@ -15,20 +15,34 @@ export const Layout = () => {
     const playState = useSelectedSongStore((state) => state.playState);
     const setPlayState = useSelectedSongStore((state) => state.setPlayState);
 
-    const selectedPlaySongMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+    const currentSeek = useSelectedSongStore((state) => state.currentSeek);
+    const setSeek = useSelectedSongStore((state) => state.setCurrentSeek);
 
-    const [trackObject, setTrackObject] = useState<Howl | null>(null
-    );
+    const selectedPlaySongMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+    const setSelectedPlaySongMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
+
+    const allSongMetaData = useSelectedSongStore((state) => state.allSongMetaData);
+
+    const trackObject = useSelectedSongStore((state) => state.currentPlayer);
+    const setTrackObject = useSelectedSongStore((state) => state.setCurrentPlayer);
 
     trackObject?.on('end', function(){
         console.log('Finished!');
 
-        setTrackObject(null);
+        
 
-        setPlayState(false);
+        if (allSongMetaData != null){
+            if (allSongMetaData[selectedPlaySongMetaData.id + 1] != undefined){
+                setSelectedPlaySongMetaData(allSongMetaData[selectedPlaySongMetaData.id + 1]);
+            }
+
+        }
+        
+        //setTrackObject(null);
+        //setPlayState(false);
     });
     
-    useEffect(() => {
+    useEffect(() => {// pause and play song
         console.log("play state is: " + playState)
 
         if (playState == true){
@@ -54,18 +68,62 @@ export const Layout = () => {
         }
     }, [playState]);   
 
-    useEffect(() => {//stop current song
-        setPlayState(false);
-        if (trackObject != null){
-            trackObject.stop();
+    useEffect(() => {//set new song
+        //setPlayState(false);
+
+        console.log("playing new song");
+
+        trackObject?.stop();
+        trackObject?.unload();
+        
+        if (selectedPlaySongMetaData.songRawPath != ""){
+            var newHowl = new Howl({src: selectedPlaySongMetaData.songRawPath, html5: false});
+
+            newHowl.play();
+            setTrackObject(newHowl);
+            setPlayState(true);
         }
-        setTrackObject(null);
+
 
     }, [selectedPlaySongMetaData]);   
 
+
+    useEffect(() => {
+            const interval = setInterval(() => {  
+                
+                if (playState == true){      
+                    if (trackObject != null){        
+                        console.log("music controller, current song seek is: " + trackObject?.seek());             
+                        setSeek(trackObject.seek());                       
+                    }
+                }
+    
+            }, 1000);
+    
+            return () => clearInterval(interval);
+    }, [playState, trackObject]); 
+
+    
+
+    window.addEventListener("beforeunload", (event) => {
+        trackObject?.stop();
+        trackObject?.unload();
+        setPlayState(false);
+        console.log("UNLOADING MUSIC CONTROLLER");
+    });
+
+    function changeSeek(newSeek: number){
+        if (trackObject != null){
+            trackObject.seek(newSeek);
+            setSeek(newSeek);
+        }
+    }
+    
+
     return (
+        
         <div>
-            <><BottomMusicControl/> <LeftAudioSidebar/> <Outlet/></>
+            <><BottomMusicControl setSeek={changeSeek}/> <LeftAudioSidebar/> <Outlet/></>
         </div>
     )
   };
