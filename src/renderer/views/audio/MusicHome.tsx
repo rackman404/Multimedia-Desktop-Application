@@ -6,9 +6,13 @@ import { SongInfoCard } from '../../components/regular/Audio/Music/SongInfoCard'
 import { SongEditCard } from '../../components/regular/Audio/Music/SongEditCard';
 import { SongMetaData, SongMetaDataSimple } from '../../../types';
 import { useSelectedSongStore } from '../../state_stores/MusicStateStores';
+import { SongLyricCard } from '../../components/regular/Audio/Music/SongLyricCard';
+import { RegularButton } from '../../elements/CustomButtons';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Card, Paper } from '@mui/material';
 
 export const Layout = () => {
-    const [refreshState, setRefreshState] = useState(false);
+
 
     const [metaData, setMetaData] = useState<SongMetaDataSimple[]>([{
         name: "NO MUSIC",
@@ -23,10 +27,6 @@ export const Layout = () => {
         album: ''
     }]);
 
-    const selectedPlayMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
-    const setSelectedPlayMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
-    const setAllMetaData = useSelectedSongStore((state) => state.setAllSongMetaData);
-
     const [selectedInfoCardMetaData, setSelectedInfoCardMetaData] = useState<SongMetaDataSimple>({
         name: "NO MUSIC",
         metadataFormat: '',
@@ -39,6 +39,14 @@ export const Layout = () => {
         songRawPath: '',
         album: ''
     });
+
+    const selectedPlayMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+    const setSelectedPlayMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
+    const setAllMetaData = useSelectedSongStore((state) => state.setAllSongMetaData);
+    const [refreshState, setRefreshState] = useState(false);
+    const [secondaryCard, setSecondaryCard] = useState(<SongLyricCard sMetaData={selectedInfoCardMetaData}/>);
+
+
 
     useEffect(() => {//initial load
         (async () => {
@@ -67,13 +75,23 @@ export const Layout = () => {
         return () => clearInterval(interval);
     }, [refreshState]); 
     
+    function setSecondaryLyric(){
+        setSecondaryCard(<SongLyricCard sMetaData={selectedInfoCardMetaData}/>);
+    }
 
+    function setSecondaryEdit(){
+        setSecondaryCard(<SongEditCard/>);
+    }
 
     return (
         <div className='content_musichome'>
-            <div className=''>
+            <div>
+                <div className='access_button_row_musichome'>
+                    <RegularButton onClick={setSecondaryLyric} style={{height: '20px', width: '10vw'}}>Lyrics</RegularButton>
+                    <RegularButton onClick={setSecondaryEdit} style={{height: '20px', width: '10vw'}}>Edit Metadata</RegularButton>
+                </div> 
                 <SongInfoCard sMetaData={selectedInfoCardMetaData} />
-                <SongEditCard/>
+                {secondaryCard}
             </div>
             
             <SongTable sMetaData={metaData} selectedInfoCardFunction={setSelectedInfoCardMetaData} selectedPlayDataFunction={setSelectedPlayMetaData}/>

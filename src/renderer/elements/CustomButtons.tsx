@@ -26,10 +26,10 @@ export const LinkButton = styled(Button)<ILinkButton>(({ theme }) => ({
 }));
 
 export const RegularButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.getContrastText(purple[700]),
-  backgroundColor: purple[500],
+  color: theme.palette.getContrastText(grey[800]),
+  backgroundColor: grey[700],
   '&:hover': {
-    backgroundColor: purple[700],
+    backgroundColor: grey[800],
   },
 }));
 

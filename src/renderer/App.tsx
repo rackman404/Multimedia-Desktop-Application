@@ -6,13 +6,13 @@ import Dashboard from './views/Dashboard'
 import MusicHome from './views/audio/MusicHome'
 import MusicPlayLists from './views/audio/MusicPlaylists'
 
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
 import { LeftAudioSidebar } from './components/static/Audio/LeftAudioSidebar';
 import { TopHeader } from './components/static/TopHeader';
 import { BottomMusicControl } from './components/static/Audio/BottomMusicControl';
 import MusicController from './views/audio/MusicController';
 
-const theme = createTheme({
+var theme = createTheme({
   colorSchemes: {
     dark: true,
   },
@@ -24,7 +24,7 @@ const theme = createTheme({
     },
     MuiButton: { 
       styleOverrides: { 
-        root: { minWidth: 0 } 
+        root: { minWidth: 0, minHeight: 0 } 
       } 
     },
 
@@ -46,6 +46,8 @@ const theme = createTheme({
     },
   },
 });
+
+theme = responsiveFontSizes(theme);
 
 export default function App() {
   return (

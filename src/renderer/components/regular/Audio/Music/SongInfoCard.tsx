@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import placeholderImage from '../../../../../../assets/icons/256x256.png';
 import { SongMetaData, SongMetaDataSimple } from '../../../../../types';
+import { fmtMSS } from '../../../../Common';
 
 type SongInfoProps = { //constructor variables
   sMetaData: SongMetaDataSimple
@@ -57,49 +58,59 @@ format: sMetaData.metadataFormat,
   
     return (
         <div>
-            <Card variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "66.5vh", width: "20vw"}}>
+            <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "66.5vh", maxWidth: "20vw", maxHeight: "66.5vh"}}>
               <CardContent>
-                <Typography variant="h5" component="div" >{sMetaData?.name}</Typography>
-                
-                {/*https://stackoverflow.com/questions/72212417/make-cardmedia-images-fit-its-content-in-mui-5
-                https://stackoverflow.com/questions/77707763/extract-image-from-mp3-files-inside-browser-using-javascript 
-                 */}
-                <CardMedia
-                  component="img"
-                  width="100"
-                  height="200"
-                  image= {cover}
-                  alt="Song Thumbnail Image"         
-                  sx={{objectFit: "contain" }}
-                />
+
+                <Paper  style={{maxHeight: "28.5vh", overflow: 'auto', scrollbarWidth: 'none'}}>
+                  <Typography variant="h5" component="div" >{sMetaData?.name}</Typography>
+                  
+                  {/*https://stackoverflow.com/questions/72212417/make-cardmedia-images-fit-its-content-in-mui-5
+                  https://stackoverflow.com/questions/77707763/extract-image-from-mp3-files-inside-browser-using-javascript 
+                  */}
+                  <CardMedia
+                    component="img"
+                    width="100"
+                    height="200"
+                    image= {cover}
+                    alt="Song Thumbnail Image"         
+                    sx={{objectFit: "contain" }}
+                  />
+                </Paper>
 
                 <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist}<br/></Typography>
-
+                
                 <Divider/>
-                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Song Detail<br/></Typography>
-                <div style={{ textAlign: "left", padding: "5px"}}>
-                  <Typography variant="body2" >Genre: {fullMetaData?.genre}<br/></Typography>
-                  <Typography variant="body2" >Artist: {fullMetaData?.artist}<br/></Typography>
-                  <Typography variant="body2" >Album: {fullMetaData?.album}<br/></Typography>
-                  <Typography variant="body2" >Length: {fullMetaData?.length}<br/></Typography>
-                </div>
+                <Paper  style={{maxHeight: "38vh", maxWidth:"20vw", overflow: 'auto', scrollbarWidth: 'none'}}>
 
-                <Divider/>
-                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Technical Detail<br/></Typography>
-                <div style={{ textAlign: "left", paddingRight: "5px"}}>
-                  <Typography variant="body2" >Bitrate: {fullMetaData?.bitrate}<br/></Typography>
-                  <Typography variant="body2" >Format: {fullMetaData?.format}<br/></Typography>
-                  <Typography variant="body2" >Embedded Comment: {fullMetaData?.comment}<br/></Typography>
-                  <Typography variant="body2" >File Location: {fullMetaData?.songRawPath} <br/></Typography>
-                </div>
+                  <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Song Detail<br/></Typography>
+                  <div style={{ textAlign: "left", paddingRight: "5px"}}>
+                    <Typography variant="body2" >Genre: {fullMetaData?.genre}<br/></Typography>
+                    <Typography variant="body2" >Artist: {fullMetaData?.artist}<br/></Typography>
+                    <Typography variant="body2" >Album: {fullMetaData?.album}<br/></Typography>
+                    <Typography variant="body2" >Length: {fmtMSS(sMetaData.length)} Mins<br/></Typography>
+                  </div>
 
-                <Divider/>
-                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Other Detail<br/></Typography>
-                <div style={{ textAlign: "left", padding: "5px"}}>
-                  <Typography variant="body2" >Play Count: <br/></Typography>
-                  <Typography variant="body2" >Data Added: <br/></Typography>
-                </div>
+                  <Divider/>
+                  <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Technical Detail<br/></Typography>
+                  <div style={{ textAlign: "left"}}>
+                    <Typography variant="body2" >Bitrate: {fullMetaData?.bitrate} kbps<br/></Typography>
+                    <Typography variant="body2" >Format: {fullMetaData?.format}<br/></Typography>
+                    <Typography variant="body2" >Embedded Comment: {fullMetaData?.comment}<br/></Typography>
+                    <Typography variant="body2" >File Location: {fullMetaData?.songRawPath} <br/></Typography>
+                  </div>
 
+                  <Divider/>
+                  <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Other Detail<br/></Typography>
+                  <div style={{ textAlign: "left", padding: "5px"}}>
+                    <Typography variant="body2" >Play Count: <br/></Typography>
+                    <Typography variant="body2" >Data Added: <br/></Typography>
+                    <Typography variant="body2" >Placeholder: <br/></Typography>
+                    <Typography variant="body2" >Placeholder: <br/></Typography>
+                  </div>
+
+
+                </Paper>
+                
               </CardContent>
             </Card>
         </div>

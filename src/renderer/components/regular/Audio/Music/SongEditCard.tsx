@@ -20,10 +20,8 @@ export const SongEditCard = () => {
                 </Typography>
 
                 <div style={{ textAlign: "left", padding: "5px"}}>
-                  <Typography variant="body2" >Genre: <br/></Typography>
-                  <Typography variant="body2" >Artist: <br/></Typography>
-                  <Typography variant="body2" >Album: <br/></Typography>
-                  <Typography variant="body2" >Length: <br/></Typography>
+                  <Typography variant="body2" >Fill in currently selected Metadata from online sources: <br/></Typography>
+
                 </div>
 
               </CardContent>

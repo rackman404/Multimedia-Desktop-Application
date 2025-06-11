@@ -8,3 +8,24 @@
     background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
 
 }
+
+.body_songtable{
+    scrollbar-color: rgb(255, 255, 255) #000000;
+    scroll-behavior: smooth;
+}
+
+.top_bar_songtable{
+    height: 5.2vh;
+    width: 80vw;
+
+    background: linear-gradient(to right bottom,rgb(41, 41, 41),rgb(49, 49, 49));
+
+
+    
+}
+
+
+.top_bar_content_songtable{
+    display: flex;
+    flex-direction: row;
+}

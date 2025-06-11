@@ -6,3 +6,18 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.access_button_row_musichome{
+    position:absolute;
+    left:-10px;
+    top:98.2vh;
+    width:20vw;
+    height:20vh;
+    z-index: 10000;
+
+
+
+    display: flex;
+    flex-direction: row;
+
+}

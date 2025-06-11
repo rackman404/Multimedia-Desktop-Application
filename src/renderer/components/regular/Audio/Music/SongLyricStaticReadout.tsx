@@ -4,13 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { RegularButton } from '../../../../elements/CustomButtons';
-import { SongMetaDataSimple } from '../../../../../types';
 
-type SongLyricProps = { //constructor variables
-  sMetaData: SongMetaDataSimple
-}
 
-export const SongLyricCard = ({sMetaData}: SongLyricProps) => { 
+export const SongLyricCard = () => { 
   //const [headerText, setHeaderText] = useState("placeholder");
   const [lyricMode, setLyricMode] = useState({component: <></>, mode: "raw"});
 
@@ -33,10 +29,10 @@ export const SongLyricCard = ({sMetaData}: SongLyricProps) => {
 
   return (
       <div>
-          <Card variant='outlined' className="card_songlyriccard" component={Paper} sx={{ height: "26.5vh", width: "20vw"}}>
+          <Card variant='outlined' className="card_songeditcard" component={Paper} sx={{ height: "26.5vh", width: "20vw"}}>
             <CardContent>
             <div className='top_bar_row_songlyriccard'>
-              <RegularButton className='option_button_songlyriccard' onClick={() => (SetLyrics(true))}><Typography fontSize={"0.75em"} noWrap component="div">Raw Lyrics</Typography></RegularButton>
+              <RegularButton className='option_button_songlyriccard' onClick={() => (SetLyrics(true))}>Raw Lyrics</RegularButton>
 
               <div>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
@@ -48,7 +44,7 @@ export const SongLyricCard = ({sMetaData}: SongLyricProps) => {
                 </Typography>
               </div>
 
-              <RegularButton className='option_button_songlyriccard' onClick={() => (SetLyrics(false))}><Typography fontSize={"0.75em"} noWrap component="div">Live Lyrics</Typography></RegularButton>
+              <RegularButton className='option_button_songlyriccard' onClick={() => (SetLyrics(false))}>Live Lyrics</RegularButton>
 
             </div>
 

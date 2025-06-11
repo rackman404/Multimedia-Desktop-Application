@@ -8,8 +8,11 @@
 .horizontal_grid_topheader{
     display: grid;
     grid-template-columns: 47.5vw 5vw 47.5vw;
-    grid-template-rows: auto;
-    height:7vh;
+    grid-template-rows: 1;
+    min-height:7vh;
+    
+    max-width: 100%;
+    
 }
 
 .right_align_toolbar_topheader{

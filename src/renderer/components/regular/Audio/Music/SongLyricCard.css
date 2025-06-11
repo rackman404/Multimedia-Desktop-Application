@@ -1,0 +1,20 @@
+.card_songlyriccard{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+
+    min-height: 25vh;
+
+    text-align: center;
+}
+
+.top_bar_row_songlyriccard{
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+}
+
+.option_button_songlyriccard{
+    max-height: 2vh;
+
+}

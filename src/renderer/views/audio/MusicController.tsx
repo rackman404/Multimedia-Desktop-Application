@@ -57,7 +57,7 @@ export const Layout = () => {
             }
             else{
                 if (selectedPlaySongMetaData.songRawPath != ""){
-                    var newHowl = new Howl({src: selectedPlaySongMetaData.songRawPath, html5: true});
+                    var newHowl = new Howl({src: decodeURIComponent(selectedPlaySongMetaData.songRawPath), html5: true});
                     newHowl.play();
                     setTrackObject(newHowl);
                 }
@@ -81,9 +81,11 @@ export const Layout = () => {
 
         trackObject?.stop();
         trackObject?.unload();
+        Howler.unload();
         
         if (selectedPlaySongMetaData.songRawPath != ""){
-            var newHowl = new Howl({src: selectedPlaySongMetaData.songRawPath, html5: true});
+            console.log(selectedPlaySongMetaData.songRawPath);
+            var newHowl = new Howl({src: (selectedPlaySongMetaData.songRawPath), html5: true});
             newHowl.play();
             setTrackObject(newHowl);
             setPlayState(true);

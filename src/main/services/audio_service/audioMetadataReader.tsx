@@ -196,6 +196,11 @@ export class AudioMetadataReader{
         );
         */
 
+        if (metadata.common.lyrics != undefined){
+            
+        }
+        
+
     } catch (error: any) {
         console.error('Error parsing metadata:', error.message);
     }
@@ -220,8 +225,6 @@ export class AudioMetadataReader{
                 
 
                 //https://stackoverflow.com/questions/44725664/extract-album-art-image-from-html5-audio-after-metadata-loads-using-javascript 
-
-                //to read image: imgElement.src = `data:${picture.format};base64,${base64String}`;
                 if (temp != null){
                     
                 }
@@ -244,9 +247,31 @@ export class AudioMetadataReader{
             console.error('Error parsing metadata:', error.message);
         }
 
-        return sMetadata;
+        return sMetadata;   
+    }
 
-        
+    async readLyricData(file_path: string): Promise<{unsynced: string, synced: string[]}>{
+        const mm = await import('music-metadata');
+
+        const metadata = await mm.parseFile(file_path);
+        var lyrics = {} as {unsynced: string, synced: string[]};
+
+            if (metadata.common.lyrics != undefined){
+                if (metadata.common.lyrics[0].text != undefined){
+                    lyrics["unsynced"] = metadata.common.lyrics[0].text;
+                    console.log(lyrics["unsynced"]);
+                }
+            }
+
+
+        return lyrics;
+    }
+
+    async readExternalLyricData(file_path: string){
+        const mm = await import('music-metadata');
+
+        const metadata = await mm.parseFile(file_path);
+
     }
 
 }
