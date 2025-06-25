@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { RegularButton } from '../../../../elements/CustomButtons';
 import { SongMetaDataSimple } from '../../../../../types';
+import { SongLyricStaticReadout } from './SongLyricStaticReadout';
+import { SongLyricLiveReadout } from './SongLyricLiveReadout';
 
 type SongLyricProps = { //constructor variables
   sMetaData: SongMetaDataSimple
@@ -12,24 +14,26 @@ type SongLyricProps = { //constructor variables
 
 export const SongLyricCard = ({sMetaData}: SongLyricProps) => { 
   //const [headerText, setHeaderText] = useState("placeholder");
-  const [lyricMode, setLyricMode] = useState({component: <></>, mode: "raw"});
+  const [lyricMode, setLyricMode] = useState(() => <SongLyricLiveReadout sMetaData={sMetaData}></SongLyricLiveReadout>);
 
   function SetLyrics(bool: boolean): void{
     if (bool == true){
-      //setLyricMode({component: })
+      setLyricMode(() => <SongLyricStaticReadout></SongLyricStaticReadout>)
+    }
+    if (bool == false){
+      console.log("setting to live lyrics " + sMetaData.songRawPath);
+      setLyricMode(() => <SongLyricLiveReadout sMetaData={sMetaData}></SongLyricLiveReadout>)
     }
   }
 
-  function headerText(): string{
-    if (lyricMode.mode == "raw"){
+  function headerText(): any{
+    if (lyricMode.type == SongLyricStaticReadout){
       return "From Metadata";
     }
     else{
-      return "From External API";
+      return <div>From External API <br/> (liblrc.net) </div>;
     }
   }
-
-
 
   return (
       <div>
@@ -53,7 +57,7 @@ export const SongLyricCard = ({sMetaData}: SongLyricProps) => {
             </div>
 
             <div style={{ textAlign: "left", padding: "5px"}}>
-              Cock and Balls
+              {lyricMode}
 
             </div>
 

@@ -4,8 +4,7 @@
 
 
 # Features
-- Convert local 
-
+- Convert downloaded audio files using FFmpeg 
 
 # Composition
 

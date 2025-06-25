@@ -39,6 +39,7 @@ format: sMetaData.metadataFormat,
       if (sMetaData.songRawPath != ""){
         const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", sMetaData.id, sMetaData.songRawPath]);
         //console.log("cover image" +  sMetaData?.coverImage);
+        //console.log(result);
         var cImg = placeholderImage;
         if(result.coverImage != null){
           cImg = result.coverImage;

@@ -106,7 +106,7 @@ export const Layout = () => {
                     }
                 }
     
-            }, 1000);
+            }, 100);
     
             return () => clearInterval(interval);
     }, [playState, trackObject]); 

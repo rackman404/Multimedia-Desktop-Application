@@ -5,8 +5,9 @@ import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
-import { SongMetaData, SongMetaDataSimple } from "../../../types";
+import { SongLyricAPIData, SongMetaData, SongMetaDataSimple } from "../../../types";
 import { PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
+import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
 
 type MetaDatas = {
     full: SongMetaData[],
@@ -17,15 +18,18 @@ export class AudioManager{
     broker: AudioBroker;
     audioPlayback: AudioPlayBackController;
     audioMetadata: AudioMetadataReader;
+    audioLyrics: AudioWebLyricReader;
     fileMusicPath: string;
 
     songMetaDataFull: SongMetaData[] | undefined
     songMetaDataSimple: SongMetaDataSimple[] | undefined
 
+
     constructor() {
         this.broker = new AudioBroker(this);
         this.audioPlayback = new AudioPlayBackController();
         this.audioMetadata = new AudioMetadataReader();
+        this.audioLyrics = new AudioWebLyricReader();
 
         if (app.isPackaged == false){ //developmental file path
             this.fileMusicPath = __dirname;
@@ -121,11 +125,22 @@ export class AudioManager{
     }
 
     async getSpecifiedSongDataFull(id: number, song_path: string): Promise<SongMetaDataSimple | undefined>{
-        var songsPath = fs.readdirSync(this.fileMusicPath);
+        var songsPath = fs.readdirSync(this.fileMusicPath); //remove?
         var songDataFull: SongMetaData;
 
         songDataFull = (await this.audioMetadata.readMetaDataFull(id, song_path)); 
 
         return songDataFull;
     }
+
+    async getExternalLyrics(song_path: string): Promise<SongLyricAPIData | undefined>{
+        var songData: SongMetaDataSimple
+        var lyrics: SongLyricAPIData
+
+        songData = await this.audioMetadata.readMetaDataSimple(-1, song_path);
+        lyrics = await this.audioLyrics.requestLyricData(songData);
+
+        return lyrics;
+    }
+
 }

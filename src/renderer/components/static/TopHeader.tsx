@@ -52,6 +52,7 @@ export const TopHeader = () => {
 
                         <Card >                            
                             <LinkButton component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Settings")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Player</Typography></LinkButton>
+                            <LinkButton component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Settings")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Nyaa</Typography></LinkButton>
                             <Chip label="Video" variant="filled" sx={{margin: "5px"}}/>   
                         </Card>
                     </Toolbar>

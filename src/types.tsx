@@ -39,3 +39,19 @@ export type SongMetaDataSimple = {
     //misc data
     songRawPath: string,
 }
+
+export type NyaaWebData = {
+    title: string;
+    magnet : string;
+    size: string;
+    dateCreated : string;
+    leechers: number;
+    seeders: number;
+    totalDownloads: number;
+}
+
+export type SongLyricAPIData = {
+    timestamps: number[]
+    lyrics: string[]
+    isInstrumental: boolean
+}

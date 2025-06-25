@@ -18,3 +18,20 @@
     max-height: 2vh;
 
 }
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.fade_in_text { 
+    animation: fadeIn 0.25s; 
+    text-align: center;
+}
+
+.fade_out_text {
+    color: rgb(247, 0, 0);
+    opacity: 0;
+    transition: all 0.25s ease;
+    text-align: center;
+}

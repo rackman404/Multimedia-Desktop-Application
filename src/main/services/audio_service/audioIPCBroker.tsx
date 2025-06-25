@@ -64,6 +64,13 @@ export class AudioBroker {
 
         break;
 
+      case "external_lyrics":
+        console.log("getting lyrics");
+        
+        return this.audioManager.getExternalLyrics(arg[1]);
+
+        break;
+
       default:
         console.log("ERROR: AUDIO BROKER (INVALID RESPONSE)");
 

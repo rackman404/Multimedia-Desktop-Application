@@ -44,7 +44,8 @@ export const Layout = () => {
     const setSelectedPlayMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
     const setAllMetaData = useSelectedSongStore((state) => state.setAllSongMetaData);
     const [refreshState, setRefreshState] = useState(false);
-    const [secondaryCard, setSecondaryCard] = useState(<SongLyricCard sMetaData={selectedInfoCardMetaData}/>);
+    //https://stackoverflow.com/questions/65827305/passing-a-component-to-the-usestate-hook
+    const [secondaryCard, setSecondaryCard] = useState(() => <SongLyricCard key={selectedPlayMetaData.name} sMetaData={selectedPlayMetaData}/>);
 
 
 
@@ -60,6 +61,7 @@ export const Layout = () => {
 
     useEffect(() => {
         setSelectedInfoCardMetaData(selectedPlayMetaData);
+        refreshSecondaryCard();
         
     }, [selectedPlayMetaData, metaData]); 
 
@@ -76,11 +78,19 @@ export const Layout = () => {
     }, [refreshState]); 
     
     function setSecondaryLyric(){
-        setSecondaryCard(<SongLyricCard sMetaData={selectedInfoCardMetaData}/>);
+        setSecondaryCard(() => <SongLyricCard key = {selectedPlayMetaData.name} sMetaData={selectedPlayMetaData}/>);
     }
 
     function setSecondaryEdit(){
-        setSecondaryCard(<SongEditCard/>);
+        setSecondaryCard(() => <SongEditCard/>);
+    }
+
+    //BAD PRACTICE; REFACTOR
+    function refreshSecondaryCard(){
+        if (secondaryCard.type == SongLyricCard){
+            console.log("refreshing secondary");
+            setSecondaryCard(() => <SongLyricCard key = {selectedPlayMetaData.name} sMetaData={selectedPlayMetaData}/>);
+        }
     }
 
     return (
