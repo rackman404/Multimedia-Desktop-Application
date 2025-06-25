@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import './../../css/audio/MusicHome.css';
-import { LeftAudioSidebar } from '../../components/static/Audio/LeftAudioSidebar';
-import { SongTable } from '../../components/regular/Audio/Music/SongTable';
-import { SongInfoCard } from '../../components/regular/Audio/Music/SongInfoCard';
-import { SongEditCard } from '../../components/regular/Audio/Music/SongEditCard';
-import { SongMetaData, SongMetaDataSimple } from '../../../types';
-import { useSelectedSongStore } from '../../state_stores/MusicStateStores';
-import { SongLyricCard } from '../../components/regular/Audio/Music/SongLyricCard';
-import { RegularButton } from '../../elements/CustomButtons';
+import './../../../css/audio/MusicHome.css';
+import { LeftAudioSidebar } from '../../../components/static/Audio/Music/LeftAudioSidebar';
+import { SongTable } from '../../../components/regular/Audio/Music/SongTable';
+import { SongInfoCard } from '../../../components/regular/Audio/Music/SongInfoCard';
+import { SongEditCard } from '../../../components/regular/Audio/Music/SongEditCard';
+import { SongMetaData, SongMetaDataSimple } from '../../../../types';
+import { useSelectedSongStore } from '../../../state_stores/MusicStateStores';
+import { SongLyricCard } from '../../../components/regular/Audio/Music/SongLyricCard';
+import { RegularButton } from '../../../elements/CustomButtons';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Card, Paper } from '@mui/material';
 

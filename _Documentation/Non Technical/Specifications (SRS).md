@@ -22,6 +22,7 @@ Purpose of this desktop application is to provide a unified application to repla
 Assume that this is a multi-media system to be used in the following scenarios:
 - Playing and categorizing music
 - Finding and downloading new music from Soul Seek
+- Changing properties of music files (using FFmpeg)
 
 # Requirements
 
@@ -29,7 +30,7 @@ Assume that this is a multi-media system to be used in the following scenarios:
 - Audio:
 	- Must be able to automatically add missing metadata to any audio music file (i.e. thumbnail, lyrics, genre, etc)
 	- Soul seek integration with ability to search for new songs and download new songs from within this application
-	- Have basic music playing capabilities including: playing music, auto play next song, playlist functionality
+	- Basic music playing capabilities including: playing music, auto play next song, playlist functionality
 - Audio (FFmpeg):
 	- Basic functionality for converting between audio formats
 

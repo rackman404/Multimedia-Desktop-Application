@@ -49,6 +49,7 @@ type SongTableProps = { //constructor variables
 export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCardFunction}: SongTableProps) => { 
   const [highlighted, setHighlighted] = useState<number | undefined>();
   const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+  
 
   async function selectFullDataInfoCard(rowData: SongMetaDataSimple){
     //const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", rowData.id, rowData.songRawPath]);
@@ -60,18 +61,20 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
     setHighlighted(currentSong.id);
   }, [currentSong]);   
 
-  
   return (
       <div className='body_songtable'>
           <Card variant='outlined' className='top_bar_songtable'>
             <div className='top_bar_content_songtable'>
-              <TextField id="searchfield" label="Search" variant="standard" />
+              <TextField id="searchfield" label="Search" variant="standard" />          
               <Button>Submit</Button>
+              <Button>Reset Search</Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-
-              <Button>Show Current Song</Button>
-              <Button>Show Current Song</Button>
+              <Button>Zoom To Current Song</Button>
+              <Button>Autofocus (on/off) Song</Button>
+              <Button>Force Reload Song List</Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
+              <Button>Toggle Shuffle</Button>
+              <Button>Translate Song Titles</Button>
             </div>
           </Card>
           

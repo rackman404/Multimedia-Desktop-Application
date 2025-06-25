@@ -17,6 +17,7 @@ import { resolveHtmlPath } from './util';
 import * as fs from "fs" 
 
 import { AudioManager } from './services/audio_service/audioManager';
+import { NyaaScraper } from './services/nyaa_service/nyaaScraper';
 
 
 export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' + "music");
@@ -167,6 +168,8 @@ app
 //---------------------- Backend Setup
 
 var audioManager = new AudioManager();
+
+var test = new NyaaScraper();
 
 
 //----------------- IPC Handlers, Rout to services

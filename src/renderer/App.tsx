@@ -3,14 +3,14 @@ import icon from '../../assets/icon.svg';
 import './App.css';
 
 import Dashboard from './views/Dashboard'
-import MusicHome from './views/audio/MusicHome'
-import MusicPlayLists from './views/audio/MusicPlaylists'
+import MusicHome from './views/audio/music/MusicHome'
+import MusicPlayLists from './views/audio/music/MusicPlaylists'
 
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
-import { LeftAudioSidebar } from './components/static/Audio/LeftAudioSidebar';
+import { LeftAudioSidebar } from './components/static/Audio/Music/LeftAudioSidebar';
 import { TopHeader } from './components/static/TopHeader';
-import { BottomMusicControl } from './components/static/Audio/BottomMusicControl';
-import MusicController from './views/audio/MusicController';
+import { BottomMusicControl } from './components/static/Audio/Music/BottomMusicControl';
+import MusicController from './views/audio/music/MusicController';
 
 var theme = createTheme({
   colorSchemes: {

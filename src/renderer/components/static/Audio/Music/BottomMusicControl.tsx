@@ -1,14 +1,14 @@
 import { AppBar, Box, Button, ButtonGroup, Card, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slider, TextField, ToggleButton, Toolbar, Typography } from '@mui/material';
-import '../../../css/BottomMusicControl.css';
+import '../../../../css/BottomMusicControl.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { RegularButton } from '../../../elements/CustomButtons';
+import { RegularButton } from '../../../../elements/CustomButtons';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import { useSelectedSongStore } from '../../../state_stores/MusicStateStores';
+import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 
 
 
@@ -47,20 +47,23 @@ export const BottomMusicControl = ({setSeek, setVolume}:MusicControlProps) => {
                         <Toolbar></Toolbar>
 
                         <div>
-
                             <div className='centered_control_bottommusiccontrol'>
                                 <Button><ArrowBackIosNewIcon/></Button>
                                 <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
                                 <Button><ArrowForwardIosIcon/></Button>
                             </div>
 
-                            <Toolbar>
-                                <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} onChange={userSeekChange} />
-                            </Toolbar>
+                            <div className='seek_component_bottommusiccontrol'>
+                                <Toolbar>
+                                    <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{maxWidth: "50em"}} onChange={userSeekChange} />
+                                </Toolbar>
+                                tes
+                            </div>
+
                         </div>
                         
                         <div>
-                            <div className='centered_control_bottommusiccontrol' style={{marginTop: "2.3vh"}}>
+                            <div className='volume_control_bottommusiccontrol' style={{marginTop: "2.3vh"}}>
                                 Volume
                             </div>
                         

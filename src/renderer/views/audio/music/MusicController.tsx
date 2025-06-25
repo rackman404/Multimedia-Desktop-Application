@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import './../../css/audio/MusicHome.css';
-import { LeftAudioSidebar } from '../../components/static/Audio/LeftAudioSidebar';
-import { SongTable } from '../../components/regular/Audio/Music/SongTable';
-import { SongInfoCard } from '../../components/regular/Audio/Music/SongInfoCard';
-import { SongEditCard } from '../../components/regular/Audio/Music/SongEditCard';
-import { SongMetaData } from '../../../types';
-import { BottomMusicControl } from '../../components/static/Audio/BottomMusicControl';
+import './../../../css/audio/MusicHome.css';
+import { LeftAudioSidebar } from '../../../components/static/Audio/Music/LeftAudioSidebar';
+import { SongTable } from '../../../components/regular/Audio/Music/SongTable';
+import { SongInfoCard } from '../../../components/regular/Audio/Music/SongInfoCard';
+import { SongEditCard } from '../../../components/regular/Audio/Music/SongEditCard';
+import { SongMetaData } from '../../../../types';
+import { BottomMusicControl } from '../../../components/static/Audio/Music/BottomMusicControl';
 import { Outlet, useNavigate } from 'react-router-dom';
-import {useSelectedSongStore } from '../../state_stores/MusicStateStores';
+import {useSelectedSongStore } from '../../../state_stores/MusicStateStores';
 
 import { Howl, Howler } from 'howler';
 
@@ -84,6 +84,7 @@ export const Layout = () => {
         Howler.unload();
         
         if (selectedPlaySongMetaData.songRawPath != ""){
+            setSeek(0);
             console.log(selectedPlaySongMetaData.songRawPath);
             var newHowl = new Howl({src: (selectedPlaySongMetaData.songRawPath), html5: true});
             newHowl.play();

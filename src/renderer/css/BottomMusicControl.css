@@ -17,4 +17,19 @@
     display: flex;
     justify-content: center;
     margin-top: 0.5vh;
+    flex-direction: row;
 }
+
+.volume_control_bottommusiccontrol{
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5vh;
+    flex-direction: row;
+}
+
+.seek_component_bottommusiccontrol{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
