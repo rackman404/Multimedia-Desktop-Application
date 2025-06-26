@@ -100,7 +100,12 @@ export const Layout = () => {
                     <RegularButton onClick={setSecondaryLyric} style={{height: '20px', width: '10vw'}}>Lyrics</RegularButton>
                     <RegularButton onClick={setSecondaryEdit} style={{height: '20px', width: '10vw'}}>Edit Metadata</RegularButton>
                 </div> 
-                <SongInfoCard sMetaData={selectedInfoCardMetaData} />
+
+                {/* note key is specifically used to fully rerender the component rather than rely soly on the metadata changing.
+                Without the key, multiple _base64 async calls can be loading at once if the selected song was changed rapidly which may cause a
+                larger song thumbnail to load into the wrong selected image */}
+                <SongInfoCard key={selectedInfoCardMetaData.id} sMetaData={selectedInfoCardMetaData} />
+
                 {secondaryCard}
             </div>
             

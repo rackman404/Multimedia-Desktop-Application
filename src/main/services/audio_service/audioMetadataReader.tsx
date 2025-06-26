@@ -163,9 +163,15 @@ export class AudioMetadataReader{
 
             //to read image: imgElement.src = `data:${picture.format};base64,${base64String}`;
             if (temp != null){
+
+                sMetadata.coverImage = temp;
+
+                //new - performance increase
+                /*
                 sMetadata.coverImage = await _arrayBufferToBase64(temp.data);
-                
-                
+                */
+
+                //old - performance horrendeous
                 /*
                 sMetadata.coverImage = btoa(new Uint8Array(temp.data).reduce(function (data, byte) {
                     return data + String.fromCharCode(byte);

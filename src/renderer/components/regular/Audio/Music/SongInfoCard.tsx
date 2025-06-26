@@ -12,6 +12,9 @@ type SongInfoProps = { //constructor variables
   sMetaData: SongMetaDataSimple
 }
 
+
+
+
 export const SongInfoCard = ({sMetaData} : SongInfoProps) => { 
   const [cover, setCover] = useState<string>(placeholderImage);
   const [fullMetaData, setFullMetaData] = useState<SongMetaData>({
@@ -33,26 +36,66 @@ format: sMetaData.metadataFormat,
   });
 
   const [progressIndicator, setProgressIndicator] = useState(<div/>);
-  
 
+  //combination of a coroutine and BtoA function, will yield control to main process after doing a small amount of work
+  //this prevents any hanging of the application if the binary image data is too big
+  //NOTE THIS SHOULD BE TEMPORARY; PROCESSING IMAGE INTO BASE64 SHOULD BE DONE IN BACKEND HOWEVER BY DOING IN THE FRONTEND I CAN LAZYLY LOAD ALL OTHER FULL METADATA
+  //WHILE GIVING TIME FOR COVER IMAGE TO LOAD SEPARETLEY 
 
+  //https://stackoverflow.com/questions/38432611/converting-arraybuffer-to-string-maximum-call-stack-size-exceeded
+  //https://stackoverflow.com/questions/64814478/how-can-a-javascript-async-function-explicitly-yield-control-at-a-specific-point
+  async function _arrayBufferToBase64( buffer: any, setIndicatorFunc: any ) {
+      var binary = '';
+      var bytes = new Uint8Array( buffer );
+      var len = bytes.byteLength;
 
+      var count = 0;
+      var timeTilLoadingIndicator = 0;
+      var loadedIndicator = false;
+      for (var i = 0; i < len; i++) {
+          binary += String.fromCharCode( bytes[ i ] );
+          count++;
+
+          if (count == 30000){ //
+            count = 0;
+            timeTilLoadingIndicator++;
+            await new Promise((resolve) => setTimeout(resolve));
+          }
+
+          if (timeTilLoadingIndicator > 25 && loadedIndicator == false){
+            loadedIndicator = true;
+            setIndicatorFunc(<LinearProgress/>);
+          }
+          
+      }
+      return window.btoa( binary );
+  }
 
   useEffect(() => {
 
     (async () => {
-      setProgressIndicator(<LinearProgress/>)
       if (sMetaData.songRawPath != ""){
-        const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", sMetaData.id, sMetaData.songRawPath]);
+        const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", sMetaData.id, sMetaData.songRawPath]) as SongMetaData;
         //console.log("cover image" +  sMetaData?.coverImage);
         //console.log(result);
+
+        setFullMetaData(result);
+
+        var cImg = placeholderImage;
+        if(result.coverImage != null){
+          cImg = await _arrayBufferToBase64(result.coverImage.data, setProgressIndicator);
+          cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
+        }
+
+        /* old
         var cImg = placeholderImage;
         if(result.coverImage != null){
           cImg = result.coverImage;
           cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
         }
+        */
   
-        setFullMetaData(result);
+        
         setCover(cImg);
       }
       setProgressIndicator(<div/>)
