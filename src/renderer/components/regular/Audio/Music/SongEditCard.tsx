@@ -10,7 +10,7 @@ export const SongEditCard = () => {
 
     return (
         <div>
-            <Card variant='outlined'  className="card_songeditcard" component={Paper} sx={{ height: "26.5vh", width: "20vw"}}>
+            <Card variant='outlined'  className="card_songeditcard" component={Paper} sx={{ height: "30.5vh", width: "20vw"}}>
               <CardContent>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
                   

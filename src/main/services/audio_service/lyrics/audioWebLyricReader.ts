@@ -1,8 +1,6 @@
-import { promises } from "dns";
 import { SongLyricAPIData, SongMetaDataSimple } from "../../../../types";
 
 const axios = require('axios'); 
-const cheerio = require('cheerio'); 
 
 const THROTTLE_TIMER = 2;
 const QUERY_URL = 'https://lrclib.net/api/get?artist_name=';

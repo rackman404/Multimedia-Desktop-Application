@@ -59,7 +59,7 @@ format: sMetaData.metadataFormat,
   
     return (
         <div>
-            <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "66.5vh", maxWidth: "20vw", maxHeight: "66.5vh"}}>
+            <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "60.5vh", maxWidth: "20vw", maxHeight: "60.5vh"}}>
               <CardContent>
 
                 <Paper  style={{maxHeight: "28.5vh", overflow: 'auto', scrollbarWidth: 'none'}}>
@@ -81,7 +81,7 @@ format: sMetaData.metadataFormat,
                 <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist}<br/></Typography>
                 
                 <Divider/>
-                <Paper  style={{maxHeight: "38vh", maxWidth:"20vw", overflow: 'auto', scrollbarWidth: 'none'}}>
+                <Paper  style={{maxHeight: "32vh", maxWidth:"20vw", overflow: 'auto', scrollbarWidth: 'none'}}>
 
                   <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Song Detail<br/></Typography>
                   <div style={{ textAlign: "left", paddingRight: "5px"}}>
@@ -105,6 +105,8 @@ format: sMetaData.metadataFormat,
                   <div style={{ textAlign: "left", padding: "5px"}}>
                     <Typography variant="body2" >Play Count: <br/></Typography>
                     <Typography variant="body2" >Data Added: <br/></Typography>
+                    <Typography variant="body2" >Placeholder: <br/></Typography>
+                    <Typography variant="body2" >Placeholder: <br/></Typography>
                     <Typography variant="body2" >Placeholder: <br/></Typography>
                     <Typography variant="body2" >Placeholder: <br/></Typography>
                   </div>

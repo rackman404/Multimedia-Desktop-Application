@@ -36,6 +36,10 @@ const configuration: webpack.Configuration = {
   },
 
   optimization: {
+    
+    //https://stackoverflow.com/questions/59773061/how-can-i-debug-this-webpack-error-error-in-bundle-js-from-terser 
+    minimize: false,
+
     minimizer: [
       new TerserPlugin({
         parallel: true,

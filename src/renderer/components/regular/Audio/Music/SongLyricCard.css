@@ -1,8 +1,4 @@
 .card_songlyriccard{
-    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
-
-    min-height: 25vh;
-
     text-align: center;
 }
 
@@ -12,6 +8,9 @@
     flex-direction: row;
 
     justify-content: center;
+
+    /*flex item spacing*/
+    gap: 10px;
 }
 
 .option_button_songlyriccard{
@@ -30,8 +29,39 @@
 }
 
 .fade_out_text {
-    color: rgb(247, 0, 0);
+    color: rgb(0, 0, 0);
     opacity: 0;
-    transition: all 0.25s ease;
+    transition: all 0.15s ease;
     text-align: center;
+}
+
+.row_songlyriccard{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+
+    /*flex item spacing*/
+    gap: 10px;
+    
+    /*these 3 lines help center elements in a absolute container*/
+    width: 20vw;
+    left: 0;
+    right: 0;
+
+    bottom: 0;
+    margin-bottom: 2.5vh;
+}
+
+.div_songlyriccard{
+    position: absolute;
+
+    /*these 3 lines help center elements in a absolute container*/
+    width: 20vw;
+    left: 0;
+    right: 0;
+
+    bottom: 15vh;
+
 }
