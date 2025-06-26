@@ -14,6 +14,8 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
   const [currentLyric, setCurrentLyric] = useState("");
   const [nextLyric, setNextLyric] = useState("");
   const currentSeek = useSelectedSongStore((state) => state.currentSeek);
+  
+  const [previousTimestamp, setPreviousTimestamp] = useState(0);
 
   const [fadeState, setFadeState] = useState('fade_in_text');
   const [currentOffset, setCurrentOffset] = useState(0);
@@ -63,7 +65,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
         console.log((closest + " " + (currentSeek+(currentOffset/1000))));
 
-        if (closest < (adjustedSeek) && currentLyric != text){
+        if (closest < (adjustedSeek) && previousTimestamp != closest){
           setFadeState("fade_in_text");
           
           if (text == ""){
@@ -79,6 +81,8 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
           else{
             setNextLyric(lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);
           }  
+
+          setPreviousTimestamp(closest);
         }
 
         
@@ -93,12 +97,10 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
       setCurrentLyric("Song is marked as instrumental, no lyrics");  
     }
 
-
-
-    
-  }, [currentSeek, currentLyric, currentOffset]);
+  }, [currentSeek, currentLyric, currentOffset, previousTimestamp]);
   
 
+  
   return (
       <div className='card_songlyriccard'>
         {/*key needed to actually rerender the fade in properly*/}
@@ -106,6 +108,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
           <br/>
           <div key={nextLyric} className={fadeState} style={{color:"grey"}}> {nextLyric} </div>
           <div className='div_songlyriccard'> <Divider/> {progressIndicator}</div>
+
           
           
 

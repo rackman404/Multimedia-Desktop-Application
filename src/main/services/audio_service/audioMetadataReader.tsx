@@ -32,6 +32,31 @@ const defaultSomeType = {
 }
     */
 
+//combination of a coroutine and BtoA function, will yield control to main process after doing a small amount of work
+//this prevents any hanging of the application if the binary image data is too big
+
+//https://stackoverflow.com/questions/38432611/converting-arraybuffer-to-string-maximum-call-stack-size-exceeded
+//https://stackoverflow.com/questions/64814478/how-can-a-javascript-async-function-explicitly-yield-control-at-a-specific-point
+async function _arrayBufferToBase64( buffer: any ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+
+    var count = 0;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+        count++;
+
+        if (count == 50000){ //
+          count = 0;
+          await new Promise((resolve) => setTimeout(resolve));
+        }
+        
+    }
+    return btoa( binary );
+}
+
+
 export class AudioMetadataReader{
     
 
@@ -138,13 +163,15 @@ export class AudioMetadataReader{
 
             //to read image: imgElement.src = `data:${picture.format};base64,${base64String}`;
             if (temp != null){
-                //sMetadata.coverImage = btoa(String.fromCharCode(...new Uint8Array(temp.data)));
-                //sMetadata.coverImage = _arrayBufferToBase64(temp.data);
-
+                sMetadata.coverImage = await _arrayBufferToBase64(temp.data);
+                
+                
+                /*
                 sMetadata.coverImage = btoa(new Uint8Array(temp.data).reduce(function (data, byte) {
                     return data + String.fromCharCode(byte);
                 }, ''));
-
+                */
+                
 
                 sMetadata.coverImageFormat = metadata.common.picture[0].format;
                 
@@ -255,13 +282,6 @@ export class AudioMetadataReader{
 
 
         return lyrics;
-    }
-
-    async readExternalLyricData(file_path: string){
-        const mm = await import('music-metadata');
-
-        const metadata = await mm.parseFile(file_path);
-
     }
 
 }

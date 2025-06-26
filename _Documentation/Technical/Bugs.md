@@ -33,3 +33,13 @@ Fix:
 
 Note: 
 - As of 2025-06-25: Cheerio was not used in any production feature, therefore unknown if fix actually allows cheerio to still function despite successful compilation
+
+
+
+
+
+
+
+
+Cause: Seeking through a song with repeated lyrics will cause duplicated elements to appear
+(likely same problem outlined here: https://stackoverflow.com/questions/72204470/react-updating-state-creates-duplicate-element-in-dom-but-state-updates-correctl)

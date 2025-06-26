@@ -1,3 +1,4 @@
+
 export type SongMetaData = {
     //OS metadata
     format: string
@@ -14,7 +15,7 @@ export type SongMetaData = {
     playCount: number,
     bitrate: number, //in kbps (-1 if no bitrate can be provided)
 
-    coverImage: string
+    coverImage: any
     coverImageFormat: string
 
     //misc data

@@ -87,7 +87,7 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                           <TableCell align="right">Artist</TableCell>
                           <TableCell align="right">Genre</TableCell>
                           <TableCell align="right">Play Count</TableCell>
-                          <TableCell align="right">Bit Rate</TableCell>
+                          <TableCell align="right">Bit Rate (kbps)</TableCell>
                           <TableCell align="right">Internal ID</TableCell>
                       </TableHeaderRow>
                   </TableHead>

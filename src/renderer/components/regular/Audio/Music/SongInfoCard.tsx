@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Chip, Divider, Drawer, IconButton, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import './SongInfoCard.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -32,10 +32,16 @@ format: sMetaData.metadataFormat,
     comment: "",
   });
 
+  const [progressIndicator, setProgressIndicator] = useState(<div/>);
+  
+
+
+
 
   useEffect(() => {
 
     (async () => {
+      setProgressIndicator(<LinearProgress/>)
       if (sMetaData.songRawPath != ""){
         const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", sMetaData.id, sMetaData.songRawPath]);
         //console.log("cover image" +  sMetaData?.coverImage);
@@ -48,9 +54,8 @@ format: sMetaData.metadataFormat,
   
         setFullMetaData(result);
         setCover(cImg);
-
       }
-
+      setProgressIndicator(<div/>)
     })();
 
 
@@ -61,6 +66,8 @@ format: sMetaData.metadataFormat,
         <div>
             <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "60.5vh", maxWidth: "20vw", maxHeight: "60.5vh"}}>
               <CardContent>
+
+                {progressIndicator}
 
                 <Paper  style={{maxHeight: "28.5vh", overflow: 'auto', scrollbarWidth: 'none'}}>
                   <Typography variant="h5" component="div" >{sMetaData?.name}</Typography>
