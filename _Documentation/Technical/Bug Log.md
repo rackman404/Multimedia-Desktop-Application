@@ -39,7 +39,10 @@ Note:
 
 
 
-
+![[Pasted image 20250627180045.png]]
 
 Cause: Seeking through a song with repeated lyrics will cause duplicated elements to appear
 (likely same problem outlined here: https://stackoverflow.com/questions/72204470/react-updating-state-creates-duplicate-element-in-dom-but-state-updates-correctl)
+
+Fix: 
+- Not yet fixed
