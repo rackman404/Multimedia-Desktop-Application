@@ -9,6 +9,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
+import { fmtMSS } from '../../../../Common';
 
 
 
@@ -17,9 +18,11 @@ import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores'
 type MusicControlProps = { //constructor variables
   setSeek: (newSeek:number) => void
   setVolume: (newVolume: number)  => void
+  setNext: ()  => void
+  setPrev: ()  => void
 };
 
-export const BottomMusicControl = ({setSeek, setVolume}:MusicControlProps) => {
+export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicControlProps) => {
     
 
     const updatePlayState = useSelectedSongStore((state) => state.setPlayState);
@@ -48,14 +51,16 @@ export const BottomMusicControl = ({setSeek, setVolume}:MusicControlProps) => {
 
                         <div>
                             <div className='centered_control_bottommusiccontrol'>
-                                <Button><ArrowBackIosNewIcon/></Button>
+                                <Button onClick={setPrev}><ArrowBackIosNewIcon/></Button>
                                 <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
-                                <Button><ArrowForwardIosIcon/></Button>
+                                <Button onClick={setNext}><ArrowForwardIosIcon/></Button>
                             </div>
 
                             <div className='seek_component_bottommusiccontrol'>
                                 <Toolbar>
-                                    <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{maxWidth: "50em"}} onChange={userSeekChange} />
+                                    {fmtMSS(Math.round(currentSeek))}
+                                    <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{maxWidth: "50em", marginLeft: "10px", marginRight: "10px"}} onChange={userSeekChange} />
+                                    {fmtMSS(Math.round(currentSong.length))}
                                 </Toolbar>
                                 tes
                             </div>
@@ -67,7 +72,7 @@ export const BottomMusicControl = ({setSeek, setVolume}:MusicControlProps) => {
                                 Volume
                             </div>
                         
-                            <Toolbar> <Slider size="small" aria-label="Volume" value={currentVolume} max={100} onChange={userVolumeChange} /> </Toolbar>
+                            <Toolbar> {currentVolume} <Slider size="small" aria-label="Volume" value={currentVolume} max={100} onChange={userVolumeChange} /> </Toolbar>
                         </div>
                     </div>
                     

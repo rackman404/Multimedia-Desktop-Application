@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './../../../css/audio/MusicHome.css';
+import './../../../App.css';
 import { LeftAudioSidebar } from '../../../components/static/Audio/Music/LeftAudioSidebar';
 import { SongTable } from '../../../components/regular/Audio/Music/SongTable';
 import { SongInfoCard } from '../../../components/regular/Audio/Music/SongInfoCard';
@@ -30,22 +31,8 @@ export const Layout = () => {
     trackObject?.on('end', function(){
         console.log('Finished!');
 
+        nextSong();
         
-
-        if (allSongMetaData != null){
-            if ((selectedPlaySongMetaData.id + 1) < allSongMetaData.length ){
-                console.log((selectedPlaySongMetaData.id + 1) + " " + allSongMetaData[selectedPlaySongMetaData.id].name);
-                setSelectedPlaySongMetaData(allSongMetaData[selectedPlaySongMetaData.id + 1]);
-            }
-            else{
-                setPlayState(false);
-                setTrackObject(null);
-            }
-
-        }
-        
-
-
     });
     
     useEffect(() => {// pause and play song
@@ -133,12 +120,40 @@ export const Layout = () => {
             setVolume(newVolume);
         }
     }
+
+    function nextSong(){
+        if (allSongMetaData != null){
+            if ((selectedPlaySongMetaData.id + 1) < allSongMetaData.length ){
+                console.log((selectedPlaySongMetaData.id + 1) + " " + allSongMetaData[selectedPlaySongMetaData.id].name);
+                setSelectedPlaySongMetaData(allSongMetaData[selectedPlaySongMetaData.id + 1]);
+            }
+            else{
+                setPlayState(false);
+                setTrackObject(null);
+            }
+
+        }
+    }
+
+    function prevSong(){
+        if (allSongMetaData != null){
+            if ((selectedPlaySongMetaData.id - 1) != -1 ){
+                console.log((selectedPlaySongMetaData.id - 1) + " " + allSongMetaData[selectedPlaySongMetaData.id].name);
+                setSelectedPlaySongMetaData(allSongMetaData[selectedPlaySongMetaData.id - 1]);
+            }
+            else{
+                setPlayState(false);
+                setTrackObject(null);
+            }
+
+        }
+    }
     
 
     return (
         
         <div>
-            <><BottomMusicControl setSeek={changeSeek} setVolume={changeVolume}/> <LeftAudioSidebar/> <Outlet/></>
+            <> <div style={{animation:  "fadeIn 0.5s"}}> <BottomMusicControl setSeek={changeSeek} setVolume={changeVolume} setNext={nextSong} setPrev={prevSong}/> <LeftAudioSidebar/> <Outlet/></div></>
         </div>
     )
   };

@@ -1,10 +1,10 @@
-import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Chip, Divider, Drawer, IconButton, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Chip, CircularProgress, Divider, Drawer, IconButton, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import './SongInfoCard.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import placeholderImage from '../../../../../../assets/icons/256x256.png';
+import placeholderImage from '../../../../../../assets//music_no_thumbnail.png';
 import { SongMetaData, SongMetaDataSimple } from '../../../../../types';
 import { fmtMSS } from '../../../../Common';
 
@@ -16,7 +16,14 @@ type SongInfoProps = { //constructor variables
 
 
 export const SongInfoCard = ({sMetaData} : SongInfoProps) => { 
-  const [cover, setCover] = useState<string>(placeholderImage);
+  const [cover, setCover] = useState<any>(<CardMedia
+                    component="img"
+                    width="100"
+                    height="200"
+                    image= {placeholderImage}
+                    alt="Song Thumbnail Image"         
+                    sx={{objectFit: "contain" }}
+                  />);
   const [fullMetaData, setFullMetaData] = useState<SongMetaData>({
 format: sMetaData.metadataFormat,
     fileSize: 0,
@@ -35,7 +42,8 @@ format: sMetaData.metadataFormat,
     comment: "",
   });
 
-  const [progressIndicator, setProgressIndicator] = useState(<div/>);
+  const [progressIndicator, setProgressIndicator] = useState(0);
+  const [useProgressIndicator, setUseProgressIndicator] = useState(false);
 
   //combination of a coroutine and BtoA function, will yield control to main process after doing a small amount of work
   //this prevents any hanging of the application if the binary image data is too big
@@ -44,30 +52,39 @@ format: sMetaData.metadataFormat,
 
   //https://stackoverflow.com/questions/38432611/converting-arraybuffer-to-string-maximum-call-stack-size-exceeded
   //https://stackoverflow.com/questions/64814478/how-can-a-javascript-async-function-explicitly-yield-control-at-a-specific-point
-  async function _arrayBufferToBase64( buffer: any, setIndicatorFunc: any ) {
+  async function _arrayBufferToBase64( buffer: any) {
       var binary = '';
       var bytes = new Uint8Array( buffer );
       var len = bytes.byteLength;
 
       var count = 0;
+      var progressCheck = 0;
+
       var timeTilLoadingIndicator = 0;
       var loadedIndicator = false;
       for (var i = 0; i < len; i++) {
           binary += String.fromCharCode( bytes[ i ] );
           count++;
+          progressCheck++
 
-          if (count == 30000){ //
+          if (count == 20000){
             count = 0;
             timeTilLoadingIndicator++;
-            await new Promise((resolve) => setTimeout(resolve));
+            await new Promise((resolve) => setTimeout(resolve)); //more or less yielding back to the main control flow every so often  similar to C# and Java so app doesn't hang 
+          }
+
+          if (progressCheck == 100000){
+            progressCheck = 0;
+            setProgressIndicator(i/len);
           }
 
           if (timeTilLoadingIndicator > 25 && loadedIndicator == false){
             loadedIndicator = true;
-            setIndicatorFunc(<LinearProgress/>);
+            setUseProgressIndicator(true);
           }
           
       }
+      setUseProgressIndicator(false);
       return window.btoa( binary );
   }
 
@@ -83,7 +100,7 @@ format: sMetaData.metadataFormat,
 
         var cImg = placeholderImage;
         if(result.coverImage != null){
-          cImg = await _arrayBufferToBase64(result.coverImage.data, setProgressIndicator);
+          cImg = await _arrayBufferToBase64(result.coverImage.data);
           cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
         }
 
@@ -96,36 +113,40 @@ format: sMetaData.metadataFormat,
         */
   
         
-        setCover(cImg);
+        setCover(<CardMedia
+                    component="img"
+                    width="100"
+                    height="200"
+                    image= {cImg}
+                    alt="Song Thumbnail Image"         
+                    sx={{objectFit: "contain" }}
+                  />);
       }
-      setProgressIndicator(<div/>)
     })();
-
-
   }, [sMetaData]);
+
+  React.useEffect(() => {
+    if (useProgressIndicator == true){
+      setCover(<CircularProgress key={progressIndicator} variant='determinate' size="10vw" value={progressIndicator*100}/>)
+    }
+
+  }, [useProgressIndicator, progressIndicator]);
 
   
     return (
         <div>
             <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "60.5vh", maxWidth: "20vw", maxHeight: "60.5vh"}}>
               <CardContent>
-
-                {progressIndicator}
-
+                
                 <Paper  style={{maxHeight: "28.5vh", overflow: 'auto', scrollbarWidth: 'none'}}>
                   <Typography variant="h5" component="div" >{sMetaData?.name}</Typography>
                   
                   {/*https://stackoverflow.com/questions/72212417/make-cardmedia-images-fit-its-content-in-mui-5
                   https://stackoverflow.com/questions/77707763/extract-image-from-mp3-files-inside-browser-using-javascript 
                   */}
-                  <CardMedia
-                    component="img"
-                    width="100"
-                    height="200"
-                    image= {cover}
-                    alt="Song Thumbnail Image"         
-                    sx={{objectFit: "contain" }}
-                  />
+
+                  {cover}
+                  
                 </Paper>
 
                 <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist}<br/></Typography>
@@ -135,19 +156,19 @@ format: sMetaData.metadataFormat,
 
                   <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Song Detail<br/></Typography>
                   <div style={{ textAlign: "left", paddingRight: "5px"}}>
-                    <Typography variant="body2" >Genre: {fullMetaData?.genre}<br/></Typography>
-                    <Typography variant="body2" >Artist: {fullMetaData?.artist}<br/></Typography>
-                    <Typography variant="body2" >Album: {fullMetaData?.album}<br/></Typography>
-                    <Typography variant="body2" >Length: {fmtMSS(sMetaData.length)} Mins<br/></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Genre: {fullMetaData?.genre} <br/></div> </Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Artist: {fullMetaData?.artist} <br/></div></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Album: {fullMetaData?.album} <br/></div></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Length: {fmtMSS(sMetaData.length)} Mins <br/></div></Typography>
                   </div>
 
                   <Divider/>
                   <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Technical Detail<br/></Typography>
                   <div style={{ textAlign: "left"}}>
-                    <Typography variant="body2" >Bitrate: {fullMetaData?.bitrate} kbps<br/></Typography>
-                    <Typography variant="body2" >Format: {fullMetaData?.format}<br/></Typography>
-                    <Typography variant="body2" >Embedded Comment: {fullMetaData?.comment}<br/></Typography>
-                    <Typography variant="body2" >File Location: {fullMetaData?.songRawPath} <br/></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Bitrate: {fullMetaData?.bitrate} kbps</div></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Format: {fullMetaData?.format}</div></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Embedded Comment: {fullMetaData?.comment}</div></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>File Location: {fullMetaData?.songRawPath}</div></Typography>
                   </div>
 
                   <Divider/>

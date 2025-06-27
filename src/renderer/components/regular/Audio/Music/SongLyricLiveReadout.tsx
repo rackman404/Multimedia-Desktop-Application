@@ -38,7 +38,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
   useEffect(() => {
     if (lyricData.lyrics == undefined){
-      setCurrentLyric("If this message doesn't disappear after loading bar disappears it means you're fucked bozo");  
+      setCurrentLyric("If this message doesn't disappear after loading bar disappears it means the lyric API could not find lyrics (either doesn't exist or metadata is fucked)");  
     }
     else if (lyricData.lyrics != undefined && lyricData.lyrics.length != 0){
       if (currentLyric == "If this message doesn't disappear after loading bar disappears it means you're fucked bozo"){

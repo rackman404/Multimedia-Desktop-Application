@@ -3,5 +3,13 @@
 
     text-align: center;
 
-    
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.text_fade_in_songinfocard{
+    animation: fadeIn 0.50s; 
 }

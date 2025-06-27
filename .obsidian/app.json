@@ -4,5 +4,6 @@
     "assets/",
     "release/",
     "src/"
-  ]
+  ],
+  "alwaysUpdateLinks": true
 }
