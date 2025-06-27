@@ -1,0 +1,85 @@
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.page_content_settings{
+    user-select: none;
+    
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+
+    animation: fadeIn 0.50s; 
+}
+
+.card_settings{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+
+
+    height: 100vh;
+    width: 100vw;
+
+    text-align: center;
+}
+
+.secondary_card_settings{
+    background: linear-gradient(to right bottom,rgb(34, 34, 34),rgb(49, 49, 49));
+
+    width: 80vw;
+
+    text-align: center;
+
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+
+.shaded_label_affimative_settings{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(255, 0, 0));
+}
+
+.shaded_label_negative_settings{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(0, 255, 85));
+}
+
+.row_settings{
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;  /*aligns elements in row vertically center */
+
+    gap: 5px;
+
+    /* use to give row full space allocated to it */
+    width: 90%;
+
+    
+}
+
+.double_row_settings{
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+
+
+    gap: 5px;
+
+    
+}
+
+.column_settings{
+    display: flex;
+    flex-direction: column;
+
+    /* does not work vertically, use align items
+    justify-content: center;
+    justify-items: center;
+    */
+    align-items: center;
+
+    gap: 5px;
+
+    
+}

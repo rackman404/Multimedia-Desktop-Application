@@ -2,7 +2,7 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example' | 'audio';
+export type Channels = 'ipc-example' | 'audio' | 'settings';
 
 const electronHandler = {
   ipcRenderer: {

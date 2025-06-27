@@ -30,4 +30,5 @@ npm-debug.log.*
 *.mp3
 *.flac
 
+dotnet_discord_rpc
 

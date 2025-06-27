@@ -44,9 +44,9 @@ export const TopHeader = () => {
 
                     <Toolbar className='right_align_toolbar_topheader'>
                         <Card >                            
-                            <LinkButton component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Settings")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Settings</Typography></LinkButton>
-                            <LinkButton component={Link} to={'/settings'} sx={{margin: "5px"}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">About</Typography></LinkButton>
-                            <LinkButton component={Link} to={'/settings'} sx={{margin: "5px"}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Help</Typography></LinkButton>
+                            <LinkButton component={Link} to={'/utility/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Settings")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Settings</Typography></LinkButton>
+                            <LinkButton component={Link} to={'/utility/about'} sx={{margin: "5px"}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">About</Typography></LinkButton>
+                            <LinkButton component={Link} to={'/utility/help'} sx={{margin: "5px"}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Help</Typography></LinkButton>
                             <Chip label="Utility" variant="filled" sx={{margin: "5px"}}/>   
                         </Card>
 

@@ -18,6 +18,7 @@ import * as fs from "fs"
 
 import { AudioManager } from './services/audio_service/audioManager';
 import { NyaaScraper } from './services/nyaa_service/nyaaScraper';
+import { SettingsManager } from './services/settings_service/settingsManager';
 
 
 export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' + "music");
@@ -64,6 +65,90 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+
+
+/**
+ * Add event listeners...
+ */
+
+app.on('window-all-closed', () => {
+  // Respect the OSX convention of having the application in memory even
+  // after all windows have been closed
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app
+  .whenReady()
+  .then(() => {
+    createWindow();
+    app.on('activate', () => {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (mainWindow === null) createWindow();
+    });
+  })
+  .catch(console.log);
+
+
+//---------------------- Backend Setup
+
+var audioManager = new AudioManager();
+var settingsManager = new SettingsManager();
+
+var test = new NyaaScraper();
+
+
+//----------------- IPC Handlers, Rout to services
+
+
+ipcMain.on('ipc-example', async (event, arg) => {
+  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+  console.log(msgTemplate(arg));
+  event.reply('ipc-example', msgTemplate('pong'));
+});
+
+
+ipcMain.on('audio', async (event, arg) => {
+  if (arg != ""){
+    audioManager.broker.eventOn(event, arg);
+  }
+  else{
+    event.reply('audio', console.log("Undefined ipc one way from bus audio"));
+  }
+
+});
+
+ipcMain.handle('audio', async (event, arg) => {
+    if (arg != ""){
+      return audioManager.broker.eventHandle(event, arg);
+    }
+  }
+
+);
+
+ipcMain.on('settings', async (event, arg) => {
+  if (arg != ""){
+    settingsManager.broker.eventOn(event, arg);
+  }
+  else{
+    event.reply('audio', console.log("Undefined ipc one way from bus audio"));
+  }
+
+});
+
+ipcMain.handle('settings', async (event, arg) => {
+    if (arg != ""){
+      return settingsManager.broker.eventHandle(event, arg);
+    }
+  }
+
+);
+
+
+//-----------------
+
 const createWindow = async () => {
   //backend folder setup
   if (app.isPackaged == false){ // fork process directly from main.py when not packaged (compiled into exe)
@@ -104,9 +189,11 @@ const createWindow = async () => {
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
-
-
+    fullscreenable: false,
   });
+  mainWindow.maximize();
+
+  settingsManager.SetWindow(mainWindow);
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
@@ -135,72 +222,13 @@ const createWindow = async () => {
     return { action: 'deny' };
   });
 
+  
+
+
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
 };
-
-/**
- * Add event listeners...
- */
-
-app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app
-  .whenReady()
-  .then(() => {
-    createWindow();
-    app.on('activate', () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
-    });
-  })
-  .catch(console.log);
-
-
-//---------------------- Backend Setup
-
-var audioManager = new AudioManager();
-
-var test = new NyaaScraper();
-
-
-//----------------- IPC Handlers, Rout to services
-
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
-
-
-ipcMain.on('audio', async (event, arg) => {
-  if (arg != ""){
-    audioManager.broker.eventOn(event, arg);
-  }
-  else{
-    event.reply('audio', console.log("Undefined ipc one way from bus audio"));
-  }
-
-});
-
-ipcMain.handle('audio', async (event, arg) => {
-    if (arg != ""){
-      return audioManager.broker.eventHandle(event, arg);
-    }
-  }
-
-);
-
-//-----------------
 
 
 

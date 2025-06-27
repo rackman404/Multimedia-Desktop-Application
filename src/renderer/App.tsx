@@ -5,6 +5,9 @@ import './App.css';
 import Dashboard from './views/Dashboard'
 import MusicHome from './views/audio/music/MusicHome'
 import MusicPlayLists from './views/audio/music/MusicPlaylists'
+import Settings from './views/utility/Settings'
+import Help from './views/utility/Help'
+import About from './views/utility/About'
 
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
 import { LeftAudioSidebar } from './components/static/Audio/Music/LeftAudioSidebar';
@@ -65,6 +68,10 @@ export default function App() {
           <Route path="/audio/music/home" element={<MusicHome/>} />
           <Route path="/audio/music/playlists" element={<MusicPlayLists />} />
         </Route>
+
+        <Route path="/utility/settings" element={<Settings />} />
+        <Route path="/utility/help" element={<Help />} />
+        <Route path="/utility/about" element={<About />} />
 
       </Routes>
       
