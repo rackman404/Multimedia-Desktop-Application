@@ -1,4 +1,4 @@
-![[preview_v0_1_0.png]]
+![preview_v0_1_0.png](preview_v0_1_0.png)
 <sub>Preview of the music/audio service V0.1.0-alpha-unsecure</sub>
 # <h1 align="center">Multimedia Center</h1>
 
