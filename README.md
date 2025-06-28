@@ -17,12 +17,16 @@ An Electron desktop application that combines audio playing capabilities with ot
 - Follow steps outlined in documentation
 
 
-# Current Services and Features (As of 2025-06-27 V0.1.0-alpha-unsecure)
+# Current Services and Features (As of 2025-06-28 V0.2.0-alpha-unsecure)
 
 ### Music (Audio)
 - Music player capabilities
 - Live Lyric support through [lrclib](https://lrclib.net)'s public API 
 - Display embedded song metadata within the sidebar (i.e thumbnail, album name, etc..)
+
+### Discord Rich Presence Client (Misc)
+- Stream activity details (i.e Song name, start end timestamps, etc..) to a Discord client on the same PC to the user's profile
+- Only Supports Music Activity
 
 # Projected V1.0 Services and Features
 
@@ -41,8 +45,7 @@ An Electron desktop application that combines audio playing capabilities with ot
 ### FFmpeg (Audio Utils)
 -  Basic audio manipulation (FFmpeg)
 
-### Discord Rich Presence Client (Misc)
-- Stream activity details (i.e Song name, start end timestamps, etc..) to a Discord client on the same PC to the user's profile
+
 
 # Documentation
 All documentation is stored within \_Documentation. Documentation is either in Markdown or Draw.io formatted if it is a diagram documentation may not always be up to date to current release version, documentation may include the following (subject to change):
