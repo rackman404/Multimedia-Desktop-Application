@@ -25,7 +25,7 @@ export class DiscordManager{
 
 
     sendToRPC(detail: string, state: string, startstamp: string, endstamp: string, imageURL: string){
-        this.rpcApplication?.stdin?.write(detail + "," + state + "," + startstamp + "," + endstamp + "," + imageURL + "\n");
+        this.rpcApplication?.stdin?.write(detail.replace(/,/g, " and ") + "," + state.replace(/,/g, " and ") + "," + startstamp + "," + endstamp + "," + imageURL + "\n");
         //this.rpcApplication?.stdin?.end();
     }
 

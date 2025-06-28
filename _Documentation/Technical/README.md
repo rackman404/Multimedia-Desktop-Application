@@ -4,7 +4,9 @@
 
 Until CI/CD Tools are implemented, the following will allow for building:
 - Download latest commits from Github repo
-- TBD
+- Ensure latest version of discord_rpc_cli.exe is complied and placed within "binary_dependencies" folder 
+	- also ensure discord_game_sdk.dll is present in the same folder as it
+
 
 # Versioning Guidelines
 
