@@ -18,7 +18,10 @@ node_modules
 # OSX
 .DS_Store
 
-release
+release/build
+release/app/dist
+
+
 .erb/dll
 
 .idea
@@ -30,5 +33,10 @@ npm-debug.log.*
 *.mp3
 *.flac
 
-dotnet_discord_rpc
+dotnet_discord_rpc/Assets
+dotnet_discord_rpc/bin
+dotnet_discord_rpc/obj
+
+_sample_development_folder
+
 

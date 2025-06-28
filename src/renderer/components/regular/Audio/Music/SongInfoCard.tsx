@@ -25,7 +25,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
                     sx={{objectFit: "contain" }}
                   />);
   const [fullMetaData, setFullMetaData] = useState<SongMetaData>({
-format: sMetaData.metadataFormat,
+  format: sMetaData.metadataFormat,
     fileSize: 0,
     metadataFormat: "",
     id: sMetaData.id,
@@ -119,7 +119,7 @@ format: sMetaData.metadataFormat,
                     height="200"
                     image= {cImg}
                     alt="Song Thumbnail Image"         
-                    sx={{objectFit: "contain" }}
+                    sx={{objectFit: "contain" , animation: "fadeIn 0.50s" }}
                   />);
       }
     })();

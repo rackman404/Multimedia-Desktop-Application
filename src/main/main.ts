@@ -19,9 +19,11 @@ import * as fs from "fs"
 import { AudioManager } from './services/audio_service/audioManager';
 import { NyaaScraper } from './services/nyaa_service/nyaaScraper';
 import { SettingsManager } from './services/settings_service/settingsManager';
+import { DiscordManager } from './services/discord_service/discordManager';
 
 
 export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' + "music");
+export const BINARYDEPENDENCYDIRECTORY = path.join(__dirname, '../../../../' + "binary_dependencies");
 //export const PRODUCTIONMUSICFILEDIRECTORY = __dirname + '../../../../' + "music";
 
 
@@ -96,6 +98,7 @@ app
 
 var audioManager = new AudioManager();
 var settingsManager = new SettingsManager();
+var discordManager = new DiscordManager();
 
 var test = new NyaaScraper();
 
@@ -133,7 +136,7 @@ ipcMain.on('settings', async (event, arg) => {
     settingsManager.broker.eventOn(event, arg);
   }
   else{
-    event.reply('audio', console.log("Undefined ipc one way from bus audio"));
+    event.reply('settings', console.log("Undefined ipc one way from bus settings"));
   }
 
 });
@@ -143,7 +146,23 @@ ipcMain.handle('settings', async (event, arg) => {
       return settingsManager.broker.eventHandle(event, arg);
     }
   }
+);
 
+ipcMain.on('discord', async (event, arg) => {
+  if (arg != ""){
+    discordManager.broker.eventOn(event, arg);
+  }
+  else{
+    event.reply('discord', console.log("Undefined ipc one way from bus discord"));
+  }
+
+});
+
+ipcMain.handle('discord', async (event, arg) => {
+    if (arg != ""){
+      return discordManager.broker.eventHandle(event, arg);
+    }
+  }
 );
 
 

@@ -12,18 +12,40 @@ export class DiscordBroker {
     this.discordManager = discordController;
   }
 
+  eventOn(event: Electron.IpcMainEvent, arg: string){
+    console.log("handling discord message event from broker; arg: " + arg);
 
+    
+    switch(arg[0].toString()){
+      case "enable_client": 
+        console.log("recieved from discord broker, enabling client");
+
+        this.discordManager.enableClient();
+        break;
+      case "disable_client": 
+        console.log("recieved from discord broker, disabling client");
+
+        this.discordManager.disableClient();
+        break;
+      case "song_notification": //TEST ONLY
+        console.log("recieved from discord broker, sending song notification");
+
+        this.discordManager.sendToRPC(arg[1], arg[2], arg[3], arg[4], arg[5]);
+        break;
+      default:
+        console.log("ERROR: DISCORD BROKER (INVALID RESPONSE)");
+
+    }
+  }
 
   eventHandle(event: Electron.IpcMainInvokeEvent, arg: string[]){
-    console.log("handling audio event from broker; arg: " + arg);
+    console.log("handling audio reply event from broker; arg: " + arg);
 
     switch(arg[0].toString()){
-      case "test_discord_channel": //TEST ONLY
-        console.log("recieved from broker");
-        break;
+ 
 
       default:
-        console.log("ERROR: AUDIO BROKER (INVALID RESPONSE)");
+        console.log("ERROR: DISCORD BROKER (INVALID RESPONSE)");
 
     }
   }

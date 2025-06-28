@@ -1,0 +1,19 @@
+{
+  "name": "multimedia-center-main",
+  "productName": "multimedia-center-process",
+  "version": "0.1.0",
+  "description": "multimediaprocess",
+  "license": "MIT",
+  "author": {
+    "name": "Jacky Zhang",
+    "email": "jacky.zhang1337@gmail.com",
+    "url": "https://github.com/rackman404/Multimedia-Desktop-Application"
+  },
+  "main": "./dist/main/main.js",
+  "scripts": {
+    "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
+    "postinstall": "npm run rebuild && npm run link-modules",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
+  },
+  "dependencies": {}
+}

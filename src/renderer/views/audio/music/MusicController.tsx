@@ -77,6 +77,9 @@ export const Layout = () => {
             newHowl.play();
             setTrackObject(newHowl);
             setPlayState(true);
+
+
+            window.electron.ipcRenderer.sendMessage('discord', ["song_notification", "Song: " + selectedPlaySongMetaData.name, "Artist: " + selectedPlaySongMetaData.artist, "0", "0", "https://www.iconsdb.com/icons/preview/gray/note-xxl.png"]);
         }
 
 

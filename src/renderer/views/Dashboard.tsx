@@ -22,15 +22,25 @@ export const Layout = () => {
             <Card className='card_dashboard'> <h2>Debug</h2> 
 
             <RegularButton onClick={() => window.electron.ipcRenderer.sendMessage('audio', ['msg'])}>Test send one way</RegularButton>
+
+            <RegularButton onClick={    
+                () => {
+                    
+                window.electron.ipcRenderer.sendMessage('discord', ["song_notification", "test", "testbottom", "3", "4", "https://www.iconsdb.com/icons/preview/gray/note-xxl.png"]);
+
+                
+            }}>Test Discord Rich Presence</RegularButton>
+
+            
             <RegularButton onClick={    
                 async () => {
                     
-                const result = await window.electron.ipcRenderer.invoke('audio', "get_all_metadata");
-                console.log("getting results:");
-                console.log(JSON.parse(result));
+                await window.electron.ipcRenderer.sendMessage('discord', ["song_notification", "secondary", "testbottom", "3", "4", "https://www.iconsdb.com/icons/preview/gray/note-xxl.png"]);
+
                 
-            }}>Test Recieve Metadata</RegularButton>
+            }}>Test Discord Rich Presence (Secondary)</RegularButton>
             
+
             </Card>
 
             

@@ -1,4 +1,4 @@
-![[preview_v0_1_0.png]]
+![preview_v0_1_0.png](preview_v0_1_0.png)
 <sub>Preview of the music/audio service V0.1.0-alpha-unsecure</sub>
 # <h1 align="center">Multimedia Center</h1>
 
@@ -8,6 +8,8 @@ An Electron desktop application that combines audio playing capabilities with ot
 
 # Installation
 
+### NOTE:
+- Only windows binaries will be built; If a MacOS or Linux build is required, either compile the source code using the official electron documentation OR fork this project and alter the code before compiling if there are issues with compiling to MacOS or Linux
 ### For Actual Usage
 - Download the latest binary releases and run MultimediaCenter.exe
 

@@ -8,5 +8,8 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+# IDE0210: Convert to top-level statements
+csharp_style_prefer_top_level_statements = true
+
 [*.md]
 trim_trailing_whitespace = false

@@ -36,6 +36,7 @@ export class AudioManager{
             this.fileMusicPath = path.join(this.fileMusicPath, '../../_sample_development_folder/sample_music');
 
             console.log("audio manager dev file path: " + this.fileMusicPath);
+            
         }
         else{
             this.fileMusicPath = PRODUCTIONMUSICFILEDIRECTORY;

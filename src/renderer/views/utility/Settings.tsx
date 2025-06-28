@@ -21,20 +21,30 @@ export const Layout = () => {
     async function setNetwork(state: boolean){
         console.log("changing network connection");
         if (state == true){
-            const result = await window.electron.ipcRenderer.invoke('settings', ["network", "true"]);
+            const result = await window.electron.ipcRenderer.sendMessage('settings', ["network", "true"]);
         }
         if (state == false){
-            const result = await window.electron.ipcRenderer.invoke('settings', ["network", "false"]);
+            const result = await window.electron.ipcRenderer.sendMessage('settings', ["network", "false"]);
         }
     }
 
     async function setFullscreen(state: boolean){
         console.log("changing fullscreen state");
         if (state == true){
-            const result = await window.electron.ipcRenderer.invoke('settings', ["fullscreen", "true"]);
+            const result = await window.electron.ipcRenderer.sendMessage('settings', ["fullscreen", "true"]);
         }
         if (state == false){
-            const result = await window.electron.ipcRenderer.invoke('settings', ["fullscreen", "false"]);
+            const result = await window.electron.ipcRenderer.sendMessage('settings', ["fullscreen", "false"]);
+        }
+    }
+
+    function setRichPresence(state: boolean){
+        console.log("changing fullscreen state");
+        if (state == true){
+            window.electron.ipcRenderer.sendMessage('discord', ["enable_client"]);
+        }
+        if (state == false){
+            window.electron.ipcRenderer.sendMessage('discord', ["disable_client"]);
         }
     }
     
@@ -69,7 +79,7 @@ export const Layout = () => {
                             <RegularButton
                             className={discordState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
                             sx={{marginLeft: "auto"}}
-                            onClick={() => discordState === false ? setDiscordState(true) : setDiscordState(false)}> 
+                            onClick={() => discordState === false ? (setDiscordState(true), setRichPresence(true)) : (setDiscordState(false), setRichPresence(false))}> 
                                 {discordState === false ? "Enable" : "Disable"} 
                             </RegularButton>  
 
@@ -88,6 +98,20 @@ export const Layout = () => {
                             <RegularButton
                             sx={{marginLeft: "auto"}}
                             onClick={() => discordState === false ? setDiscordState(true) : setDiscordState(false)}> 
+                                Submit
+                            </RegularButton>  
+                        </div>
+
+                            <div className='row_settings'>
+                            <Tooltip title="Default step increment is 100ms per step">
+                                <Typography noWrap component="div">Set Offset Step Increment</Typography>
+                            </Tooltip>
+        
+                            <TextField id="inputfieldoffset" label="Set Step Increment" variant="standard" sx={{marginLeft: "auto"}} /> 
+                            
+                            <RegularButton
+                            sx={{marginLeft: "auto"}}
+                            onClick={() => discordState === false ? (setDiscordState(true), setRichPresence(true)) : (setDiscordState(false), setRichPresence(false))}> 
                                 Submit
                             </RegularButton>  
                         </div>
