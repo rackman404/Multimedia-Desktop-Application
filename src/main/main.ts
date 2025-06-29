@@ -20,6 +20,7 @@ import { AudioManager } from './services/audio_service/audioManager';
 import { NyaaScraper } from './services/nyaa_service/nyaaScraper';
 import { SettingsManager } from './services/settings_service/settingsManager';
 import { DiscordManager } from './services/discord_service/discordManager';
+import { PlayerManager } from './services/player_service/playerManager';
 
 
 export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' + "music");
@@ -99,6 +100,7 @@ app
 var audioManager = new AudioManager();
 var settingsManager = new SettingsManager();
 var discordManager = new DiscordManager();
+var playerManager = new PlayerManager();
 
 var test = new NyaaScraper();
 
@@ -165,6 +167,23 @@ ipcMain.handle('discord', async (event, arg) => {
   }
 );
 
+ipcMain.on('video', async (event, arg) => {
+  if (arg != ""){
+    playerManager.broker.eventOn(event, arg);
+  }
+  else{
+    event.reply('discord', console.log("Undefined ipc one way from bus discord"));
+  }
+
+});
+
+ipcMain.handle('video', async (event, arg) => {
+    if (arg != ""){
+      return playerManager.broker.eventHandle(event, arg);
+    }
+  }
+);
+
 
 //-----------------
 
@@ -210,9 +229,20 @@ const createWindow = async () => {
     },
     fullscreenable: false,
   });
-  mainWindow.maximize();
 
+  mainWindow.maximize();
+  
   settingsManager.SetWindow(mainWindow);
+
+  var playerWindow = new BrowserWindow({
+    width: 500,
+    height: 500,
+    transparent: false,
+    frame: true,
+  });
+  playerManager.LaunchPlayer(playerWindow);
+ 
+
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
