@@ -2,7 +2,9 @@
     background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
 
     text-align: center;
-
+    
+  /* required for button panel to be relative to parent but absolute to itself */
+  position: relative;
 }
 
 @keyframes fadeIn {
@@ -13,3 +15,29 @@
 .text_fade_in_songinfocard{
     animation: fadeIn 0.50s; 
 }
+
+.button_panel_songinfocard{
+    position:absolute;
+    top:4vh;
+    min-width:5vw;
+    height: 0;
+    z-index: 10000;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.static_button_songinfocard{
+    position:absolute;
+    min-width:5vw;
+    height: 0;
+    z-index: 10000;
+
+    top:1vh;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+

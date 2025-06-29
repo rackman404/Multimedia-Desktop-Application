@@ -1,5 +1,7 @@
 ﻿
 
+using System.Text;
+
 public struct RPCData
 {
     public string details { get; private set; }
@@ -32,6 +34,7 @@ class Program
         {
             do
             {
+                System.Threading.Thread.Sleep(200);
                 string? temp = Console.ReadLine();
                 if (temp != null)
                 {
@@ -50,7 +53,7 @@ class Program
         {
 
             clientController.UpdateMethod();
-            
+            System.Threading.Thread.Sleep(200);
 
             if (updates != "" && updates != null)
             {
@@ -117,7 +120,7 @@ public class DiscordController
 
         var activity = new Discord.Activity
         {
-            State = "Idling.",
+            State = "ロストア.",
             Details = "Idling",
             Assets = tempAssets,
             Timestamps = timestamps,
@@ -142,10 +145,13 @@ public class DiscordController
         timestamps.Start = data.startTimestamp;
         //timestamps.End = data.endTimestamp;
 
+        Console.WriteLine("ロストア");
+
         var activity = new Discord.Activity
         {
-            State = data.state,
-            Details = data.details,
+            //https://github.com/discord/discord-rpc/issues/119
+            State = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(data.state)),
+            Details = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(data.details)),
             Assets = tempAssets,
             Timestamps = timestamps,
         };

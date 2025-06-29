@@ -42,7 +42,11 @@ export class DiscordBroker {
     console.log("handling audio reply event from broker; arg: " + arg);
 
     switch(arg[0].toString()){
- 
+      case "client_status": 
+        console.log("recieved from discord broker, sending client status");
+
+        return this.discordManager.getClientStatus();
+      break;
 
       default:
         console.log("ERROR: DISCORD BROKER (INVALID RESPONSE)");

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_Documentation/Technical/README.md",
+                "file": "_Documentation/Technical/Bug Log.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "Bug Log"
             }
           }
         ]
@@ -170,6 +170,11 @@
   },
   "active": "f4fadbd18cb75a88",
   "lastOpenFiles": [
+    "Pasted image 20250628155250.png",
+    "_Documentation/Technical/Modules/Discord/README.md",
+    "Pasted image 20250628155245.png",
+    "_Documentation/Technical/Modules/Audio/FFmpeg/README.md",
+    "_Documentation/Technical/README.md",
     "release/build/win-unpacked/binary_dependencies/System.Xml.XPath.dll",
     "release/build/win-unpacked/binary_dependencies/System.Xml.XmlSerializer.dll",
     "release/build/win-unpacked/binary_dependencies/System.Xml.XmlDocument.dll",
@@ -180,7 +185,6 @@
     "release/build/win-unpacked/binary_dependencies/System.Text.RegularExpressions.dll",
     "release/build/win-unpacked/binary_dependencies/System.Text.Json.dll",
     "release/build/win-unpacked/binary_dependencies/System.Text.Encodings.Web.dll",
-    "release/build/win-unpacked/binary_dependencies/System.Text.Encoding.Extensions.dll",
     "release/build/win-unpacked/resources/assets/icons/64x64.png",
     "release/build/win-unpacked/resources/assets/icons/512x512.png",
     "release/build/win-unpacked/resources/assets/icons/96x96.png",
@@ -190,15 +194,11 @@
     "release/build/win-unpacked/resources/assets/icons/24x24.png",
     "release/build/win-unpacked/resources/assets/icons/16x16.png",
     "release/build/win-unpacked/resources/assets/icons/128x128.png",
-    "release/build/win-unpacked/resources/assets/icons/1024x1024.png",
-    "_Documentation/Technical/Modules/Discord/README.md",
     "_Documentation/Technical/Modules/Audio/Music/README.md",
     "_Documentation/Technical/Bug Log.md",
     "_Documentation/Technical/Modules/Video/Nyaa/README.md",
     "README.md",
     "().md",
-    "_Documentation/Technical/Modules/Audio/FFmpeg/README.md",
-    "_Documentation/Technical/README.md",
     "lrclib.net.md",
     "nyaa.si.md",
     "_Documentation/Non Technical/Specifications (SRS).md",

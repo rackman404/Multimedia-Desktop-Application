@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Chip, CircularProgress, Divider, Drawer, IconButton, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Chip, CircularProgress, Divider, Drawer, IconButton, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Tooltip, Typography } from '@mui/material';
 import './SongInfoCard.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import placeholderImage from '../../../../../../assets//music_no_thumbnail.png';
 import { SongMetaData, SongMetaDataSimple } from '../../../../../types';
 import { fmtMSS } from '../../../../Common';
+import { RegularButton } from '../../../../elements/CustomButtons';
 
 type SongInfoProps = { //constructor variables
   sMetaData: SongMetaDataSimple
@@ -44,6 +45,9 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
 
   const [progressIndicator, setProgressIndicator] = useState(0);
   const [useProgressIndicator, setUseProgressIndicator] = useState(false);
+
+
+  const[buttonPanelState, setButtonPanelState] = useState(false);
 
   //combination of a coroutine and BtoA function, will yield control to main process after doing a small amount of work
   //this prevents any hanging of the application if the binary image data is too big
@@ -136,11 +140,47 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
     return (
         <div>
             <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "60.5vh", maxWidth: "20vw", maxHeight: "60.5vh"}}>
+
+              <div className='static_button_songinfocard'>              
+                <Tooltip title="Hide/Show this panel" placement="right">
+                  <RegularButton onClick={() => {buttonPanelState === false ? setButtonPanelState(true) : setButtonPanelState(false)}}>
+                  <div style={{font:"1px" }}>{buttonPanelState === false ? "Show Buttons" : "Hide Buttons"}</div>
+                  </RegularButton>
+                </Tooltip>
+              </div>
+
+
+              <div className='button_panel_songinfocard' style={buttonPanelState === false ? {translate: "-8vw"} : {}}>
+                <Tooltip title="(Do not / do) show thumbnail" placement="right">
+                <RegularButton>
+                <div style={{font:"1px" }}>Hide Thumbnail</div>
+                </RegularButton>
+                </Tooltip>
+
+                <Tooltip title="Show the currently playing song's metadata in this panel" placement="right">
+                <RegularButton>
+                <div style={{font:"1px" }}>Show Playing Song</div>
+                </RegularButton>
+                </Tooltip>
+
+                <Tooltip title="Open currently selected song in windows file explorer" placement="right">
+                <RegularButton>
+                <div style={{font:"1px" }}>Open In Windows</div>
+                </RegularButton>
+                </Tooltip>
+
+                <Tooltip title="(Experimental) (Do not use embedded metadata; instead find metadata for song online) / (Recommended) (use embedded metadata)" placement="right">
+                <RegularButton>
+                <div style={{font:"1px" }}>Use Online Metadata</div>
+                </RegularButton>
+                </Tooltip>
+              </div>
+
               <CardContent>
                 
+                {/* IMAGE METADATA */}
                 <Paper  style={{maxHeight: "28.5vh", overflow: 'auto', scrollbarWidth: 'none'}}>
                   <Typography variant="h5" component="div" >{sMetaData?.name}</Typography>
-                  
                   {/*https://stackoverflow.com/questions/72212417/make-cardmedia-images-fit-its-content-in-mui-5
                   https://stackoverflow.com/questions/77707763/extract-image-from-mp3-files-inside-browser-using-javascript 
                   */}
@@ -151,6 +191,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
 
                 <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist}<br/></Typography>
                 
+                {/* WORDED METADATA */}
                 <Divider/>
                 <Paper  style={{maxHeight: "32vh", maxWidth:"20vw", overflow: 'auto', scrollbarWidth: 'none'}}>
 

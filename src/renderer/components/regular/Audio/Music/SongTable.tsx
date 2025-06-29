@@ -3,11 +3,13 @@ import './SongTable.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import { TableHeaderRow } from '../../../../elements/CustomButtons';
+import { RegularButton, TableHeaderRow } from '../../../../elements/CustomButtons';
 import { SongMetaData, SongMetaDataSimple } from '../../../../../types';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { fmtMSS } from '../../../../Common';
 import { blueGrey, grey } from '@mui/material/colors';
+
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
 /*
 const dataRowSX: SxProps = {
@@ -48,18 +50,90 @@ type SongTableProps = { //constructor variables
 
 export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCardFunction}: SongTableProps) => { 
   const [highlighted, setHighlighted] = useState<number | undefined>();
-  const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+
+  const [autoFocus, setAutoFocus] = useState(false);
   
+
+  const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+  const [infoCardSongID, setInfoCardSongID] = useState(0);
 
   async function selectFullDataInfoCard(rowData: SongMetaDataSimple){
     //const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", rowData.id, rowData.songRawPath]);
     //setHighlighted(rowData.id);
     selectedInfoCardFunction(rowData);
+
+    setInfoCardSongID(rowData.id);
+
+    setHighlighted(rowData.id);
   }
 
-  useEffect(() => {//highlight active song
-    setHighlighted(currentSong.id);
+  useEffect(() => {
+    if (autoFocus == true){
+      scrollToElementInTable(currentSong.id);
+    }
   }, [currentSong]);   
+
+  function scrollToElementInTable(songID: number){
+    var childelement = document.querySelector(`#${CSS.escape("tablerow" + songID.toString())}`); 
+    var headeroffsetelement = document.querySelector(`#${CSS.escape("musictableheader")}`); 
+    var tableelement = document.querySelector(`#${CSS.escape("musictable")}`); 
+    var scrollelement = document.querySelector(`#${CSS.escape("scrollable")}`); 
+    
+    var songRect = childelement?.getBoundingClientRect();
+    var headeroffsetRect = headeroffsetelement?.getBoundingClientRect();
+    var scrollRect = scrollelement?.getBoundingClientRect();
+    var tableRect = tableelement?.getBoundingClientRect();
+    
+    //goal is to match the same relative percentage to top between the scrollwheel and the table
+
+    //1. get scale factor between table and scrollbar
+
+    //2. get table and scrollbar true size
+
+    //3. get percentage to top of table for song element
+
+    //4. get the scaled percentage to top of scrollbar
+
+    //5. ???
+
+    //6. PROFIT
+
+    if (songRect != null && scrollRect != null && tableRect != null && headeroffsetRect != null){
+
+        var scrollRectScreenSizeY = scrollRect.bottom - scrollRect.top;
+        var tableRectScreenSizeY = tableRect.bottom - tableRect.top;
+
+        var factorOfScrollToTable = tableRectScreenSizeY/scrollRectScreenSizeY;
+        console.log("Factor: " + (factorOfScrollToTable));
+
+        //position of song in table
+        var songPosInTable = tableRect.top - songRect.top;
+
+        var percentageToTopOfTableSong = (Math.abs(songPosInTable)/tableRectScreenSizeY);
+
+        console.log("total size of scroll: " + scrollRectScreenSizeY );
+        console.log("total size of table: " + tableRectScreenSizeY );
+        console.log("position of song from top: " + Math.abs(songPosInTable));
+        console.log("Percentage to top of table: " + (percentageToTopOfTableSong));
+
+
+        var scrollTarget = scrollRectScreenSizeY * percentageToTopOfTableSong * factorOfScrollToTable
+
+        console.log("target: " + (scrollTarget));
+        
+        scrollelement?.scroll({ top: (scrollTarget - scrollRectScreenSizeY/2), behavior: "smooth",})
+
+    
+    }
+
+  }
+
+  function scrollToTop(){
+    var parentelement = document.querySelector(`#${CSS.escape("musictable")}`); 
+
+    parentelement?.scroll({ top: 0,
+          behavior: "smooth",})
+  }
 
   return (
       <div className='body_songtable'>
@@ -69,19 +143,20 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
               <Button>Submit</Button>
               <Button>Reset Search</Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              <Button>Zoom To Current Song</Button>
-              <Button>Autofocus (on/off) Song</Button>
+              <Button onClick={() => scrollToElementInTable(currentSong.id)}>Zoom To Active Song</Button>
+              <Button onClick={() => scrollToElementInTable(infoCardSongID)}>Zoom To Selected Song</Button>
+              <Button onClick={() => autoFocus === false ? setAutoFocus(true) : setAutoFocus(false)}> {autoFocus === false ? "Enable" : "Disable"} Autofocus</Button>
               <Button>Force Reload Song List</Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              <Button>Toggle Shuffle</Button>
               <Button>Translate Song Titles</Button>
             </div>
           </Card>
           
-          <TableContainer component={Paper} sx={{ maxHeight: "77.8vh", width: "80vw" }} >
-              <Table size='small' stickyHeader aria-label="table">
-                  <TableHead>
+          <TableContainer id={"scrollable"} component={Paper} sx={{ maxHeight: "77.8vh", width: "80vw" }} >
+              <Table size='small' id={"musictable"} stickyHeader aria-label="table">
+                  <TableHead id={"musictableheader"}>
                       <TableHeaderRow>
+                          <TableCell> Playing </TableCell>
                           <TableCell>Name</TableCell>
                           <TableCell align="right">Length (Mins)</TableCell>
                           <TableCell align="right">Artist</TableCell>
@@ -96,14 +171,14 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                   {//https://stackoverflow.com/questions/54045094/use-buttonbase-for-ripple-effect-on-material-ui-tablerow
                   sMetaData ? sMetaData.map((sMetaData, index) => (
 
-                      <CardActionArea className='row_songtable' key={sMetaData.id}  component={TableRow} sx={highlighted === index ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCard(sMetaData)} 
+                      <CardActionArea className='row_songtable' id={"tablerow" + sMetaData.id} key={"tablerow" + sMetaData.id}  component={TableRow} sx={highlighted === index ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCard(sMetaData)} 
                       onDoubleClick=
                       {(e) => {
                         selectedPlayDataFunction(sMetaData);
                       }}
-                      /*data-active={highlighted === index ? "" : undefined} */
-                      > 
-                        <TableCell component="th" scope="row">{sMetaData.name}</TableCell>
+                      >                 
+                        <TableCell component="th" scope="row"> {currentSong.id === index ? <PlayCircleIcon/> : " "} </TableCell>
+                        <TableCell  component="th" scope="row">{sMetaData.name}</TableCell>
                         <TableCell align="right">{fmtMSS(sMetaData.length)}</TableCell>
                         <TableCell align="right">{sMetaData.artist}</TableCell>
                         <TableCell align="right">{sMetaData.genre}</TableCell>

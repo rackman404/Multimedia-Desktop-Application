@@ -1,22 +1,21 @@
 .content_bottommusiccontrol{
     position:fixed;
     left:20vw;
-    bottom:100px;
-    height:1px;
+    bottom:0;
     width:80vw;  
     z-index: 10000;
-}
 
-.horizontal_grid_bottommusiccontrol{
     display: grid;
-    grid-template-columns: 10vw 40vw 30vw;
+    grid-template-columns: 15vw 0.1vw 50vw 0.1vw 15vw;
     grid-template-rows: auto;
+
+    height: 10.3vh;
+
 }
 
 .centered_control_bottommusiccontrol{
     display: flex;
     justify-content: center;
-    margin-top: 0.5vh;
     flex-direction: row;
 }
 
@@ -31,5 +30,48 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+}
+
+.left_card_bottommusiccontrol{
+    background: linear-gradient(rgb(34, 34, 34),rgb(44, 44, 44), rgb(34, 34, 34));
+
+    height: 100%;
+    width: 100%;
+
+    text-align: center;
+
+    display: grid;
+
+
+    /* thumbnail on left side, song deets on the other */ 
+    grid-template-columns: 7.5vw 7.5vw ;
+    grid-template-rows: auto;
+
+    align-items: center;
+    align-content: center;
+    
+ 
+    /* scale font based on UI */
+    font-size: 5px;
+    font-size: 1vw;
+}
+
+.center_card_bottommusiccontrol{
+    background: linear-gradient(rgba(34, 34, 34, 0.26),rgb(44, 44, 44), rgb(34, 34, 34, 0.26));
+
+    height: 100%;
+    width: 100%;
+
+    
+}
+
+
+
+.right_card_bottommusiccontrol{
+    background: linear-gradient(rgb(34, 34, 34),rgb(44, 44, 44), rgb(34, 34, 34));
+
+    height: 100%;
+    width: 100%;
+
 }
 

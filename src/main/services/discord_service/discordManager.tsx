@@ -65,4 +65,13 @@ export class DiscordManager{
         }
     }
 
+    getClientStatus(): boolean{
+        if (this.rpcApplication != undefined){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

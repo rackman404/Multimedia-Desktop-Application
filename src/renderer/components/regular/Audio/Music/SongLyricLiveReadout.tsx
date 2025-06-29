@@ -63,7 +63,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
         
         var text = lyricData.lyrics[lyricData.timestamps.indexOf(closest)]
 
-        console.log((closest + " " + (currentSeek+(currentOffset/1000))));
+        //console.log((closest + " " + (currentSeek+(currentOffset/1000))));
 
         if (closest < (adjustedSeek) && previousTimestamp != closest){
           setFadeState("fade_in_text");

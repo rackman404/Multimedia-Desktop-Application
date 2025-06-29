@@ -3,8 +3,8 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 body {
+  top: 0;
   position: relative;
-  color: white;
   height: 100vh;
   /*
   background: linear-gradient(
@@ -22,7 +22,9 @@ body {
   overflow-y: hidden; /* scroll bar */
   overflow-x: hidden; /* scroll bar */
 
-  margin-top: -2px;
+  margin-top: -0.01vh;
+
+ 
 }
 
 @keyframes fadeIn {

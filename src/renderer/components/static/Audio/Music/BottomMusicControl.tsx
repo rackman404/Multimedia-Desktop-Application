@@ -1,6 +1,6 @@
-import { AppBar, Box, Button, ButtonGroup, Card, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slider, TextField, ToggleButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonGroup, Card, CardMedia, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slider, TextField, ToggleButton, Toolbar, Typography } from '@mui/material';
 import '../../../../css/BottomMusicControl.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RegularButton } from '../../../../elements/CustomButtons';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -11,7 +11,8 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { fmtMSS } from '../../../../Common';
 
-
+import placeholderImage from '../../../../../../assets/music_no_thumbnail.png';
+import { SongMetaData } from '../../../../../types';
 
 
 
@@ -23,14 +24,58 @@ type MusicControlProps = { //constructor variables
 };
 
 export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicControlProps) => {
-    
-
     const updatePlayState = useSelectedSongStore((state) => state.setPlayState);
     const PlayState = useSelectedSongStore((state) => state.playState);
     const currentSeek = useSelectedSongStore((state) => state.currentSeek);
     const currentVolume = useSelectedSongStore((state) => state.currentVolume);
-
     const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+
+    const [shuffle, setShuffle] = useState(false);
+
+    const [cover, setCover] = useState<any>(<CardMedia
+        component="img"
+        width="100%"
+        height="65%"
+        image= {placeholderImage}
+        alt="Song Thumbnail Image"         
+        sx={{objectFit: "contain" }}
+    />);
+
+
+    useEffect(() => {
+
+        (async () => {
+            if (currentSong.songRawPath != ""){
+                const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", currentSong.id, currentSong.songRawPath]) as SongMetaData;
+                //console.log("cover image" +  sMetaData?.coverImage);
+                //console.log(result);
+
+                var cImg = placeholderImage;
+                if(result.coverImage != null){
+                cImg = await _arrayBufferToBase64(result.coverImage.data);
+                cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
+                }
+
+                /* old
+                var cImg = placeholderImage;
+                if(result.coverImage != null){
+                cImg = result.coverImage;
+                cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
+                }
+                */
+        
+                
+        setCover(<img
+        width="100%"
+        height="65%"
+        src= {cImg}
+        alt="Song Thumbnail Image"  
+        style={{objectFit: "contain", animation: "fadeIn 0.50s" }}
+                />);
+            }
+        })();
+    }, [currentSong]);
+
 
     const userSeekChange = (event: Event, newValue: number) => {
         setSeek(newValue);
@@ -40,46 +85,78 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
         setVolume(newValue);
     };
 
+    //https://stackoverflow.com/questions/38432611/converting-arraybuffer-to-string-maximum-call-stack-size-exceeded
+    //https://stackoverflow.com/questions/64814478/how-can-a-javascript-async-function-explicitly-yield-control-at-a-specific-point
+    async function _arrayBufferToBase64( buffer: any) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+
+        var count = 0;
+        var progressCheck = 0;
+
+        var timeTilLoadingIndicator = 0;
+        var loadedIndicator = false;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+            count++;
+            progressCheck++
+
+            if (count == 20000){
+                count = 0;
+                timeTilLoadingIndicator++;
+                await new Promise((resolve) => setTimeout(resolve)); //more or less yielding back to the main control flow every so often  similar to C# and Java so app doesn't hang 
+            }
+    
+        }
+        return window.btoa( binary );
+    }
 
     return (
+        <div className='content_bottommusiccontrol'>        
+                <Card className='left_card_bottommusiccontrol' variant='outlined'>
+                    {cover}
+                    <div>
+                        {currentSong.name} 
+                        <br/>
+                        {currentSong.artist}
+                    </div>
+                </Card>
 
-        <div className='content_bottommusiccontrol'>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
-                    <div className= "horizontal_grid_bottommusiccontrol"> 
-                        <Toolbar></Toolbar>
-
+                <Divider orientation="vertical" />
+                
+                <Card className='center_card_bottommusiccontrol' variant='outlined'>
+                    <div className='centered_control_bottommusiccontrol'>
                         <div>
-                            <div className='centered_control_bottommusiccontrol'>
-                                <Button onClick={setPrev}><ArrowBackIosNewIcon/></Button>
-                                <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
-                                <Button onClick={setNext}><ArrowForwardIosIcon/></Button>
-                            </div>
-
-                            <div className='seek_component_bottommusiccontrol'>
-                                <Toolbar>
-                                    {fmtMSS(Math.round(currentSeek))}
-                                    <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{maxWidth: "50em", marginLeft: "10px", marginRight: "10px"}} onChange={userSeekChange} />
-                                    {fmtMSS(Math.round(currentSong.length))}
-                                </Toolbar>
-                                tes
-                            </div>
-
+                            <Button onClick={setPrev}><ArrowBackIosNewIcon/></Button>
+                            <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
+                            <Button onClick={setNext}><ArrowForwardIosIcon/></Button>
                         </div>
-                        
+
                         <div>
-                            <div className='volume_control_bottommusiccontrol' style={{marginTop: "2.3vh"}}>
-                                Volume
-                            </div>
-                        
-                            <Toolbar> {currentVolume} <Slider size="small" aria-label="Volume" value={currentVolume} max={100} onChange={userVolumeChange} /> </Toolbar>
+                        <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Shuffle</Button>
                         </div>
                     </div>
-                    
-                </AppBar>
-            </Box>
-        </div>
 
+                    <div className='seek_component_bottommusiccontrol'>
+                        <Toolbar>
+                            {fmtMSS(Math.round(currentSeek))}
+                            <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{maxWidth: "50em", marginLeft: "10px", marginRight: "10px"}} onChange={userSeekChange} />
+                            {fmtMSS(Math.round(currentSong.length))}
+                        </Toolbar>
+                    </div>
+                </Card>
+
+                <Divider orientation="vertical" />
+
+                <Card className='right_card_bottommusiccontrol' variant='outlined'>
+                    <div className='volume_control_bottommusiccontrol' style={{marginTop: "2.3vh"}}>
+                        Volume
+                    </div>
+                
+                    <Toolbar> {currentVolume} <Slider size="small" aria-label="Volume" value={currentVolume} max={100} onChange={userVolumeChange} sx={{marginLeft: "10px"}} /> </Toolbar>
+                </Card>
+            </div>       
     );
 
 

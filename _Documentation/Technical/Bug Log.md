@@ -46,3 +46,26 @@ Cause: Seeking through a song with repeated lyrics will cause duplicated element
 
 Fix: 
 - Not yet fixed
+
+
+
+
+
+
+Issue:
+- If discord is closed while application is running, RPC CLI will also close; It should not do that, instead it should attempt to reconnect to discord periodically
+
+
+
+
+
+# Performance
+
+- Large Performance Issues when using rpc cli
+![[Pasted image 20250628155250.png]]
+
+Fix:
+- Don't allow main loop to execute every possible frame 
+
+            clientController.UpdateMethod();
+            System.Threading.Thread.Sleep(50);
