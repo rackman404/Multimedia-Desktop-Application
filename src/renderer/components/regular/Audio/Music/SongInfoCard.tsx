@@ -137,6 +137,16 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
   }, [useProgressIndicator, progressIndicator]);
 
   
+  //on mount and unmount
+  useEffect(() => {
+
+    //called when the component is unmounted
+    return () => {
+      setCover(<div/>);
+    };
+  }, []);
+
+  
     return (
         <div>
             <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "60.5vh", maxWidth: "20vw", maxHeight: "60.5vh"}}>
@@ -144,13 +154,13 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
               <div className='static_button_songinfocard'>              
                 <Tooltip title="Hide/Show this panel" placement="right">
                   <RegularButton onClick={() => {buttonPanelState === false ? setButtonPanelState(true) : setButtonPanelState(false)}}>
-                  <div style={{font:"1px" }}>{buttonPanelState === false ? "Show Buttons" : "Hide Buttons"}</div>
+                  <div style={{font:"1px" }}>{buttonPanelState === false ? "Show" : "Hide"}</div>
                   </RegularButton>
                 </Tooltip>
               </div>
 
 
-              <div className='button_panel_songinfocard' style={buttonPanelState === false ? {translate: "-8vw"} : {}}>
+              <div className='button_panel_songinfocard' style={buttonPanelState === false ? {translate: "-40vw"} : {}}>
                 <Tooltip title="(Do not / do) show thumbnail" placement="right">
                 <RegularButton>
                 <div style={{font:"1px" }}>Hide Thumbnail</div>
@@ -189,7 +199,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
                   
                 </Paper>
 
-                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist}<br/></Typography>
+                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))}<br/></Typography>
                 
                 {/* WORDED METADATA */}
                 <Divider/>
@@ -198,7 +208,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
                   <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Song Detail<br/></Typography>
                   <div style={{ textAlign: "left", paddingRight: "5px"}}>
                     <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Genre: {fullMetaData?.genre} <br/></div> </Typography>
-                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Artist: {fullMetaData?.artist} <br/></div></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Artist: {fullMetaData?.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))} <br/></div></Typography>
                     <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Album: {fullMetaData?.album} <br/></div></Typography>
                     <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Length: {fmtMSS(sMetaData.length)} Mins <br/></div></Typography>
                   </div>

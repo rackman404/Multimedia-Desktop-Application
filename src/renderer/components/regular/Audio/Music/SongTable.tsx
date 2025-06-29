@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardActionArea, Checkbox, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardActionArea, Checkbox, Chip, Divider, Drawer, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import './SongTable.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -71,7 +71,10 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
     if (autoFocus == true){
       scrollToElementInTable(currentSong.id);
     }
+
+    setHighlighted(currentSong.id);
   }, [currentSong]);   
+  
 
   function scrollToElementInTable(songID: number){
     var childelement = document.querySelector(`#${CSS.escape("tablerow" + songID.toString())}`); 
@@ -143,12 +146,30 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
               <Button>Submit</Button>
               <Button>Reset Search</Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              <Button onClick={() => scrollToElementInTable(currentSong.id)}>Zoom To Active Song</Button>
-              <Button onClick={() => scrollToElementInTable(infoCardSongID)}>Zoom To Selected Song</Button>
-              <Button onClick={() => autoFocus === false ? setAutoFocus(true) : setAutoFocus(false)}> {autoFocus === false ? "Enable" : "Disable"} Autofocus</Button>
-              <Button>Force Reload Song List</Button>
+              <Button onClick={() => scrollToElementInTable(currentSong.id)}>Zoom To Active</Button>
+              <Button onClick={() => scrollToElementInTable(infoCardSongID)}>Zoom To Selected</Button>
+              <Button onClick={() => autoFocus === false ? setAutoFocus(true) : setAutoFocus(false)}> {autoFocus === false ? "Enable" : "Disable"} Autozoom</Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
+              <Button>Force Reload Song List</Button>
               <Button>Translate Song Titles</Button>
+              <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
+              
+              {/*
+              <FormControl sx={{height: "2.2vh"}}>
+                f
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={0}
+                  label="Age"
+                  onChange={() => {}}
+                  >
+                  <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
+                  <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
+                  <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
+                </Select>
+              </FormControl>
+              */}
             </div>
           </Card>
           
@@ -161,7 +182,7 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                           <TableCell align="right">Length (Mins)</TableCell>
                           <TableCell align="right">Artist</TableCell>
                           <TableCell align="right">Genre</TableCell>
-                          <TableCell align="right">Play Count</TableCell>
+                          {/* <TableCell align="right">Play Count</TableCell> */}
                           <TableCell align="right">Bit Rate (kbps)</TableCell>
                           <TableCell align="right">Internal ID</TableCell>
                       </TableHeaderRow>
@@ -180,9 +201,9 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                         <TableCell component="th" scope="row"> {currentSong.id === index ? <PlayCircleIcon/> : " "} </TableCell>
                         <TableCell  component="th" scope="row">{sMetaData.name}</TableCell>
                         <TableCell align="right">{fmtMSS(sMetaData.length)}</TableCell>
-                        <TableCell align="right">{sMetaData.artist}</TableCell>
-                        <TableCell align="right">{sMetaData.genre}</TableCell>
-                        <TableCell align="right">{sMetaData.playCount}</TableCell>
+                        <TableCell align="right">{sMetaData.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</TableCell>
+                        <TableCell align="right">{sMetaData.genre.map((genre, index) => ( index === 0 ? genre : ", " + genre))}</TableCell>
+                        {/* <TableCell align="right">{sMetaData.playCount}</TableCell> */}
                         <TableCell align="right">{Math.round(sMetaData.bitrate)}</TableCell>    
                         <TableCell align="right">{Math.round(sMetaData.id)}</TableCell>    
                       </CardActionArea>

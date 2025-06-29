@@ -14,7 +14,9 @@ import { fmtMSS } from '../../../../Common';
 import placeholderImage from '../../../../../../assets/music_no_thumbnail.png';
 import { SongMetaData } from '../../../../../types';
 
-
+import Marquee from "react-fast-marquee";
+import { checkTextOverflow } from '../../../../../utils';
+import { grey } from '@mui/material/colors';
 
 type MusicControlProps = { //constructor variables
   setSeek: (newSeek:number) => void
@@ -41,6 +43,32 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
         sx={{objectFit: "contain" }}
     />);
 
+    const [artistElement, setArtistElement] = useState<HTMLDivElement | null>();
+    const [nameElement, setNameElement] = useState<HTMLDivElement | null>();
+
+    const [artistMarqueeState, setArtistMarqueeState] = useState(false);
+    const [nameMarqueeState, setNameMarqueeState] = useState(false);
+
+    //on mount and unmount
+    useEffect(() => {
+
+    //called when the component is unmounted
+    return () => {
+        setCover(<div/>);
+    };
+    }, []);
+
+    
+    //check for overflow and set a marquee if it does
+    useEffect(() => {
+
+        if (artistElement != null && nameElement != null){
+            setArtistMarqueeState(checkTextOverflow(artistElement));
+            setNameMarqueeState(checkTextOverflow(nameElement));
+        }
+        
+
+    }, [artistElement, nameElement]);
 
     useEffect(() => {
 
@@ -67,10 +95,10 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                 
         setCover(<img
         width="100%"
-        height="65%"
+        height="100%"
         src= {cImg}
         alt="Song Thumbnail Image"  
-        style={{objectFit: "contain", animation: "fadeIn 0.50s" }}
+        style={{objectFit: "contain", animation: "fadeIn 0.50s", objectPosition: "left" }}
                 />);
             }
         })();
@@ -117,9 +145,20 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                 <Card className='left_card_bottommusiccontrol' variant='outlined'>
                     {cover}
                     <div>
-                        {currentSong.name} 
+                        <div ref={(el) => {setNameElement(el)}} id = "name" className='left_card_text_container_bottommusiccontrol'>
+                        {nameMarqueeState === true ? 
+                        <Marquee speed={25} delay={1}>{<div style={{paddingRight: "5px"}}>{currentSong.name} {" "} | </div>}</Marquee>
+                        : currentSong.name}
+                        </div>
+
                         <br/>
-                        {currentSong.artist}
+                        
+                        
+                        <div ref={(el) => {setArtistElement(el)}} id = "artist" className='left_card_text_container_bottommusiccontrol'>
+                            {artistMarqueeState === true ? 
+                            <Marquee speed={25} delay={1}><div style={{paddingRight: "5px"}}>{currentSong.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))} {" "} |</div></Marquee>
+                            : currentSong.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))}
+                        </div>
                     </div>
                 </Card>
 
@@ -132,9 +171,17 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                             <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
                             <Button onClick={setNext}><ArrowForwardIosIcon/></Button>
                         </div>
+                                
+                        <div className='right_control_center_bottommusiccontrol'>
+                            <div>
+                            <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Shuffle </Button>
+                            </div>
+                        </div>
 
-                        <div>
-                        <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Shuffle</Button>
+                        <div className='left_control_center_bottommusiccontrol'>
+                            <div>
+                            <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Hide" : "Show"} Controls </Button>
+                            </div>
                         </div>
                     </div>
 

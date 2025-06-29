@@ -118,6 +118,7 @@
     "puppeteer": "^24.10.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-fast-marquee": "^1.6.5",
     "react-router-dom": "^7.3.0",
     "zustand": "^5.0.5"
   },

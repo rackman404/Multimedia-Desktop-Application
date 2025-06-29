@@ -20,12 +20,18 @@
 
     background: linear-gradient(to right bottom,rgb(41, 41, 41),rgb(49, 49, 49));
 
-
+    font-size: 5px;
     
 }
 
 
 .top_bar_content_songtable{
+    margin-top: 5px;
     display: flex;
     flex-direction: row;
+
+    height: 4.2vh;
+
+    justify-content: center;
+    align-items: center;
 }

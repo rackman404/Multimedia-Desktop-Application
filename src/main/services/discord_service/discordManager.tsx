@@ -15,7 +15,7 @@ export class DiscordManager{
     constructor() {
         this.broker = new DiscordBroker(this);
                     
-        this.enableClient();
+        //this.enableClient();
         
 
         this.rpcApplication?.stdout?.on('data', function (data: { toString: (arg0: string) => any; }) {

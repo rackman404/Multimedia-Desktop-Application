@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './../../../css/audio/MusicHome.css';
 import './../../../App.css';
-import { LeftAudioSidebar } from '../../../components/static/Audio/Music/LeftAudioSidebar';
 import { SongTable } from '../../../components/regular/Audio/Music/SongTable';
 import { SongInfoCard } from '../../../components/regular/Audio/Music/SongInfoCard';
 import { SongEditCard } from '../../../components/regular/Audio/Music/SongEditCard';
@@ -27,6 +26,18 @@ export const Layout = () => {
 
     const trackObject = useSelectedSongStore((state) => state.currentPlayer);
     const setTrackObject = useSelectedSongStore((state) => state.setCurrentPlayer);
+
+    //on mount and unmount
+    useEffect(() => {
+
+    //called when the component is unmounted
+    return () => {
+        console.log("unmounted music controller");
+        Howler.unload();
+        setPlayState(false);
+    };
+    }, []);
+
 
     trackObject?.on('end', function(){
         console.log('Finished!');
@@ -101,15 +112,6 @@ export const Layout = () => {
             return () => clearInterval(interval);
     }, [playState, trackObject]); 
 
-    
-
-    window.addEventListener("beforeunload", (event) => {
-        trackObject?.stop();
-        trackObject?.unload();
-        setPlayState(false);
-        console.log("UNLOADING MUSIC CONTROLLER");
-    });
-
     function changeSeek(newSeek: number){
         if (trackObject != null){
             trackObject.seek(newSeek);
@@ -157,7 +159,7 @@ export const Layout = () => {
         
         <div>
             {/* yet another render of a component needed to fix async iamge loading issue, must refactor entire controller into backend to realistically fix this*/}
-            <> <div style={{animation:  "fadeIn 0.5s"}}> <BottomMusicControl key={selectedPlaySongMetaData.id} setSeek={changeSeek} setVolume={changeVolume} setNext={nextSong} setPrev={prevSong}/> <LeftAudioSidebar/> <Outlet/></div></>
+            <> <div style={{animation:  "fadeIn 0.5s"}}> <BottomMusicControl key={selectedPlaySongMetaData.id} setSeek={changeSeek} setVolume={changeVolume} setNext={nextSong} setPrev={prevSong}/><Outlet/></div></>
         </div>
     )
   };

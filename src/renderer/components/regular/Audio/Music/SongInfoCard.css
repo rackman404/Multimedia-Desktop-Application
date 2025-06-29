@@ -18,7 +18,7 @@
 
 .button_panel_songinfocard{
     position:absolute;
-    top:4vh;
+    top:13vh;
     min-width:5vw;
     height: 0;
     z-index: 10000;
@@ -30,11 +30,10 @@
 
 .static_button_songinfocard{
     position:absolute;
-    min-width:5vw;
     height: 0;
     z-index: 10000;
 
-    top:1vh;
+    top:7vh;
 
     display: flex;
     flex-direction: column;

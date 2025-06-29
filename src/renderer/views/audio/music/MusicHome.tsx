@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './../../../css/audio/MusicHome.css';
-import { LeftAudioSidebar } from '../../../components/static/Audio/Music/LeftAudioSidebar';
 import { SongTable } from '../../../components/regular/Audio/Music/SongTable';
 import { SongInfoCard } from '../../../components/regular/Audio/Music/SongInfoCard';
 import { SongEditCard } from '../../../components/regular/Audio/Music/SongEditCard';

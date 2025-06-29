@@ -17,6 +17,21 @@ export const Layout = () => {
     const fullscreenState = useGlobalSettingsState((state) => state.fullscreenState);
     const setFullscreenState = useGlobalSettingsState((state) => state.setFullscreenState);
 
+    //on mount and unmount
+    useEffect(() => {
+
+        getDiscordStatus();
+
+        //called when the component is unmounted
+        return () => {
+
+        };
+    }, []);
+
+    async function getDiscordStatus(){
+        console.log("discord: " + discordState);
+        setDiscordState (await window.electron.ipcRenderer.invoke('discord', ["client_status"]));
+    }
 
     async function setNetwork(state: boolean){
         console.log("changing network connection");

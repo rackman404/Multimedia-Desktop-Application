@@ -1,8 +1,8 @@
 {
   "name": "multimedia-center-main",
-  "productName": "multimedia-center-process",
+  "productName": "multimedia",
   "version": "0.1.0",
-  "description": "multimediaprocess",
+  "description": "Multimedia Application",
   "license": "MIT",
   "author": {
     "name": "Jacky Zhang",

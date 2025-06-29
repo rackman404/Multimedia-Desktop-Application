@@ -10,7 +10,6 @@ import Help from './views/utility/Help'
 import About from './views/utility/About'
 
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
-import { LeftAudioSidebar } from './components/static/Audio/Music/LeftAudioSidebar';
 import { TopHeader } from './components/static/TopHeader';
 import { BottomMusicControl } from './components/static/Audio/Music/BottomMusicControl';
 import MusicController from './views/audio/music/MusicController';

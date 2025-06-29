@@ -35,7 +35,7 @@ export class SettingsManager{
             offline: stateBool,
         });
         
-    }
+    } 
 
     async SetFullscreen(state: string){
         var stateBool: boolean;
