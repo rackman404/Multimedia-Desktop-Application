@@ -201,8 +201,8 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                         <TableCell component="th" scope="row"> {currentSong.id === index ? <PlayCircleIcon/> : " "} </TableCell>
                         <TableCell  component="th" scope="row">{sMetaData.name}</TableCell>
                         <TableCell align="right">{fmtMSS(sMetaData.length)}</TableCell>
-                        <TableCell align="right">{sMetaData.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</TableCell>
-                        <TableCell align="right">{sMetaData.genre.map((genre, index) => ( index === 0 ? genre : ", " + genre))}</TableCell>
+                        <TableCell align="right">{sMetaData.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</TableCell>
+                        <TableCell align="right">{sMetaData.genre?.map((genre, index) => ( index === 0 ? genre : ", " + genre))}</TableCell>
                         {/* <TableCell align="right">{sMetaData.playCount}</TableCell> */}
                         <TableCell align="right">{Math.round(sMetaData.bitrate)}</TableCell>    
                         <TableCell align="right">{Math.round(sMetaData.id)}</TableCell>    

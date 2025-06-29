@@ -156,7 +156,7 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                         
                         <div ref={(el) => {setArtistElement(el)}} id = "artist" className='left_card_text_container_bottommusiccontrol'>
                             {artistMarqueeState === true ? 
-                            <Marquee speed={25} delay={1}><div style={{paddingRight: "5px"}}>{currentSong.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))} {" "} |</div></Marquee>
+                            <Marquee speed={25} delay={1}><div style={{paddingRight: "5px"}}>{currentSong.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))} {" "} |</div></Marquee>
                             : currentSong.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))}
                         </div>
                     </div>

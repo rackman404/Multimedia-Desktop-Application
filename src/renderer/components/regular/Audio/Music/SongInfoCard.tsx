@@ -199,7 +199,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
                   
                 </Paper>
 
-                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))}<br/></Typography>
+                <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{fullMetaData?.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))}<br/></Typography>
                 
                 {/* WORDED METADATA */}
                 <Divider/>
@@ -208,7 +208,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
                   <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Song Detail<br/></Typography>
                   <div style={{ textAlign: "left", paddingRight: "5px"}}>
                     <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Genre: {fullMetaData?.genre} <br/></div> </Typography>
-                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Artist: {fullMetaData?.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))} <br/></div></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Artist: {fullMetaData?.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))} <br/></div></Typography>
                     <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Album: {fullMetaData?.album} <br/></div></Typography>
                     <Typography variant="body2" ><div className='text_fade_in_songinfocard'>Length: {fmtMSS(sMetaData.length)} Mins <br/></div></Typography>
                   </div>
