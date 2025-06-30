@@ -37,6 +37,7 @@ dotnet_discord_rpc/Assets/Plugins/X86_64
 dotnet_discord_rpc/bin/Debug/net8.0/*
 dotnet_discord_rpc/obj
 
+#DO NOT EVER UPLOAD OR MODIFY THE .dll, for some reason only a manual adding of the dll works or else it breaks
 !dotnet_discord_rpc/bin/Debug/net8.0/discord_game_sdk.dll
 !dotnet_discord_rpc/bin/Debug/net8.0/discord_game_sdk.dll.lib
 !dotnet_discord_rpc/bin/Debug/net8.0/discord_game_sdk.bundle
