@@ -45,8 +45,8 @@ jobs:
       
       - name: copy c# built files into build folder
         run: |
-          mkdir build/binary_dependencies
-          robocopy dotnet_discord_rpc/bin/debug/net8.0 build/binary_dependencies /MIR
+          mkdir build
+          robocopy dotnet_discord_rpc/bin/debug/net8.0 build /MIR
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
       - name: _MAIN compile main application_ Install Nodejs and NPM
@@ -62,15 +62,9 @@ jobs:
         run: |
           npm run package
 
-      - name: copy main program files into build folder
+      - name: show directory of built Main program
         run: |
-          mkdir build
-          robocopy release/build/win-unpacked build /MIR
-          if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
-
-      - name: show directory of built program
-        run: |
-          cd build
+          cd release/build/win-unpacked
           tree /f
 
 
