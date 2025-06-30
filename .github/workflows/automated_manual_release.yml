@@ -29,7 +29,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Compile C# application
-        working-directory: ./dotnet_discord_rpc
+        working-directory: \dotnet_discord_rpc
         run: |
           dotnet build
 
