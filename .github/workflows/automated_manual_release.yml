@@ -58,7 +58,7 @@ jobs:
           robocopy release/build/win-unpacked build /MIR
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
-      - name: (DISCORD compile discord helper child application) Setup and Install dotnet
+            - name: (DISCORD compile discord helper child application) Setup and Install dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
