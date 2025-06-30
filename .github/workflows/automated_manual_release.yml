@@ -46,7 +46,8 @@ jobs:
       - name: copy c# built files into build folder
         run: |
           mkdir build
-          robocopy dotnet_discord_rpc/bin/debug/net8.0 build /MIR
+          cd..
+          robocopy dotnet_discord_rpc/bin/debug/net8.0/* build
 
       - name: _MAIN compile main application_ Install Nodejs and NPM
         uses: actions/setup-node@v1
