@@ -102,22 +102,6 @@ export const Layout = () => {
 
                         <h3>Music Parameters</h3>
 
-
-                        <div className='row_settings'>
-                            <Tooltip title="Disable this if you do not wish to broadcast your activities in this application on your Discord Profile (Note: You must be logged into Discord to use Rich Presence at all)">
-                                <Typography noWrap component="div" sx={{justifyContent: "flex-start"}}>Change Music Folder Directory</Typography>
-                            </Tooltip>
-                            
-                            
-                            <RegularButton
-                            className={discordState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
-                            sx={{marginLeft: "auto"}}
-                            onClick={() => discordState === false ? (setDiscordState(true), setRichPresence(true)) : (setDiscordState(false), setRichPresence(false))}> 
-                                {discordState === false ? "Enable" : "Disable"} 
-                            </RegularButton>  
-
-                        </div>
-
                         
                         <div className='row_settings'>
                             <Tooltip title="Default offset in miliseconds (ms) (Only has effects if live lyrics are enabled and live lyrics can be found)">
