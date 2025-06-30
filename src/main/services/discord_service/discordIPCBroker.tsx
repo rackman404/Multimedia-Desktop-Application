@@ -2,8 +2,6 @@ import { ipcMain } from "electron/main";
 import * as fs from "fs" 
 import { DiscordManager } from "./discordManager";
 
-import {Howl, Howler} from 'howler';
-
 
 export class DiscordBroker {
   discordManager: DiscordManager;
