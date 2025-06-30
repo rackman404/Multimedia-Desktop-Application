@@ -80,14 +80,14 @@ jobs:
           robocopy dotnet_discord_rpc/bin/debug/net8.0 build/binary_dependencies /MIR
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
-      - name: Zip release
-        run: |
-          Compress-Archive build build.zip
-
       - name: show directory of built program
         run: |
           cd build
           tree /f
+
+      - name: Zip release
+        run: |
+          Compress-Archive build build.zip
 
       - name: create release
         id: create_release
