@@ -43,10 +43,6 @@ jobs:
           cd dotnet_discord_rpc/bin/debug/net8.0
           tree /f
 
-      - name: copy c# built files into build folder
-        run: |
-          copy dotnet_discord_rpc/bin/debug/net8.0/* releases/build/win-unpacked/
-
       - name: _MAIN compile main application_ Install Nodejs and NPM
         uses: actions/setup-node@v1
         with:
@@ -59,6 +55,10 @@ jobs:
       - name: run packaging
         run: |
           npm run package
+
+      - name: copy c# built files into build folder
+        run: |
+          copy dotnet_discord_rpc/bin/debug/net8.0/* releases/build/win-unpacked/
 
       - name: show directory of built Main program
         run: |
