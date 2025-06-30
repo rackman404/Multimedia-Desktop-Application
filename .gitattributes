@@ -10,4 +10,4 @@
 *.ttf   binary
 *.woff  binary
 *.woff2 binary
-*.dll -crlf -diff -merg
+*.dll   text eol=lf
