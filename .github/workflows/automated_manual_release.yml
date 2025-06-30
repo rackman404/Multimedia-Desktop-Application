@@ -26,7 +26,7 @@ jobs:
       - name: Check out main branch on git repo
         uses: actions/checkout@v1
 
-      - name: (MAIN: compile main application) Install Nodejs (20_13_1) and NPM
+      - name: _MAIN compile main application_ Install Nodejs and NPM
         uses: actions/setup-node@v1
         with:
           node-version: 20.13.1
@@ -39,7 +39,7 @@ jobs:
         run: |
           npm run package
 
-      - name: (DISCORD: compile discord helper child application) Setup and Install dotnet (Version 8.0)
+      - name: _DISCORD compile discord helper child application_ Setup and Install dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
