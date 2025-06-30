@@ -78,6 +78,7 @@ jobs:
       - name: copy c# built files into build folder
         run: |
           robocopy dotnet_discord_rpc/bin/debug/net8.0 build/binary_dependencies /MIR
+          robocopy release/build/win-unpacked/Assets/Plugins/discord_game_sdk.dll build build/binary_dependencies/is /it
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
       - name: Zip release
