@@ -176,11 +176,20 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                             <div>
                             <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Shuffle </Button>
                             </div>
+
+                            <div>
+                            <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Loop </Button>
+                            </div>
+
                         </div>
 
                         <div className='left_control_center_bottommusiccontrol'>
                             <div>
                             <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Hide" : "Show"} Controls </Button>
+                            </div>
+
+                            <div>
+                            <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Normalization </Button>
                             </div>
                         </div>
                     </div>

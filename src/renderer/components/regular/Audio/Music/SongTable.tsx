@@ -73,6 +73,7 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
     }
 
     setHighlighted(currentSong.id);
+    setInfoCardSongID(currentSong.id);
   }, [currentSong]);   
   
 
