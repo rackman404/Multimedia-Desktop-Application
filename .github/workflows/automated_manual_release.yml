@@ -32,10 +32,8 @@ jobs:
     runs-on: windows-2025
 
     steps:      
-      - name: Check out testing branch on git repo
+      - name: Check out branch on git repo
         uses: actions/checkout@v1
-        with:
-          ref: workflow-testing
 
       # MAIN COMPILE
 
