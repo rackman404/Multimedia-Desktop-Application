@@ -22,21 +22,11 @@ jobs:
   release:
     runs-on: windows-2025
 
-    steps:      
-      - name: (DISCORD: compile discord helper child application) Setup and Install dotnet (Version 8.0)
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-
-      - name: Compile C# application
-        working-directory: ./app
-        run: |
-          dotnet build
-
+    steps:
       - name: Check out main branch on git repo
         uses: actions/checkout@v1
 
-      - name: (MAIN: compile main application) Install Node.js (20.13.1) and NPM
+      - name: Install Node.js and NPM
         uses: actions/setup-node@v1
         with:
           node-version: 20.13.1
@@ -48,10 +38,3 @@ jobs:
       - name: run packaging
         run: |
           npm run package
-
-
-
-        
-
-
-
