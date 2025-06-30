@@ -37,6 +37,12 @@ jobs:
         run: |
           cd dotnet_discord_rpc
           dotnet build
+          tree /f
+
+      - name: show directory of built C# program
+        run: |
+          cd dotnet_discord_rpc/bin/debug/net8.0
+          tree /f
 
       - name: _MAIN compile main application_ Install Nodejs and NPM
         uses: actions/setup-node@v1
@@ -51,6 +57,10 @@ jobs:
         run: |
           npm run package
 
+      - name: show directory of built Main program
+        run: |
+          cd release/build/win-unpacked
+          tree /f
 
 
 
