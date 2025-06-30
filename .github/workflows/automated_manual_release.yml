@@ -28,7 +28,7 @@ jobs:
         with:
           ref: workflow-testing
 
-      - name: (DISCORD compile discord helper child application) Setup and Install dotnet
+      - name: _DISCORD compile discord helper child application_ Setup and Install dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -45,11 +45,11 @@ jobs:
       
       - name: copy c# built files into build folder
         run: |
-          mkdir build/binary_dependencies -p
+          mkdir build/binary_dependencies
           robocopy dotnet_discord_rpc/bin/debug/net8.0 build/binary_dependencies /MIR
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
-      - name: (MAIN compile main application) Install Nodejs and NPM
+      - name: _MAIN compile main application_ Install Nodejs and NPM
         uses: actions/setup-node@v1
         with:
           node-version: 20.13.1
@@ -64,7 +64,7 @@ jobs:
 
       - name: copy main program files into build folder
         run: |
-          mkdir build -p
+          mkdir build
           robocopy release/build/win-unpacked build /MIR
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
