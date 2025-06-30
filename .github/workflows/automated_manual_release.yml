@@ -47,7 +47,7 @@ jobs:
         run: |
           mkdir build
           cd..
-          copy dotnet_discord_rpc/bin/debug/net8.0/* build
+          robocopy dotnet_discord_rpc/bin/debug/net8.0/* build
 
       - name: _MAIN compile main application_ Install Nodejs and NPM
         uses: actions/setup-node@v1
