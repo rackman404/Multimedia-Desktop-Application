@@ -23,11 +23,6 @@ jobs:
     runs-on: windows-2025
 
     steps:      
-      - name: Check out testing branch on git repo
-        uses: actions/checkout@v1
-        with:
-          ref: workflow-testing
-
       - name: _DISCORD compile discord helper child application_ Setup and Install dotnet
         uses: actions/setup-dotnet@v4
         with:
@@ -37,6 +32,9 @@ jobs:
         run: |
           cd dotnet_discord_rpc
           dotnet build
+
+      - name: Check out main branch on git repo
+        uses: actions/checkout@v1
 
       - name: _MAIN compile main application_ Install Nodejs and NPM
         uses: actions/setup-node@v1
