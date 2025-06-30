@@ -8,9 +8,18 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      release-name:
+      release-description:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Test Placeholder'
+        description: 'Release Description'
+        # Default value if no value is explicitly provided
+        default: 'Default Value'
+        # Input has to be provided for the workflow to run
+        required: false
+        # The data type of the input
+        type: string
+      release-tag:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Release Tag'
         # Default value if no value is explicitly provided
         default: 'Default Value'
         # Input has to be provided for the workflow to run
@@ -45,7 +54,7 @@ jobs:
       
       - name: copy c# built files into build folder
         run: |
-          mkdir build/binary_dependencies -p
+          mkdir build/binary_dependencies
           robocopy dotnet_discord_rpc/bin/debug/net8.0 build/binary_dependencies /MIR
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
@@ -64,7 +73,7 @@ jobs:
 
       - name: copy main program files into build folder
         run: |
-          mkdir build -p
+          mkdir build
           robocopy release/build/win-unpacked build /MIR
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
@@ -72,6 +81,19 @@ jobs:
         run: |
           cd build
           tree /f
+
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            TEST
+          draft: true
+          prerelease: false
 
 
 
