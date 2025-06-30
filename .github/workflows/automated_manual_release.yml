@@ -82,7 +82,7 @@ jobs:
 
       - name: Zip release
         run: |
-          Compress-Archive build build.zip
+          tar.exe -c -a build build.zip
 
       - name: show directory of built program
         run: |
