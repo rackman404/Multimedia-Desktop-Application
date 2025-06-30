@@ -23,6 +23,16 @@ jobs:
     runs-on: windows-2025
 
     steps:      
+      - name: _DISCORD compile discord helper child application_ Setup and Install dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Compile C# application
+        working-directory: \dotnet_discord_rpc
+        run: |
+          dotnet build
+
       - name: Check out main branch on git repo
         uses: actions/checkout@v1
 
@@ -39,15 +49,7 @@ jobs:
         run: |
           npm run package
 
-      - name: _DISCORD compile discord helper child application_ Setup and Install dotnet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
 
-      - name: Compile C# application
-        working-directory: ./app
-        run: |
-          dotnet build
 
 
 
