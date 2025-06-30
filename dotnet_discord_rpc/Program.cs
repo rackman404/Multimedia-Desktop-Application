@@ -160,11 +160,11 @@ public class DiscordController
         {
             if (res == Discord.Result.Ok)
             {
-                Console.WriteLine("Updated State");
+                //Console.WriteLine("Updated State");
             }
         });
     }
-
+ 
     // Update is called once per frame
     public void UpdateMethod()
     {
