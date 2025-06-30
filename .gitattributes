@@ -10,4 +10,4 @@
 *.ttf   binary
 *.woff  binary
 *.woff2 binary
-*.dll   text eol=lf
+*.dll   binary  eol=lf
