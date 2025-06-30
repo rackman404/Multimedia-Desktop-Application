@@ -2,8 +2,6 @@ import { ipcMain } from "electron/main";
 import * as fs from "fs" 
 import { AudioManager } from "./audioManager";
 
-import {Howl, Howler} from 'howler';
-
 
 export class AudioBroker {
   audioManager: AudioManager;
