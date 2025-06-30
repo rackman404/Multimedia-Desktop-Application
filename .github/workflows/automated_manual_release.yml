@@ -47,6 +47,7 @@ jobs:
         run: |
           mkdir build
           robocopy dotnet_discord_rpc/bin/debug/net8.0 build /MIR
+          if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
       - name: _MAIN compile main application_ Install Nodejs and NPM
         uses: actions/setup-node@v1
