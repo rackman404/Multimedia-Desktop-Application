@@ -21,3 +21,11 @@ In general:
 x: Major Version - addition or removal of new major services added to the application
 y: Minor Version - addition or removal of a (or many) feature within a major version 
 z: Patch - minor bug fixes or changes to a minor version
+
+# Testing
+
+To Test This Application:
+- Build application first with npm run build
+
+### E2E (End To End)
+- Run Playwright E2E

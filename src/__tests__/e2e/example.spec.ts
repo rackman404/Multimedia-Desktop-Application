@@ -12,6 +12,7 @@ import path from 'path';
  * @see https://playwright.dev/docs/intro
  */
 
+//https://github.com/microsoft/playwright/issues/13288#issuecomment-1324357472 running headlessly
 
 test.describe.serial(() => {
   let page: Page;
@@ -31,7 +32,8 @@ test.describe.serial(() => {
     await electronApp.close();
   });
 
-  test('Electron App has the correct buttons on it' + path.join(__dirname, '..', '..', 'release', 'app', 'dist', 'main', 'main.js'), async () => {
+
+  test('Does Homepage have all major compnents', async () => {
     // Evaluation expression in the Electron context.
     const appPath = await electronApp.evaluate(async ({ app }) => {
       // This runs in the main Electron process, parameter here is always
@@ -41,11 +43,12 @@ test.describe.serial(() => {
     console.log(appPath);
 
     // Print the title.
-    console.log(await page.title());
+    console.log("TITLE " + await page.title());
 
-    await expect(page).toHaveTitle('Hello Electron React!');
-    await expect(page.locator('text=DASHBOARD')).toBeVisible();
-    await expect(page.locator('text=🙏Donate')).toBeVisible();
-    await expect(page.locator('text=electron-react-boilerplate')).toBeVisible();
+    await expect(page).toHaveTitle('Multimedia Center');
+
+    await expect(page.locator('text=DEBUG')).toBeVisible();
+    await expect(page.locator('text=WELCOME')).toBeVisible();
+    //await expect(page.locator('text=MUSIC')).toBeVisible();
   });
 });
