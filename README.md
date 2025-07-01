@@ -68,7 +68,9 @@ All documentation is stored within \_Documentation. Documentation is either in M
 	- [Material UI](https://mui.com/material-ui/)(Library): Ready made UI component library for use with React
 	- Howler.js (Library): Frontend Audio Library
 	- Cheerio.js (Library): JavaScript Parser for HTML and XML. Used for parsing web scraper results in Nyaa service)
-	- React Fast Marquee
+	- React Fast Marquee: Text Marquee
+	- Playwright (Testing Framework)
+	- RTL (Testing Library)
 - [FFmpeg CLI](https://ffmpeg.org/) (Binary): Provides audio conversion and metadata editing capabilities.
 - [Microsoft .NET](https://dotnet.microsoft.com/en-us/download/dotnet-framework) (Framework): C# framework for building the Discord RPC client for use by this application
 	- [Discord C# Game SDK](https://discord.com/developers/docs/developer-tools/game-sdk) (Library): Provides access to Discord's API for Rich Presence Integration.
