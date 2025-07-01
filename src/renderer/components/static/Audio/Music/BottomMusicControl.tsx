@@ -32,7 +32,11 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
     const currentVolume = useSelectedSongStore((state) => state.currentVolume);
     const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
 
-    const [shuffle, setShuffle] = useState(false);
+    const shuffleState = useSelectedSongStore((state) => state.shuffleState);
+    const setShuffleState = useSelectedSongStore((state) => state.setShuffleState);
+
+    const loopState = useSelectedSongStore((state) => state.loopState);
+    const setLoop = useSelectedSongStore((state) => state.setLoopState);
 
     const [cover, setCover] = useState<any>(<CardMedia
         component="img"
@@ -174,22 +178,22 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                                 
                         <div className='right_control_center_bottommusiccontrol'>
                             <div>
-                            <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Shuffle </Button>
+                            <Button onClick={() => shuffleState === false ? setShuffleState(true) : setShuffleState(false)}> {shuffleState === false ? "Enable" : "Disable"} Shuffle </Button>
                             </div>
 
                             <div>
-                            <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Loop </Button>
+                            <Button onClick={() => loopState === false ? setLoop(true) : setLoop(false)}> {loopState === false ? "Enable" : "Disable"} Loop </Button>
                             </div>
 
                         </div>
 
                         <div className='left_control_center_bottommusiccontrol'>
                             <div>
-                            <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Hide" : "Show"} Controls </Button>
+                            <Button onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> {shuffleState === false ? "Hide" : "Show"} Controls </Button>
                             </div>
 
                             <div>
-                            <Button onClick={() => shuffle === false ? setShuffle(true) : setShuffle(false)}> {shuffle === false ? "Enable" : "Disable"} Normalization </Button>
+                            <Button onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> {shuffleState === false ? "Enable" : "Disable"} Normalization </Button>
                             </div>
                         </div>
                     </div>

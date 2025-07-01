@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardActionArea, Checkbox, Chip, Divider, Drawer, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardActionArea, Checkbox, Chip, CircularProgress, Divider, Drawer, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import './SongTable.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -41,6 +41,7 @@ const dataRowSelectedSX: SxProps = {
   background: grey[800],
 };
 
+const FONTSCALE = "0.75vw";
 
 type SongTableProps = { //constructor variables
   sMetaData: SongMetaDataSimple[] | null
@@ -56,6 +57,8 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
 
   const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
   const [infoCardSongID, setInfoCardSongID] = useState(0);
+
+  const[isDisabled, setDisabled] = useState (true);
 
   async function selectFullDataInfoCard(rowData: SongMetaDataSimple){
     //const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", rowData.id, rowData.songRawPath]);
@@ -76,6 +79,12 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
     setInfoCardSongID(currentSong.id);
   }, [currentSong]);   
   
+  useEffect(() => {
+    if (sMetaData != null){ //songs aren't loaded in yet
+      setDisabled(false);
+    }
+
+  }, [sMetaData]);   
 
   function scrollToElementInTable(songID: number){
     var childelement = document.querySelector(`#${CSS.escape("tablerow" + songID.toString())}`); 
@@ -129,31 +138,32 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
 
     
     }
-
   }
 
-  function scrollToTop(){
-    var parentelement = document.querySelector(`#${CSS.escape("musictable")}`); 
-
-    parentelement?.scroll({ top: 0,
-          behavior: "smooth",})
-  }
 
   return (
       <div className='body_songtable'>
           <Card variant='outlined' className='top_bar_songtable'>
-            <div className='top_bar_content_songtable'>
+            
+              {isDisabled === false ? 
+              <div className='top_bar_content_songtable'>
               <TextField id="searchfield" label="Search" variant="standard" />          
-              <Button>Submit</Button>
-              <Button>Reset Search</Button>
+              <Button><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
+              <Button><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              <Button onClick={() => scrollToElementInTable(currentSong.id)}>Zoom To Active</Button>
-              <Button onClick={() => scrollToElementInTable(infoCardSongID)}>Zoom To Selected</Button>
-              <Button onClick={() => autoFocus === false ? setAutoFocus(true) : setAutoFocus(false)}> {autoFocus === false ? "Enable" : "Disable"} Autozoom</Button>
+              <Button onClick={() => scrollToElementInTable(currentSong.id)}> <div style={{fontSize: FONTSCALE}}>Zoom To Active</div></Button>
+              <Button onClick={() => scrollToElementInTable(infoCardSongID)}> <div style={{fontSize: FONTSCALE}}>Zoom To Selected</div></Button>
+              <Button onClick={() => autoFocus === false ? setAutoFocus(true) : setAutoFocus(false)}> <div style={{fontSize: FONTSCALE}}> {autoFocus === false ? "Enable" : "Disable"} Autozoom</div> </Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              <Button>Force Reload Song List</Button>
-              <Button>Translate Song Titles</Button>
+              <Button><div style={{fontSize: FONTSCALE}}> Force Reload Song List</div></Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
+              
+              </div>
+              :
+              <div className='top_bar_content_songtable'>
+                <CircularProgress/>
+              </div>
+              }
               
               {/*
               <FormControl sx={{height: "2.2vh"}}>
@@ -170,13 +180,13 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                   <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
                 </Select>
               </FormControl>
-              */}
-            </div>
+              */} 
           </Card>
           
-          <TableContainer id={"scrollable"} component={Paper} sx={{ maxHeight: "77.8vh", width: "80vw" }} >
-              <Table size='small' id={"musictable"} stickyHeader aria-label="table">
-                  <TableHead id={"musictableheader"}>
+          {isDisabled === false ? 
+          <TableContainer className='table_container_songtable' id={"scrollable"} component={Paper} sx={{ maxHeight: "77.8vh", width: "80vw" }} >
+              <Table size='small' id={"musictable"} stickyHeader aria-label="table" >
+                  <TableHead id={"musictableheader"} >
                       <TableHeaderRow>
                           <TableCell> Playing </TableCell>
                           <TableCell>Name</TableCell>
@@ -214,6 +224,14 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                   </TableBody>
               </Table>
           </TableContainer>
+          :
+          <div className='centered_songtable'>
+            <CircularProgress size={"7.5rem"}/>
+            Songs Loaded:
+          </div>
+          }
+
+
       </div>
 
   );

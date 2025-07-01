@@ -4,9 +4,13 @@
 
 }
 
+.table_container_songtable{
+    animation: fadeIn 0.5s;
+
+}
+
 .row_songtable{
     background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
-
 }
 
 .body_songtable{
@@ -19,11 +23,8 @@
     width: 80vw;
 
     background: linear-gradient(to right bottom,rgb(41, 41, 41),rgb(49, 49, 49));
-
-    font-size: 5px;
     
 }
-
 
 .top_bar_content_songtable{
     margin-top: 5px;
@@ -34,4 +35,30 @@
 
     justify-content: center;
     align-items: center;
+
+    animation: fadeIn 0.5s;
+
+    
+
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.centered_songtable{
+    display: flex;
+    flex-direction: column;
+
+    height: 77.8vh;
+
+    justify-content: center;
+    align-items: center;
+
+    /*
+    position: absolute;
+    left: calc(50% + 5vw);
+    top: calc(50%);
+    */
 }

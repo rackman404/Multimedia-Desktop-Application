@@ -1,6 +1,10 @@
 .card_songlyriccard{
     user-select: none;
     text-align: center;
+
+    /* scale font based on UI */
+    font-size: 5px;
+    font-size: 0.85vw;
 }
 
 .top_bar_row_songlyriccard{

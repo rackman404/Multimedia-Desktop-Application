@@ -14,7 +14,7 @@ body {
     #0e0e0e 129.35%
   );*/
 
-  background: linear-gradient(to right bottom,rgb(11, 0, 59),rgb(49, 49, 49));
+  background: linear-gradient(to bottom,rgb(11, 0, 59),rgb(22, 22, 22));
   font-family: sans-serif;
 
   display: flex;

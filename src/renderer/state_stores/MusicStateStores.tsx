@@ -17,6 +17,12 @@ interface ISelectedSongState {
 
   currentPlayer: Howl | null
   setCurrentPlayer: (newPlayer: Howl | null) => void
+
+  shuffleState: boolean
+  setShuffleState: (newshuffleState: boolean) => void
+
+  loopState: boolean
+  setLoopState: (newLoopState: boolean) => void
 }
 
 export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
@@ -47,5 +53,9 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
   currentPlayer: null, 
   setCurrentPlayer: (newPlayer) =>set((state) => ({ currentPlayer: newPlayer })),
   allSongMetaData: null, 
-  setAllSongMetaData: (newAllSongMetaData) =>set((state) => ({ allSongMetaData: newAllSongMetaData }))
+  setAllSongMetaData: (newAllSongMetaData) =>set((state) => ({ allSongMetaData: newAllSongMetaData })),
+  shuffleState: false, 
+  setShuffleState: (newshuffleState) =>set((state) => ({ shuffleState: newshuffleState })),
+  loopState: false, 
+  setLoopState: (newLoopState) =>set((state) => ({ loopState: newLoopState }))
 }))

@@ -14,7 +14,6 @@ import { Howl, Howler } from 'howler';
 export const Layout = () => {
     const playState = useSelectedSongStore((state) => state.playState);
     const setPlayState = useSelectedSongStore((state) => state.setPlayState);
-
     
     const setSeek = useSelectedSongStore((state) => state.setCurrentSeek);
     const setVolume = useSelectedSongStore((state) => state.setCurrentVolume);
@@ -27,6 +26,7 @@ export const Layout = () => {
     const trackObject = useSelectedSongStore((state) => state.currentPlayer);
     const setTrackObject = useSelectedSongStore((state) => state.setCurrentPlayer);
 
+
     //on mount and unmount
     useEffect(() => {
 
@@ -36,14 +36,26 @@ export const Layout = () => {
         Howler.unload();
         setPlayState(false);
     };
+
     }, []);
 
-
     trackObject?.on('end', function(){
-        console.log('Finished!');
 
-        nextSong();
-        
+        if (useSelectedSongStore.getState().loopState == true){
+            playSong();
+        }
+        else if (useSelectedSongStore.getState().shuffleState == true){
+            console.log('Finished! shuffle state is:' + useSelectedSongStore.getState().shuffleState); // unsure why shuffle bool value is delayed by 1 song unless we get it directly
+            if (allSongMetaData != null){
+            var num = Math.floor(Math.random() * allSongMetaData.length - 1);
+            console.log('Shuffling song, new song id is: ' + num);
+                setSelectedPlaySongMetaData(allSongMetaData[num])
+            }
+        }
+        else{
+            nextSong();
+
+        }  
     });
     
     useEffect(() => {// pause and play song
@@ -55,7 +67,7 @@ export const Layout = () => {
             }
             else{
                 if (selectedPlaySongMetaData.songRawPath != ""){
-                    var newHowl = new Howl({src: decodeURIComponent(selectedPlaySongMetaData.songRawPath), html5: true});
+                    var newHowl = new Howl({src: decodeURIComponent(selectedPlaySongMetaData.songRawPath), html5: false});
                     newHowl.play();
                     setTrackObject(newHowl);
                 }
@@ -73,27 +85,7 @@ export const Layout = () => {
     }, [playState]);   
 
     useEffect(() => {//set new song
-        //setPlayState(false);
-
-        console.log("playing new song");
-
-        trackObject?.stop();
-        trackObject?.unload();
-        Howler.unload();
-        
-        if (selectedPlaySongMetaData.songRawPath != ""){
-            setSeek(0);
-            console.log(selectedPlaySongMetaData.songRawPath);
-            var newHowl = new Howl({src: (selectedPlaySongMetaData.songRawPath), html5: true});
-            newHowl.play();
-            setTrackObject(newHowl);
-            setPlayState(true);
-
-
-            window.electron.ipcRenderer.sendMessage('discord', ["song_notification", "Song: " + selectedPlaySongMetaData.name, "Artist: " + selectedPlaySongMetaData.artist, "0", "0", "https://www.iconsdb.com/icons/preview/gray/note-xxl.png"]);
-        }
-
-
+       playSong();
     }, [selectedPlaySongMetaData]);   
 
 
@@ -103,7 +95,8 @@ export const Layout = () => {
                 if (playState == true){      
                     if (trackObject != null){        
                         //console.log("music controller, current song seek is: " + trackObject?.seek());             
-                        setSeek(trackObject.seek());                       
+                        setSeek(trackObject.seek());  
+
                     }
                 }
     
@@ -111,6 +104,26 @@ export const Layout = () => {
     
             return () => clearInterval(interval);
     }, [playState, trackObject]); 
+
+
+
+    useEffect(() => {
+            const interval = setInterval(() => {  
+                
+                if (playState == true){      
+                    if (trackObject != null){        
+                        //console.log("music controller, current song seek is: " + trackObject?.seek());             
+                        setSeek(trackObject.seek());  
+                        
+                        console.log(Howler.ctx);
+                    }
+                }
+    
+            }, 1000);
+    
+            return () => clearInterval(interval);
+    }, [playState, trackObject]); 
+
 
     function changeSeek(newSeek: number){
         if (trackObject != null){
@@ -154,6 +167,28 @@ export const Layout = () => {
         }
     }
     
+    function playSong(){
+        //setPlayState(false);
+
+        console.log("playing new song");
+
+        trackObject?.stop();
+        trackObject?.unload();
+        Howler.unload();
+        
+        if (selectedPlaySongMetaData.songRawPath != ""){
+            setSeek(0);
+            console.log(selectedPlaySongMetaData.songRawPath);
+            var newHowl = new Howl({src: (selectedPlaySongMetaData.songRawPath), html5: true});
+            newHowl.play();
+            setTrackObject(newHowl);
+            setPlayState(true);
+
+
+            window.electron.ipcRenderer.sendMessage('discord', ["song_notification", "Song: " + selectedPlaySongMetaData.name, "Artist: " + selectedPlaySongMetaData.artist, "0", "0", "https://www.iconsdb.com/icons/preview/gray/note-xxl.png"]);
+        }
+    }
+
 
     return (
         

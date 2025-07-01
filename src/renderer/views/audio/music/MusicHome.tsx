@@ -13,18 +13,7 @@ import { Card, Paper } from '@mui/material';
 export const Layout = () => {
 
 
-    const [metaData, setMetaData] = useState<SongMetaDataSimple[]>([{
-        name: "NO MUSIC",
-        metadataFormat: '',
-        id: 0,
-        length: 0,
-        artist: [],
-        genre: [],
-        playCount: 0,
-        bitrate: 0,
-        songRawPath: '',
-        album: ''
-    }]);
+    const [metaData, setMetaData] = useState<SongMetaDataSimple[] | null>(null);
 
     const [selectedInfoCardMetaData, setSelectedInfoCardMetaData] = useState<SongMetaDataSimple>({
         name: "NO MUSIC",
