@@ -70,12 +70,12 @@ jobs:
 
       - name: show directory of built C# program
         run: |
-          cd dotnet_discord_rpc/bin/debug/net8.0
+          cd dotnet_discord_rpc/bin/debug/net8.0/win-x64
           tree /f
       
       - name: copy c# built files into build folder
         run: |
-          robocopy dotnet_discord_rpc/bin/debug/net8.0 build/binary_dependencies /MIR
+          robocopy dotnet_discord_rpc/bin/debug/net8.0/win-x64 build/binary_dependencies /MIR
           if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }
 
       - name: Zip release

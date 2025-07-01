@@ -133,7 +133,7 @@ public class DiscordController
                 Console.WriteLine("Activity Updated!");
             }
         });
-    }
+    } 
 
     public void UpdateRichPresence(RPCData data)
     {
