@@ -46,4 +46,8 @@ dotnet_discord_rpc/obj
 
 _sample_development_folder
 
-
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
