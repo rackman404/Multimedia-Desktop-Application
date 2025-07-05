@@ -20,6 +20,7 @@ import { AudioManager } from './services/audio_service/audioManager';
 import { NyaaScraper } from './services/nyaa_service/nyaaScraper';
 import { SettingsManager } from './services/settings_service/settingsManager';
 import { DiscordManager } from './services/discord_service/discordManager';
+import { ServiceManager } from './services/serviceManager';
 
 
 export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' + "music");
@@ -92,11 +93,15 @@ app
 
 //---------------------- Backend Setup
 
+/*
 var audioManager = new AudioManager();
 var settingsManager = new SettingsManager();
 var discordManager = new DiscordManager();
+*/
 
 var test = new NyaaScraper();
+
+var serviceManager = new ServiceManager();
 
 
 //----------------- IPC Handlers, Rout to services
@@ -108,7 +113,7 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-
+/*
 ipcMain.on('audio', async (event, arg) => {
   if (arg != ""){
     audioManager.broker.eventOn(event, arg);
@@ -160,7 +165,7 @@ ipcMain.handle('discord', async (event, arg) => {
     }
   }
 );
-
+*/
 
 //-----------------
 
@@ -210,7 +215,7 @@ const createWindow = async () => {
   mainWindow.setMinimumSize(MINIMUMWINDOWSIZE.x, MINIMUMWINDOWSIZE.y);
   mainWindow.maximize();
 
-  settingsManager.SetWindow(mainWindow);
+  serviceManager.settingsManager.SetWindow(mainWindow);
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
