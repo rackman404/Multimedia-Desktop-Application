@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, ButtonGroup, Card, CardMedia, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Slider, TextField, ToggleButton, Toolbar, Typography } from '@mui/material';
-import '../../../../css/BottomMusicControl.css';
+import './BottomMusicControl.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RegularButton } from '../../../../elements/CustomButtons';

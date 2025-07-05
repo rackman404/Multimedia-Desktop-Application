@@ -56,3 +56,9 @@ export type SongLyricAPIData = {
     lyrics: string[]
     isInstrumental: boolean
 }
+
+
+export type IPCData = {
+    type: string
+    content: string 
+}

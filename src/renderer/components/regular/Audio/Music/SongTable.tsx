@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardActionArea, Checkbox, Chip, CircularProgress, Divider, Drawer, FormControl, FormControlLabel, IconButton, InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardActionArea, Checkbox, Chip, CircularProgress, Divider, Drawer, FormControl, FormControlLabel, IconButton, InputLabel, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import './SongTable.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -144,9 +144,22 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
   return (
       <div className='body_songtable'>
           <Card variant='outlined' className='top_bar_songtable'>
-            
               {isDisabled === false ? 
               <div className='top_bar_content_songtable'>
+              <FormControl sx={{width: "8vw", marginRight: "1vw", marginTop: "10px"}}>
+                <InputLabel id="demo-simple-select-label">Search Filter</InputLabel>
+                <Select sx={{height: "4vh"}}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={null}
+                  label="GFDGFDGFD"
+                  onChange={() => {}}
+                >
+                  <MenuItem value={10}>Name</MenuItem>
+                  <MenuItem value={20}>Artist</MenuItem>
+                  <MenuItem value={30}>Genre</MenuItem>
+                </Select>
+              </FormControl>
               <TextField id="searchfield" label="Search" variant="standard" />          
               <Button><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
               <Button><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
@@ -160,11 +173,9 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
               
               </div>
               :
-              <div className='top_bar_content_songtable'>
-                <CircularProgress/>
-              </div>
+                <LinearProgress/>
               }
-              
+      
               {/*
               <FormControl sx={{height: "2.2vh"}}>
                 f

@@ -1,4 +1,4 @@
-import './../css/Dashboard.css';
+import './Dashboard.css';
 import React, { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';

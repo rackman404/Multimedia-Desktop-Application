@@ -26,6 +26,7 @@ export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' 
 export const BINARYDEPENDENCYDIRECTORY = path.join(__dirname, '../../../../' + "binary_dependencies");
 //export const PRODUCTIONMUSICFILEDIRECTORY = __dirname + '../../../../' + "music";
 
+export const MINIMUMWINDOWSIZE = {x: 1920/2, y:1080/2};
 
 class AppUpdater {
   constructor() {
@@ -36,11 +37,6 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
-
-
-
-
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -210,6 +206,8 @@ const createWindow = async () => {
     },
     fullscreenable: false,
   });
+  
+  mainWindow.setMinimumSize(MINIMUMWINDOWSIZE.x, MINIMUMWINDOWSIZE.y);
   mainWindow.maximize();
 
   settingsManager.SetWindow(mainWindow);
