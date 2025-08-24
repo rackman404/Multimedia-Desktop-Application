@@ -182,6 +182,13 @@ const createWindow = async () => {
     }
     if (!fs.existsSync(PRODUCTIONCONFIGDIRECTORY)){
       fs.mkdirSync(PRODUCTIONCONFIGDIRECTORY);
+
+      fs.writeFile(path.join(PRODUCTIONCONFIGDIRECTORY, "config.json"), "{\"DeepLAPIKey\": \"\"} ", function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+      }); 
     }
     //fs.writeFileSync(PRODUCTIONMUSICFILEDIRECTORY, "Hey there!");
   }; 
