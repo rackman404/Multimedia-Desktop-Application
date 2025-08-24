@@ -62,3 +62,27 @@ export type IPCData = {
     type: string
     content: string 
 }
+
+
+
+export type SettingParameters = {
+    //Frontend settings
+    viewState: ViewState
+
+    //main window settings
+    fullscreenState: boolean
+    networkState: boolean
+
+    //misc settings
+    discordRichPresenceState: boolean
+}
+
+
+ 
+export enum ViewState {
+    Dashboard,
+    Music,
+    Video,
+    Comic,
+    Settings,
+}

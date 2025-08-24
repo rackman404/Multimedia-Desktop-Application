@@ -11,8 +11,13 @@ type SongLiveLyricProps = { //instance variables
 
 export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => { 
   const [lyricData, setLyricData] = useState({} as SongLyricAPIData);
+  const [translatedLyricData, setTranslatedLyricData] = useState({} as SongLyricAPIData);
   const [currentLyric, setCurrentLyric] = useState("");
   const [nextLyric, setNextLyric] = useState("");
+
+  const [currentTranslatedLyric, setCurrentTranslatedLyric] = useState("");
+  const [nextTranslatedLyric, setNextTranslatedLyric] = useState("");
+
   const currentSeek = useSelectedSongStore((state) => state.currentSeek);
   
   const [previousTimestamp, setPreviousTimestamp] = useState(0);
@@ -63,23 +68,42 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
         
         var text = lyricData.lyrics[lyricData.timestamps.indexOf(closest)]
 
+        var lyricsTranslated = false;
+        translatedText = "";
+        if (translatedLyricData.lyrics != undefined){
+          var translatedText = translatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)];
+          lyricsTranslated = true;
+        }
+
         //console.log((closest + " " + (currentSeek+(currentOffset/1000))));
 
         if (closest < (adjustedSeek) && previousTimestamp != closest){
           setFadeState("fade_in_text");
           
-          if (text == ""){
+          if (text == "" || text == " "){
             setCurrentLyric("[Instrumental]");  
+            if (lyricsTranslated == true ){
+              setCurrentTranslatedLyric("[Instrumental]");  
+            }
           }
           else{
             setCurrentLyric(text);  
+
+            setCurrentTranslatedLyric(translatedText);
           }
 
-          if (lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1] == ""){
+          if (lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1] == "" || lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1] == " "){
             setNextLyric("[Instrumental]");
+              if (lyricsTranslated == true){
+                setCurrentTranslatedLyric("[Instrumental]");  
+              }
           }
+
           else{
             setNextLyric(lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);
+              if (lyricsTranslated == true){
+                setNextTranslatedLyric(translatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);  
+              }
           }  
 
           setPreviousTimestamp(closest);
@@ -99,19 +123,48 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
   }, [currentSeek, currentLyric, currentOffset, previousTimestamp]);
   
+  async function requestTranslation(){
+    console.log("attempting lyric translation");
+    if (lyricData.lyrics == undefined){ //need to add a modal here to notify user that translation cannot work
+      console.log("lyric data is undefined!, cannot add translated lyrics");
+    }
+    else{
+      const result = await window.electron.ipcRenderer.invoke('audio', ["external_translated_lyrics", lyricData]) as SongLyricAPIData;
+      setTranslatedLyricData(result);
+    }
 
+
+  }
   
   return (
       <div className='card_songlyriccard'>
         {/*key needed to actually rerender the fade in properly*/}
-          <div key={currentLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </div>
-          <br/>
-          <div key={nextLyric} className={fadeState} style={{color:"grey"}}> {nextLyric} </div>
-          <div className='div_songlyriccard'> <Divider/> {progressIndicator}</div>
 
-          
-          
+          <div className='content_grid_songlyriccard'>
+            <div>
+              <div key={currentLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </div>
+              <br/>
+              <div key={nextLyric} className={fadeState} style={{color:"grey"}}> {nextLyric} </div>
+            </div>
 
+            {/*divider*/}
+            <div className='center_div_songlyriccard'> <Divider/> {progressIndicator} </div>
+
+            {/*translated lyrics*/}
+            <div>
+              <br/>
+              <div style={{marginBottom: "2vh"}}>
+                <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}> Translated Lyrics (Using DeepL) </Typography>
+                <RegularButton className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate</Typography></RegularButton>
+              </div>
+
+              <div key={currentTranslatedLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} </div>
+              <br/>
+              <div key={nextTranslatedLyric} className={fadeState} style={{color:"grey"}}> {nextTranslatedLyric} </div>
+              
+            </div>
+
+          </div>
 
           <div className='row_songlyriccard'>
             <RegularButton className='option_button_songlyriccard' onClick={() => (setCurrentOffset(currentOffset-100))}><Typography fontSize={"0.75em"} noWrap component="div">- Offset</Typography></RegularButton>

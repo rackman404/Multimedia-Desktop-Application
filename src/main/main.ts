@@ -25,6 +25,7 @@ import { ServiceManager } from './services/serviceManager';
 
 export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' + "music");
 export const BINARYDEPENDENCYDIRECTORY = path.join(__dirname, '../../../../' + "binary_dependencies");
+export const PRODUCTIONCONFIGDIRECTORY = path.join(__dirname, '../../../../' + "config");
 //export const PRODUCTIONMUSICFILEDIRECTORY = __dirname + '../../../../' + "music";
 
 export const MINIMUMWINDOWSIZE = {x: 1920/2, y:1080/2};
@@ -178,6 +179,9 @@ const createWindow = async () => {
     
     if (!fs.existsSync(PRODUCTIONMUSICFILEDIRECTORY)){
       fs.mkdirSync(PRODUCTIONMUSICFILEDIRECTORY);
+    }
+    if (!fs.existsSync(PRODUCTIONCONFIGDIRECTORY)){
+      fs.mkdirSync(PRODUCTIONCONFIGDIRECTORY);
     }
     //fs.writeFileSync(PRODUCTIONMUSICFILEDIRECTORY, "Hey there!");
   }; 

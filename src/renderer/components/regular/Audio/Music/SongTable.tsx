@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardActionArea, Checkbox, Chip, CircularProgress, Divider, Drawer, FormControl, FormControlLabel, IconButton, InputLabel, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Select, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardActionArea, Checkbox, Chip, CircularProgress, Divider, Drawer, FormControl, FormControlLabel, IconButton, InputLabel, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Paper, Select, SelectChangeEvent, StepIcon, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import './SongTable.css';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { SongMetaData, SongMetaDataSimple } from '../../../../../types';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { fmtMSS } from '../../../../Common';
 import { blueGrey, grey } from '@mui/material/colors';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
@@ -54,11 +55,14 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
 
   const [autoFocus, setAutoFocus] = useState(false);
   
-
   const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
   const [infoCardSongID, setInfoCardSongID] = useState(0);
 
   const[isDisabled, setDisabled] = useState (true);
+  const[search, setSearch] = useState("Name");
+
+  const[anchor, setAnchor] = useState<any>(null);
+  const[dropDownState, setDropDownState] = useState<boolean>(false);
 
   async function selectFullDataInfoCard(rowData: SongMetaDataSimple){
     //const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", rowData.id, rowData.songRawPath]);
@@ -140,6 +144,10 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
     }
   }
 
+  const handleSearchChange = (event: SelectChangeEvent) => {
+    setSearch(event.target.value as string);
+  };
+
 
   return (
       <div className='body_songtable'>
@@ -147,19 +155,20 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
               {isDisabled === false ? 
               <div className='top_bar_content_songtable'>
               <FormControl sx={{width: "8vw", marginRight: "1vw", marginTop: "10px"}}>
-                <InputLabel id="demo-simple-select-label">Search Filter</InputLabel>
+                <InputLabel id="simple-select-label">Filter</InputLabel>
                 <Select sx={{height: "4vh"}}
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={null}
-                  label="GFDGFDGFD"
-                  onChange={() => {}}
+                  labelId="simple-select-label"
+                  id="simple-select"
+                  value={search}
+                  label= "yes"
+                  onChange={handleSearchChange}
                 >
-                  <MenuItem value={10}>Name</MenuItem>
-                  <MenuItem value={20}>Artist</MenuItem>
-                  <MenuItem value={30}>Genre</MenuItem>
+                  <MenuItem value={"Name"}>Name</MenuItem>
+                  <MenuItem value={"Artist"}>Artist</MenuItem>
+                  <MenuItem value={"Genre"}>Genre</MenuItem>
                 </Select>
               </FormControl>
+
               <TextField id="searchfield" label="Search" variant="standard" />          
               <Button><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
               <Button><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
@@ -170,6 +179,16 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
               <Button><div style={{fontSize: FONTSCALE}}> Force Reload Song List</div></Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
+              
+              
+              <FormControl sx={{width: "8vw", marginRight: "1vw"}}>
+                <Button onClick={(e) => {setAnchor(e.currentTarget), setDropDownState(true)}}>Columns <ArrowDropDownIcon/></Button>
+                <Menu anchorEl={anchor} open={dropDownState}>
+                 <MenuItem defaultChecked > <ListItemText primary="Name" /> </MenuItem>
+                 <MenuItem defaultChecked > <ListItemText primary="Name" /> </MenuItem>
+                 <MenuItem defaultChecked > <ListItemText primary="Name" /> </MenuItem>
+                </Menu>
+              </FormControl>
               
               </div>
               :

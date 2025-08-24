@@ -19,8 +19,6 @@ export class AudioBroker {
       case "get_all_metadata":
         console.log("Sending all audio metadata");
         
-
-
         break;
 
       default:
@@ -29,7 +27,7 @@ export class AudioBroker {
     }
   }
 
-  eventHandle(event: Electron.IpcMainInvokeEvent, arg: string[]){
+  eventHandle(event: Electron.IpcMainInvokeEvent, arg: any[]){
     console.log("handling audio event from broker; arg: " + arg);
 
     switch(arg[0].toString()){
@@ -70,6 +68,13 @@ export class AudioBroker {
         return this.audioManager.getExternalLyrics(arg[1]);
 
         break;
+
+      case "external_translated_lyrics":
+        console.log("getting translated lyrics");
+          
+          return this.audioManager.getExternalTranslatedLyrics(arg[1]);
+
+          break;
 
       default:
         console.log("ERROR: AUDIO BROKER (INVALID RESPONSE)");

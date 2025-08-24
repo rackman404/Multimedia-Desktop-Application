@@ -115,7 +115,7 @@ export const Layout = () => {
                         //console.log("music controller, current song seek is: " + trackObject?.seek());             
                         setSeek(trackObject.seek());  
                         
-                        console.log(Howler.ctx);
+                        //console.log(Howler.ctx);
                     }
                 }
     

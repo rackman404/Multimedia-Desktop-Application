@@ -2,7 +2,21 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
+
 export type Channels = 'ipc-example' | 'audio' | 'settings' | 'discord';
+
+
+/*
+export enum Channels {
+  audio = "audio",
+  settings = "settings",
+  discord = "discord",
+  ipcExample = "ipc-example"
+}
+*/
+
+//export type Channels = `${ChannelsEnum}`;
+
 
 const electronHandler = {
   ipcRenderer: {

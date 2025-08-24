@@ -145,9 +145,9 @@ public class DiscordController
         timestamps.Start = data.startTimestamp;
         //timestamps.End = data.endTimestamp;
 
-        Console.WriteLine("ロストア");
+        //Console.WriteLine("ロストア");
 
-        var activity = new Discord.Activity
+        Discord.Activity activity = new Discord.Activity
         {
             //https://github.com/discord/discord-rpc/issues/119
             State = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(data.state)),
@@ -165,7 +165,7 @@ public class DiscordController
         });
     }
 
-    // Update is called once per frame
+    //must be called in a loop
     public void UpdateMethod()
     {
         discord.RunCallbacks();

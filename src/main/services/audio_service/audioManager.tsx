@@ -6,8 +6,9 @@ import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
 import { SongLyricAPIData, SongMetaData, SongMetaDataSimple } from "../../../types";
-import { PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
+import { PRODUCTIONCONFIGDIRECTORY, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
 import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
+import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
 
 type MetaDatas = {
     full: SongMetaData[],
@@ -19,7 +20,10 @@ export class AudioManager{
     audioPlayback: AudioPlayBackController;
     audioMetadata: AudioMetadataReader;
     audioLyrics: AudioWebLyricReader;
+    audioTranslator: AudioDeepLTranslator;
+
     fileMusicPath: string;
+    fileConfigPath: string;
 
     songMetaDataFull: SongMetaData[] | undefined
     songMetaDataSimple: SongMetaDataSimple[] | undefined
@@ -30,16 +34,22 @@ export class AudioManager{
         this.audioPlayback = new AudioPlayBackController();
         this.audioMetadata = new AudioMetadataReader();
         this.audioLyrics = new AudioWebLyricReader();
+        this.audioTranslator = new AudioDeepLTranslator();
 
         if (app.isPackaged == false){ //developmental file path
             this.fileMusicPath = __dirname;
             this.fileMusicPath = path.join(this.fileMusicPath, '../../_sample_development_folder/sample_music');
+
+            this.fileConfigPath = __dirname;
+            this.fileConfigPath = path.join(this.fileMusicPath, '../../_sample_development_folder/sample_config');
 
             console.log("audio manager dev file path: " + this.fileMusicPath);
             
         }
         else{
             this.fileMusicPath = PRODUCTIONMUSICFILEDIRECTORY;
+            this.fileConfigPath = PRODUCTIONCONFIGDIRECTORY;
+
             //this.fileMusicPath = "";
         }
     }
@@ -140,6 +150,25 @@ export class AudioManager{
 
         songData = await this.audioMetadata.readMetaDataSimple(-1, song_path);
         lyrics = await this.audioLyrics.requestLyricData(songData);
+
+        return lyrics;
+    }
+
+    
+    async getExternalTranslatedLyrics(songData: any): Promise<SongLyricAPIData | undefined>{
+        var lyrics: SongLyricAPIData
+        var DeepLKey: string
+
+
+        var rawdata = fs.readFileSync(path.join(this.fileConfigPath, 'config.json'));
+        var jsonConfig = JSON.parse(rawdata.toString());
+        DeepLKey = jsonConfig.DeepLAPIKey;
+
+        if (DeepLKey == ""){//no deepL key was provided, return the original
+            return songData;
+        }
+
+        lyrics = await this.audioTranslator.requestDeepLTranslation(songData, DeepLKey);
 
         return lyrics;
     }

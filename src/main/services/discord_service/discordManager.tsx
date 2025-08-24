@@ -30,7 +30,7 @@ export class DiscordManager{
     }
 
     //https://stackoverflow.com/questions/35940290/how-to-convert-base64-string-to-javascript-file-object-like-as-from-file-input-f
-    writeThumbnailToFile(base64URL: string){
+    #writeThumbnailToFile(base64URL: string){
         //assume base64URL = 'data:image/png;base64....'; 
         fetch(base64URL)
         .then(res => res.blob())

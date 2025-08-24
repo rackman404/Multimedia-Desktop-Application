@@ -1,6 +1,4 @@
-# This is a basic workflow that is manually triggered
-
-name: Manual workflow
+name: Build for Release
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -36,7 +34,6 @@ jobs:
         uses: actions/checkout@v1
 
       # MAIN COMPILE
-
       - name: (MAIN compile main application) Install Nodejs and NPM
         uses: actions/setup-node@v1
         with:
@@ -62,7 +59,6 @@ jobs:
           dotnet-version: '8.0.302'
 
       # C# COMPILE
-
       - name: Compile C# application
         run: |
           cd dotnet_discord_rpc

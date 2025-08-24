@@ -1,19 +1,39 @@
 import { BrowserWindow } from "electron";
 import { SettingsBroker } from "./settingsIPCBroker";
+import { SettingsWindowController } from "./settingsWindowController";
+import { SettingParameters, ViewState } from "../../../types";
 
 const { session } = require('electron');
 
 
 export class SettingsManager{
     broker: SettingsBroker;
-    window: BrowserWindow | null = null;
+    mainWindow: BrowserWindow | undefined = undefined;
+
+    windowController: SettingsWindowController;
+
+    parameters: SettingParameters;
 
     constructor() {
         this.broker = new SettingsBroker(this);
+        this.windowController = new SettingsWindowController();
+
+        //default values
+        this.parameters = {
+                viewState: ViewState.Dashboard,
+            
+                //main window settings
+                fullscreenState: false,
+                networkState: true,
+            
+                //misc settings
+                discordRichPresenceState: false
+
+        } as SettingParameters;
     }
 
     SetWindow(window: BrowserWindow){
-        this.window = window;
+        this.mainWindow = window;
 
         console.log("window was set in settings manager");
     }
@@ -31,7 +51,7 @@ export class SettingsManager{
 
  
 
-        this.window?.webContents.session.enableNetworkEmulation({
+        this.mainWindow?.webContents.session.enableNetworkEmulation({
             offline: stateBool,
         });
         
@@ -45,11 +65,15 @@ export class SettingsManager{
         else{
             stateBool = false;
         }
-        this.window?.setFullScreenable(true);
-        this.window?.setFullScreen(stateBool);
-        this.window?.setFullScreenable(false);
 
-        console.log("full screened!"); 
+        if (this.mainWindow != undefined){
+            this.windowController.SetFullscreen(stateBool, this.mainWindow);
+        }
+    }
+
+
+    async GetParameters(): Promise<SettingParameters>{
+        return this.parameters;
     }
 
 } 

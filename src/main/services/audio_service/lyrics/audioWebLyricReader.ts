@@ -38,19 +38,34 @@ export class AudioWebLyricReader{
                 lyricData.lyrics = []
                 lyricData.timestamps = []
 
-                //console.debug(lyricData.isInstrumental);
+
+                //code below will fix formatting (i.e remove carriage return), then splits raw synced lyrics into a list of timestamps and corresponding lyrics
+                data['syncedLyrics'] = data['syncedLyrics'].replace(/[\r]/g, ''); //remove carriage return (if any)
+                data['syncedLyrics'] = data['syncedLyrics'].replace(/\n+$/, ""); //remove trailing new line (if any)
+                //console.debug("Raw with stripped extras:" + JSON.stringify(data['syncedLyrics']));
 
                 var lyrics =  data['syncedLyrics'].split(/\n/);
 
                 //initialize the arrays
+                var prev = -1;
                 for (var i = 0; i < lyrics.length; i++){
-                    var separated = lyrics[i].split("] ");
-                
-                    var timestampConversion = separated[0].replace("[", "").replace(":", ".").split(".");
+                    var separated = lyrics[i].split("]");
+        
+                    var rawTimestampConversion = separated[0].replace("[", "").replace(":", ".").split(".");
+                    var timestampConversion = (parseFloat(rawTimestampConversion[0]) * 60 + parseFloat(rawTimestampConversion[1]) + parseFloat(rawTimestampConversion[2])/100);
+                    console.debug(prev + " "+ timestampConversion);
 
-                    //min:sec:millisec
-                    lyricData.timestamps.push(parseFloat(timestampConversion[0]) * 60 + parseFloat(timestampConversion[1]) + parseFloat(timestampConversion[2])/100);
-                    lyricData.lyrics.push(separated[1]);
+                    //some lyric files may contain duplicate timestamps (for translations of same lyrics or other purposes), this code chunk deals with it
+                    if (prev != timestampConversion){ //push normally     
+                        //min:sec:millisec
+                        lyricData.timestamps.push(timestampConversion);
+                        lyricData.lyrics.push(separated[1]);
+                    }
+                    else{ //if duplicate timestamp, push the duplicated timestamp's lyrics onto the latest lyric index
+                        lyricData.lyrics[(lyricData.lyrics.length - 1)] += " - " + separated[1];
+                    }
+                    prev = timestampConversion;
+
                 }
 
                 
@@ -90,8 +105,9 @@ export class AudioWebLyricReader{
         }
 
         //console.log("table length: " + lyricData.lyrics.length + " " +  lyricData.timestamps.length);
-        console.table(lyricData.timestamps);
-        console.table(lyricData.lyrics);
+        console.log("lyrics successfully retrieved at path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"")  + TRACK_HEADER + songSearchData.name + DURATION_HEADER + songSearchData.length)
+        //console.table(lyricData.timestamps);
+        //console.table(lyricData.lyrics);
         return lyricData;
     }
 

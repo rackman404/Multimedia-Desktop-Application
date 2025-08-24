@@ -8,7 +8,6 @@ interface IGlobalSettingsState {
     setNetworkState: (newNetworkState: boolean) => void
     fullscreenState: boolean
     setFullscreenState: (newFullScreenState: boolean) => void
-
 }
 
 export const useGlobalSettingsState = create<IGlobalSettingsState>((set) => ({
@@ -19,3 +18,4 @@ export const useGlobalSettingsState = create<IGlobalSettingsState>((set) => ({
     fullscreenState: false,
     setFullscreenState: (newFullScreenState) =>set((state) => ({ fullscreenState: newFullScreenState })),
 }))
+

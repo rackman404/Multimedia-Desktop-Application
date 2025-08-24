@@ -69,9 +69,11 @@ export const Layout = () => {
         setSecondaryCard(() => <SongLyricCard key = {selectedPlayMetaData.name} sMetaData={selectedPlayMetaData}/>);
     }
 
+    /*
     function setSecondaryEdit(){
         setSecondaryCard(() => <SongEditCard/>);
     }
+    */
 
     //BAD PRACTICE; REFACTOR
     function refreshSecondaryCard(){
@@ -85,8 +87,10 @@ export const Layout = () => {
         <div className='content_musichome'>
             <div>
                 <div className='access_button_row_musichome'>
+                    {/*
                     <RegularButton onClick={setSecondaryLyric} style={{height: '20px', width: '10vw'}}>Lyrics</RegularButton>
-                    <RegularButton onClick={setSecondaryEdit} style={{height: '20px', width: '10vw'}}>Edit Metadata</RegularButton>
+                    <RegularButton onClick={setSecondaryEdit} style={{height: '20px', width: '10vw'}}>Edit Metadata</RegularButton> 
+                     */}
                 </div> 
 
                 {/* note key is specifically used to fully rerender the component rather than rely soly on the metadata changing.
