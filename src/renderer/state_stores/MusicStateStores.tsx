@@ -1,5 +1,7 @@
 import { create } from 'zustand'
-import { SongMetaData, SongMetaDataSimple } from '../../types'
+import { SongLyricAPIData, SongMetaData, SongMetaDataSimple } from '../../types'
+
+import placeholderImage from '../../../assets/music_no_thumbnail.png';
 
 interface ISelectedSongState {
   selectedPlaySongMetaData: SongMetaDataSimple
@@ -23,6 +25,15 @@ interface ISelectedSongState {
 
   loopState: boolean
   setLoopState: (newLoopState: boolean) => void
+
+  fullscreenState: boolean
+  setFullscreenState: (newFullScreenState: boolean) => void
+
+  thumbnailString: string
+  setThumbnailString: (newThumbnalString: string) => void
+
+  currentLyricData: SongLyricAPIData
+  setCurrentLyricData: (newCurrentLyricData: SongLyricAPIData) => void
 }
 
 export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
@@ -57,5 +68,16 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
   shuffleState: false, 
   setShuffleState: (newshuffleState) =>set((state) => ({ shuffleState: newshuffleState })),
   loopState: false, 
-  setLoopState: (newLoopState) =>set((state) => ({ loopState: newLoopState }))
+  setLoopState: (newLoopState) =>set((state) => ({ loopState: newLoopState })),
+  fullscreenState: false, 
+  setFullscreenState: (newFullScreenState) =>set((state) => ({ fullscreenState: newFullScreenState })),
+  thumbnailString: placeholderImage, 
+  setThumbnailString: (newThumbnalString) =>set((state) => ({ thumbnailString: newThumbnalString })),
+
+  currentLyricData: {
+    timestamps: [],
+    lyrics: [],
+    isInstrumental: false
+  }, 
+  setCurrentLyricData: (newCurrentLyricData) =>set((state) => ({ currentLyricData: newCurrentLyricData }))
 }))
