@@ -69,10 +69,20 @@ export class AudioBroker {
 
         break;
 
+
+
+
       case "external_translated_lyrics":
         console.log("getting translated lyrics");
           
           return this.audioManager.getExternalTranslatedLyrics(arg[1]);
+
+          break;
+
+      case "external_deepl_stats":
+        console.log("getting deepL statistics");
+          
+          return this.audioManager.getDeepLStatistics();
 
           break;
 

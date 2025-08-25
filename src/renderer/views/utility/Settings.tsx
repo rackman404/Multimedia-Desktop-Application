@@ -6,6 +6,7 @@ import { Button, ButtonBase, ButtonGroup, Chip, createTheme, Divider, FormContro
 import { ipcRenderer } from 'electron';
 import { RegularButton } from '../../elements/CustomButtons';
 import { useGlobalSettingsState } from '../../state_stores/GlobalSettingsStateStore';
+import { DeepLStatistics } from '../../../types';
 
 export const Layout = () => {
     const discordState = useGlobalSettingsState((state) => state.discordRichPresenceState);
@@ -17,10 +18,14 @@ export const Layout = () => {
     const fullscreenState = useGlobalSettingsState((state) => state.fullscreenState);
     const setFullscreenState = useGlobalSettingsState((state) => state.setFullscreenState);
 
+    const [deepLStatistics, setDeepLStatistics] = useState<DeepLStatistics>();
+
     //on mount and unmount
     useEffect(() => {
 
         getDiscordStatus();
+
+        getDeepLStatistics();
 
         //called when the component is unmounted
         return () => {
@@ -31,6 +36,10 @@ export const Layout = () => {
     async function getDiscordStatus(){
         console.log("discord: " + discordState);
         setDiscordState (await window.electron.ipcRenderer.invoke('discord', ["client_status"]));
+    }
+
+    async function getDeepLStatistics(){
+        setDeepLStatistics (await window.electron.ipcRenderer.invoke('audio', ["external_deepl_stats"]) as DeepLStatistics);
     }
 
     async function setNetwork(state: boolean){
@@ -74,8 +83,26 @@ export const Layout = () => {
             <div className='column_settings'>
 
                 <Card className='secondary_card_settings' variant='outlined'> 
-                <h2>Status</h2>
-                Placeholder 
+                    <h2>Status</h2>
+                    <div className='row_status'>
+                        <Tooltip title="Requires a DeepL Key for this statistic to function">
+                            <Typography noWrap component="div" sx={{justifyContent: "flex-start"}}>DeepL Connection Status:</Typography>
+                        </Tooltip>
+                        
+                        <Tooltip title="Limit is capped at 500k for basic, note that DeepL translations will not function after this point (unless a PRO DeepL key is used)">
+                            <Typography noWrap component="div" sx={{justifyContent: "flex-start"}}> {deepLStatistics?.deepLConnectionStatus} </Typography>
+                        </Tooltip>
+                    </div>
+
+                    <div className='row_status'>
+                        <Tooltip title="Requires a DeepL Key for this statistic to function">
+                            <Typography noWrap component="div" sx={{justifyContent: "flex-start"}}>DeepL Character Usage:</Typography>
+                        </Tooltip>
+                        
+                        <Tooltip title="Limit is capped at 500k for basic, note that DeepL translations will not function after this point (unless a PRO DeepL key is used)">
+                            <Typography noWrap component="div" sx={{justifyContent: "flex-start"}}> {deepLStatistics?.characterUsage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / 500,000</Typography>
+                        </Tooltip>
+                    </div>
                 </Card>
 
                 <Card className='secondary_card_settings' variant='outlined'> 

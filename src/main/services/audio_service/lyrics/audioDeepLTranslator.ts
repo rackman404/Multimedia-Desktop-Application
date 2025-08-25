@@ -1,10 +1,13 @@
 import { error } from "console";
-import { SongLyricAPIData } from "../../../../types";
+import { DeepLStatistics, SongLyricAPIData } from "../../../../types";
 import * as deepl from 'deepl-node';
 
 
 
 //NOTE for anyone using this other than myself: \https://www.deepl.com/en/your-account/keys register for a deepL account if you want access to translator services within this application
+
+
+const options = {appInfo: { appName: 'Node Song Lyric Translation Service', appVersion: 'N/A' },};
 
 export class AudioDeepLTranslator{
 
@@ -38,7 +41,7 @@ export class AudioDeepLTranslator{
 
         //console.log(songLyricData.lyrics);
 
-        const deeplClient = new deepl.DeepLClient(deepLKey);
+        const deeplClient = new deepl.DeepLClient(deepLKey, options);
         
         await (async () => {
             const targetLang: deepl.TargetLanguageCode = 'en-US';
@@ -51,8 +54,9 @@ export class AudioDeepLTranslator{
             });
 
             if (results == undefined){
-                lyricData.lyrics = songLyricData.lyrics;
+                //lyricData.lyrics = songLyricData.lyrics;
             }
+
             else{
                 results.map((result: deepl.TextResult) => {
                     lyricData.lyrics.push(result.text);
@@ -67,7 +71,26 @@ export class AudioDeepLTranslator{
         console.table(lyricData.timestamps);
         console.table(lyricData.lyrics);
 
+        //console.debug(await this.requestDeepLCharacterLimit(deepLKey));
+
         return lyricData;
     }
 
+    async requestDeepLStatistics(deepLKey: string): Promise<DeepLStatistics>{
+        var stats = {} as DeepLStatistics;
+
+        if (deepLKey != ""){
+            const deeplClient = new deepl.DeepLClient(deepLKey, options);
+            
+            stats.deepLConnectionStatus = "Connected";
+            const usage = await deeplClient.getUsage().catch((error) => {
+                console.error(error);
+                stats.deepLConnectionStatus = "No Connection (Check API Key or Internet Connection)"; //replace the OK connection status above if connection not working
+            });
+
+            stats.characterUsage = (usage?.character?.count)?.toString() ?? "N/A";
+        }
+
+        return stats;
+    }
 }

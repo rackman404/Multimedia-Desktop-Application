@@ -86,3 +86,9 @@ export enum ViewState {
     Comic,
     Settings,
 }
+
+
+export type DeepLStatistics = {
+    characterUsage: string;
+    deepLConnectionStatus: string;
+}

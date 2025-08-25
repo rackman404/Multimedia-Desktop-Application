@@ -5,7 +5,7 @@ import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
-import { SongLyricAPIData, SongMetaData, SongMetaDataSimple } from "../../../types";
+import { DeepLStatistics, SongLyricAPIData, SongMetaData, SongMetaDataSimple } from "../../../types";
 import { PRODUCTIONCONFIGDIRECTORY, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
 import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
 import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
@@ -171,6 +171,19 @@ export class AudioManager{
         lyrics = await this.audioTranslator.requestDeepLTranslation(songData, DeepLKey);
 
         return lyrics;
+    }
+
+    async getDeepLStatistics(): Promise<DeepLStatistics | undefined>{
+        var DeepLKey: string
+
+
+        var rawdata = fs.readFileSync(path.join(this.fileConfigPath, 'config.json'));
+        var jsonConfig = JSON.parse(rawdata.toString());
+        DeepLKey = jsonConfig.DeepLAPIKey;
+
+        var characters = await this.audioTranslator.requestDeepLStatistics(DeepLKey);
+
+        return characters;
     }
 
 }
