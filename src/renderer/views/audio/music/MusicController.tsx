@@ -10,6 +10,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import {useSelectedSongStore } from '../../../state_stores/MusicStateStores';
 
 import { Howl, Howler } from 'howler';
+import { SongFullscreenOverlay } from '../../../components/static/Audio/Music/SongFullscreenOverlay';
 
 export const Layout = () => {
     const playState = useSelectedSongStore((state) => state.playState);
@@ -26,9 +27,30 @@ export const Layout = () => {
     const trackObject = useSelectedSongStore((state) => state.currentPlayer);
     const setTrackObject = useSelectedSongStore((state) => state.setCurrentPlayer);
 
+    // fullscreen selected song controls --------
+    const fullscreenState = useSelectedSongStore((state) => state.fullscreenState);
+    const setFullscreenState = useSelectedSongStore((state) => state.setFullscreenState);
+
+    const [fullscreenComponent, setFullscreenComponent] = useState<any>();
+
+    //check for overflow and set a marquee if it does
+    useEffect(() => {
+
+        if (fullscreenState == true){
+            setFullscreenComponent(<SongFullscreenOverlay/>);
+        }
+        else{
+            setFullscreenComponent(null);
+        }
+        
+
+    }, [fullscreenState]);
+
+    // fullscreen selected song controls --------
 
     //on mount and unmount
     useEffect(() => {
+        setFullscreenState(false); //reset full screen upon reentering music service
 
     //called when the component is unmounted
     return () => {
@@ -193,8 +215,11 @@ export const Layout = () => {
     return (
         
         <div>
+            {fullscreenComponent}
             {/* yet another render of a component needed to fix async iamge loading issue, must refactor entire controller into backend to realistically fix this*/}
-            <> <div style={{animation:  "fadeIn 0.5s"}}> <BottomMusicControl key={selectedPlaySongMetaData.id} setSeek={changeSeek} setVolume={changeVolume} setNext={nextSong} setPrev={prevSong}/><Outlet/></div></>
+            {/* <> <div style={{animation:  "fadeIn 0.5s"}}> <BottomMusicControl key={selectedPlaySongMetaData.id} setSeek={changeSeek} setVolume={changeVolume} setNext={nextSong} setPrev={prevSong}/><Outlet/></div></> */}
+            <> <div style={{animation:  "fadeIn 0.5s"}}> <BottomMusicControl setSeek={changeSeek} setVolume={changeVolume} setNext={nextSong} setPrev={prevSong}/><Outlet/></div></>
+
         </div>
     )
   };

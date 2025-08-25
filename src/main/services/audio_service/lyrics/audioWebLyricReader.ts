@@ -53,7 +53,7 @@ export class AudioWebLyricReader{
         
                     var rawTimestampConversion = separated[0].replace("[", "").replace(":", ".").split(".");
                     var timestampConversion = (parseFloat(rawTimestampConversion[0]) * 60 + parseFloat(rawTimestampConversion[1]) + parseFloat(rawTimestampConversion[2])/100);
-                    console.debug(prev + " "+ timestampConversion);
+                    //console.debug(prev + " "+ timestampConversion);
 
                     //some lyric files may contain duplicate timestamps (for translations of same lyrics or other purposes), this code chunk deals with it
                     if (prev != timestampConversion){ //push normally     

@@ -7,6 +7,7 @@ import { RegularButton } from '../../../../elements/CustomButtons';
 import { SongMetaDataSimple } from '../../../../../types';
 import { SongLyricStaticReadout } from './SongLyricStaticReadout';
 import { SongLyricLiveReadout } from './SongLyricLiveReadout';
+import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 
 type SongLyricProps = { //constructor variables
   sMetaData: SongMetaDataSimple
@@ -14,6 +15,7 @@ type SongLyricProps = { //constructor variables
 
 export const SongLyricCard = ({sMetaData}: SongLyricProps) => { 
   //const [headerText, setHeaderText] = useState("placeholder");
+
   const [lyricMode, setLyricMode] = useState(() => <SongLyricLiveReadout sMetaData={sMetaData}></SongLyricLiveReadout>);
 
   function SetLyrics(bool: boolean): void{

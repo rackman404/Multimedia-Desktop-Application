@@ -17,6 +17,7 @@ import { SongMetaData } from '../../../../../types';
 import Marquee from "react-fast-marquee";
 import { checkTextOverflow } from '../../../../../utils';
 import { grey } from '@mui/material/colors';
+import { BottomMusicImageHandler } from './BottomMusicImageHandler';
 
 type MusicControlProps = { //constructor variables
   setSeek: (newSeek:number) => void
@@ -38,6 +39,11 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
     const loopState = useSelectedSongStore((state) => state.loopState);
     const setLoop = useSelectedSongStore((state) => state.setLoopState);
 
+    const FullscreenOverlayState = useSelectedSongStore((state) => state.fullscreenState);
+    const setFullscreenOverlayState = useSelectedSongStore((state) => state.setFullscreenState);
+
+    const setThumbnailString = useSelectedSongStore((state) => state.setThumbnailString);
+
     const [cover, setCover] = useState<any>(<CardMedia
         component="img"
         width="100%"
@@ -55,7 +61,6 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
 
     //on mount and unmount
     useEffect(() => {
-
     //called when the component is unmounted
     return () => {
         setCover(<div/>);
@@ -74,10 +79,13 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
 
     }, [artistElement, nameElement]);
 
+    /*
     useEffect(() => {
 
         (async () => {
             if (currentSong.songRawPath != ""){
+                setThumbnailString("");
+
                 const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", currentSong.id, currentSong.songRawPath]) as SongMetaData;
                 //console.log("cover image" +  sMetaData?.coverImage);
                 //console.log(result);
@@ -86,15 +94,14 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                 if(result.coverImage != null){
                 cImg = await _arrayBufferToBase64(result.coverImage.data);
                 cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
+
+                    setThumbnailString(cImg);
+                }
+                else{
+                    setThumbnailString(placeholderImage);
                 }
 
-                /* old
-                var cImg = placeholderImage;
-                if(result.coverImage != null){
-                cImg = result.coverImage;
-                cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
-                }
-                */
+
         
                 
         setCover(<img
@@ -106,7 +113,10 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                 />);
             }
         })();
+
+        
     }, [currentSong]);
+    */
 
 
     const userSeekChange = (event: Event, newValue: number) => {
@@ -117,6 +127,7 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
         setVolume(newValue);
     };
 
+    /*
     //https://stackoverflow.com/questions/38432611/converting-arraybuffer-to-string-maximum-call-stack-size-exceeded
     //https://stackoverflow.com/questions/64814478/how-can-a-javascript-async-function-explicitly-yield-control-at-a-specific-point
     async function _arrayBufferToBase64( buffer: any) {
@@ -143,11 +154,12 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
         }
         return window.btoa( binary );
     }
+    */
 
     return (
-        <div className='content_bottommusiccontrol'>        
+        <div className={FullscreenOverlayState === false ? 'content_bottommusiccontrol' : 'content_bottommusiccontrol_fullscreen'}>        
                 <Card className='left_card_bottommusiccontrol' variant='outlined'>
-                    {cover}
+                    {<BottomMusicImageHandler key={currentSong.id}/>}
                     <div>
                         <div ref={(el) => {setNameElement(el)}} id = "name" className='left_card_text_container_bottommusiccontrol'>
                         {nameMarqueeState === true ? 
@@ -169,13 +181,8 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                 <Divider orientation="vertical" />
                 
                 <Card className='center_card_bottommusiccontrol' variant='outlined'>
-                    <div className='centered_control_bottommusiccontrol'>
-                        <div>
-                            <Button onClick={setPrev}><ArrowBackIosNewIcon/></Button>
-                            <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
-                            <Button onClick={setNext}><ArrowForwardIosIcon/></Button>
-                        </div>
-                                
+
+                    <div className='center_controls_right_left_container'>
                         <div className='right_control_center_bottommusiccontrol'>
                             <div>
                             <Button onClick={() => shuffleState === false ? setShuffleState(true) : setShuffleState(false)}> {shuffleState === false ? "Enable" : "Disable"} Shuffle </Button>
@@ -186,22 +193,36 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                             </div>
 
                         </div>
+                        
+                        <div>
+                            <Button onClick={setPrev}><ArrowBackIosNewIcon/></Button>
+                            <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
+                            <Button onClick={setNext}><ArrowForwardIosIcon/></Button>
+                        </div>
+
 
                         <div className='left_control_center_bottommusiccontrol'>
                             <div>
-                            <Button onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> {shuffleState === false ? "Hide" : "Show"} Controls </Button>
+                            <Button disabled onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> {shuffleState === false ? "Hide" : "Show"} Controls </Button>
                             </div>
 
                             <div>
-                            <Button onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> {shuffleState === false ? "Enable" : "Disable"} Normalization </Button>
+                            <Button disabled onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> {shuffleState === false ? "Enable" : "Disable"} Normalization </Button>
+                            </div>
+
+                            <div>
+                            <Button onClick={() => FullscreenOverlayState === false ? setFullscreenOverlayState(true) : setFullscreenOverlayState(false)}> {FullscreenOverlayState === false ? "Enable" : "Disable"} Full View </Button>
                             </div>
                         </div>
-                    </div>
+                    </div> 
+                    
+
+                        
 
                     <div className='seek_component_bottommusiccontrol'>
                         <Toolbar>
                             {fmtMSS(Math.round(currentSeek))}
-                            <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{maxWidth: "50em", marginLeft: "10px", marginRight: "10px"}} onChange={userSeekChange} />
+                            <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{maxWidth: "100em", marginLeft: "10px", marginRight: "10px"}} onChange={userSeekChange} />
                             {fmtMSS(Math.round(currentSong.length))}
                         </Toolbar>
                     </div>

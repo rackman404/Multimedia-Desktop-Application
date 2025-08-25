@@ -13,6 +13,31 @@
 
 }
 
+@keyframes maxOff {
+    0% { position:fixed; left:20vw; grid-template-columns: 15vw 0.1vw 50vw 0.1vw 15vw; }
+    100% {position:fixed; left:0vw; grid-template-columns: 0.01vw 0.1vw 80vw 0.1vw 20vw; }
+}
+
+.content_bottommusiccontrol_fullscreen{
+    position:fixed;
+    left:0vw;
+    bottom:0;
+
+    z-index: 10000;
+
+    display: grid;
+
+    grid-template-columns: 0.01vw 0.1vw 80vw 0.1vw 20vw;
+    
+    grid-template-rows: auto;
+
+    height: 10.3vh;
+
+    animation: maxOff 2s ;
+}
+
+
+
 .volume_control_bottommusiccontrol{
     display: flex;
     justify-content: center;
@@ -77,28 +102,33 @@
 
 }
 
-
 .centered_control_bottommusiccontrol{
     display: flex;
     justify-content: center;
     flex-direction: row;
 }
 
-.right_control_center_bottommusiccontrol{
-    position:absolute;
-    right: 15vw;
-
+.center_controls_right_left_container{
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+
+    align-items: center;  /*aligns elements in row vertically center */
+    justify-content: space-between;
+
+    column-gap: 1vw;  
+}
+
+.right_control_center_bottommusiccontrol{
+    display: flex;
     flex-direction: row;
 }
 
 .left_control_center_bottommusiccontrol{
-    position:absolute;
-    left: 15vw;
-
     display: flex;
-    justify-content: center;
     flex-direction: row;
+}
+
+.absolute_center_bottommusiccontrol{
+    display: absolute;
 }
 

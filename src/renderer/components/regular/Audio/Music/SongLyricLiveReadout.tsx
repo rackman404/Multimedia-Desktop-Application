@@ -11,6 +11,7 @@ type SongLiveLyricProps = { //instance variables
 
 export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => { 
   const [lyricData, setLyricData] = useState({} as SongLyricAPIData);
+
   const [translatedLyricData, setTranslatedLyricData] = useState({} as SongLyricAPIData);
   const [currentLyric, setCurrentLyric] = useState("");
   const [nextLyric, setNextLyric] = useState("");
@@ -27,19 +28,40 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
   const [progressIndicator, setProgressIndicator] = useState(<div/>);
 
+  //FOR USE BY OVERLAY
+  const currentLyricData = useSelectedSongStore((state) => state.setCurrentLyricData);
+
   //get new lyric data on recieving new song meta data
   useEffect(() => {
+    var abort = false;
     (async () => {
       if (sMetaData.songRawPath != ""){
+
+        currentLyricData({} as SongLyricAPIData);
+
         setProgressIndicator(<LinearProgress/>)
         const result = await window.electron.ipcRenderer.invoke('audio', ["external_lyrics", sMetaData.songRawPath]) as SongLyricAPIData;
-        console.log(result);
         setLyricData(result);
+
+        if (abort == false){
+          console.log("GOT LYRICS FOR" + sMetaData.name);
+          currentLyricData(result);
+        }
+
+        
         setProgressIndicator(<div/>)
       }
 
     })();
+
+    return () => {
+      // Function returned from useEffect is called on unmount
+      // Here it'll abort the fetch
+      console.log("DISCARDING LYRIC (no need as this lyric is outdated), was for: " + sMetaData.name);
+      abort = true;
+    }
   }, [sMetaData]);
+
 
   useEffect(() => {
     if (lyricData.lyrics == undefined){
@@ -141,7 +163,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
         {/*key needed to actually rerender the fade in properly*/}
 
           <div className='content_grid_songlyriccard'>
-            <div>
+            <div style={{height: "10vh"}}>
               <div key={currentLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </div>
               <br/>
               <div key={nextLyric} className={fadeState} style={{color:"grey"}}> {nextLyric} </div>
@@ -151,8 +173,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
             <div className='center_div_songlyriccard'> <Divider/> {progressIndicator} </div>
 
             {/*translated lyrics*/}
-            <div>
-              <br/>
+            <div style={{height: "8vh"}}>
               <div>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}> Translated Lyrics (Using DeepL) </Typography>
                 <RegularButton className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate</Typography></RegularButton>
