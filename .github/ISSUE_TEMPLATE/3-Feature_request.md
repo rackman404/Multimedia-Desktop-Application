@@ -1,15 +1,7 @@
 ---
 name: Feature request
-about: You want something added to the boilerplate. 🎉
+about: New Feature to be added
 labels: 'enhancement'
 ---
 
-<!---
-❗️❗️ Also, please consider donating (https://opencollective.com/electron-react-boilerplate-594) ❗️❗️
-
-Donations will ensure the following:
-
-🔨 Long term maintenance of the project
-🛣 Progress on the roadmap
-🐛 Quick responses to bug reports and help requests
- -->
+<!--- Details about new feature to be added -->

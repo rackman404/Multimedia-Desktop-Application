@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: You're having technical issues. 🐞
+about: You're having technical issues.
 labels: 'bug'
 ---
 
@@ -10,11 +10,9 @@ labels: 'bug'
 
 <!-- If the following boxes are not ALL checked, your issue is likely to be closed -->
 
-- [ ] Using npm
-- [ ] Using an up-to-date [`main` branch](https://github.com/electron-react-boilerplate/electron-react-boilerplate/tree/main)
-- [ ] Using latest version of devtools. [Check the docs for how to update](https://electron-react-boilerplate.js.org/docs/dev-tools/)
-- [ ] Tried solutions mentioned in [#400](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/400)
-- [ ] For issue in production release, add devtools output of `DEBUG_PROD=true npm run build && npm start`
+- [x] Using npm
+- [x] Using dotnet
+- [x] Using an up-to-date [`main` branch](https://github.com/rackman404/Multimedia-Desktop-Application/tree/main)
 
 ## Expected Behavior
 
@@ -29,13 +27,9 @@ labels: 'bug'
 <!-- Add relevant code and/or a live example -->
 <!-- Add stack traces -->
 
-1.
+1. ...
 
-2.
-
-3.
-
-4.
+2. ...
 
 ## Possible Solution (Not obligatory)
 
@@ -44,24 +38,13 @@ labels: 'bug'
 ## Context
 
 <!--- How has this issue affected you? What are you trying to accomplish? -->
-<!--- Did you make any changes to the boilerplate after cloning it? -->
-<!--- Providing context helps us come up with a solution that is most useful in the real world -->
 
 ## Your Environment
 
-<!--- Include as many relevant details about the environment you experienced the bug in -->
+<!--- Include any change to developmental environment (if no change, leave altered version blank) -->
 
-- Node version :
-- electron-react-boilerplate version or branch :
-- Operating System and version :
-- Link to your project :
+- Node version : 20.13.1 | Altered Version: N/A
+- Dotnet version : 8.0.302 | Altered Version: N/A
+- Operating System and version : Windows 10 (23H2) | Altered Version: N/A 
+- Your application version: 
 
-<!---
-❗️❗️ Also, please consider donating (https://opencollective.com/electron-react-boilerplate-594) ❗️❗️
-
-Donations will ensure the following:
-
-🔨 Long term maintenance of the project
-🛣 Progress on the roadmap
-🐛 Quick responses to bug reports and help requests
- -->

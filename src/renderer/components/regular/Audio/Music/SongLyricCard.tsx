@@ -40,7 +40,7 @@ export const SongLyricCard = ({sMetaData}: SongLyricProps) => {
           <Card variant='outlined' className="card_songlyriccard" component={Paper} sx={{ height: "31.9vh", width: "20vw"}}>
             <CardContent>
             <div className='top_bar_row_songlyriccard'>
-              <RegularButton className='option_button_songlyriccard' onClick={() => (SetLyrics(true))}><Typography fontSize={"0.75em"} noWrap component="div">Raw Lyrics</Typography></RegularButton>
+              <RegularButton disabled className='option_button_songlyriccard' onClick={() => (SetLyrics(true))}><Typography fontSize={"0.75em"} noWrap component="div">Raw Lyrics</Typography></RegularButton>
 
               <div>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>

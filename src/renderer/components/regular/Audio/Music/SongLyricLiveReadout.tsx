@@ -153,7 +153,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
             {/*translated lyrics*/}
             <div>
               <br/>
-              <div style={{marginBottom: "2vh"}}>
+              <div>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}> Translated Lyrics (Using DeepL) </Typography>
                 <RegularButton className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate</Typography></RegularButton>
               </div>

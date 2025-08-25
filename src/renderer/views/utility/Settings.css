@@ -24,6 +24,7 @@
     text-align: center;
 }
 
+
 .secondary_card_settings{
     background: linear-gradient(to right bottom,rgb(34, 34, 34),rgb(49, 49, 49));
 
@@ -34,7 +35,6 @@
     margin-top: 25px;
     margin-bottom: 25px;
 }
-
 
 .shaded_label_affimative_settings{
     background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(255, 0, 0));
@@ -55,14 +55,26 @@
     /* use to give row full space allocated to it */
     width: 90%;
 
-    
+}
+
+.row_status{
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;  /*aligns elements in row vertically center */
+    justify-content: space-between;
+
+    column-gap: 10vw;  
+    margin-bottom: 1vh;  
+
+    margin-left: 5vw;
+    margin-right: 5vw;
+
 }
 
 .double_row_settings{
     display: grid;
     grid-template-columns: 50% 50%;
-
-
 
     gap: 5px;
 

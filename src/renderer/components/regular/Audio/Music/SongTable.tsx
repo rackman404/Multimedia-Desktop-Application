@@ -170,19 +170,19 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
               </FormControl>
 
               <TextField id="searchfield" label="Search" variant="standard" />          
-              <Button><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
-              <Button><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
+              <Button disabled><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
+              <Button disabled><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
               <Button onClick={() => scrollToElementInTable(currentSong.id)}> <div style={{fontSize: FONTSCALE}}>Zoom To Active</div></Button>
               <Button onClick={() => scrollToElementInTable(infoCardSongID)}> <div style={{fontSize: FONTSCALE}}>Zoom To Selected</div></Button>
               <Button onClick={() => autoFocus === false ? setAutoFocus(true) : setAutoFocus(false)}> <div style={{fontSize: FONTSCALE}}> {autoFocus === false ? "Enable" : "Disable"} Autozoom</div> </Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              <Button><div style={{fontSize: FONTSCALE}}> Force Reload Song List</div></Button>
+              <Button disabled><div style={{fontSize: FONTSCALE}}> Force Reload Song List</div></Button>
               <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
               
               
               <FormControl sx={{width: "8vw", marginRight: "1vw"}}>
-                <Button onClick={(e) => {setAnchor(e.currentTarget), setDropDownState(true)}}>Columns <ArrowDropDownIcon/></Button>
+                <Button disabled onClick={(e) => {setAnchor(e.currentTarget), setDropDownState(true)}}>Columns <ArrowDropDownIcon/></Button>
                 <Menu anchorEl={anchor} open={dropDownState}>
                  <MenuItem defaultChecked > <ListItemText primary="Name" /> </MenuItem>
                  <MenuItem defaultChecked > <ListItemText primary="Name" /> </MenuItem>
