@@ -31,18 +31,22 @@ export class AudioBroker {
     console.log("handling audio event from broker; arg: " + arg);
 
     switch(arg[0].toString()){
+      /* unused?
       case "get_all_metadata": //TEST ONLY
         console.log("Sending all audio metadata");
         
         return this.audioManager.getAllSongData();
 
         break;
+      */
+      /* unused?
       case "get_all_metadata_full":
         console.log("Sending all full audio metadata");
         
         return this.audioManager.getAllSongDataFull();
 
         break;
+      */
       case "get_all_metadata_simple":
         console.log("Sending all simple audio metadata");
         
@@ -55,22 +59,12 @@ export class AudioBroker {
         return this.audioManager.getSpecifiedSongDataFull(parseInt(arg[1]), arg[2]);
 
         break;
-      case "reload":
-        console.log("Reloading metadata");
-        
-        return this.audioManager.refreshData();
-
-        break;
-
       case "external_lyrics":
         console.log("getting lyrics");
         
         return this.audioManager.getExternalLyrics(arg[1]);
 
         break;
-
-
-
 
       case "external_translated_lyrics":
         console.log("getting translated lyrics");
