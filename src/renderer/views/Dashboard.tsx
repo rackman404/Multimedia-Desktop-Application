@@ -14,10 +14,24 @@ export const Layout = () => {
     return (
         <div className='page_content_dashboard'>
 
-            <Card className='card_dashboard'> <h2>Music</h2>  </Card>
+            <Card className='card_dashboard'> <h2>Music</h2><Divider/>  </Card>
             
-            <Card className='card_dashboard'> <h2>Welcome</h2> </Card>
+            <Card className='card_dashboard'> <h2>Welcome</h2><Divider/> 
+            
+            Current Features
 
+            <br/>
+
+            
+            Projected Features
+            
+            <br/>
+            
+            </Card>
+
+            <Card className='card_dashboard'> <h2>Changelog</h2><Divider/> </Card>
+
+            {/*
             <Card className='card_dashboard'> <h2>Debug</h2> 
 
             <RegularButton onClick={() => window.electron.ipcRenderer.sendMessage('audio', ['msg'])}>Test send one way</RegularButton>
@@ -29,6 +43,7 @@ export const Layout = () => {
 
                 
             }}>Test Discord Rich Presence</RegularButton>
+            
 
             
             <RegularButton onClick={    
@@ -41,6 +56,7 @@ export const Layout = () => {
             
 
             </Card>
+            */}
 
             
         </div>

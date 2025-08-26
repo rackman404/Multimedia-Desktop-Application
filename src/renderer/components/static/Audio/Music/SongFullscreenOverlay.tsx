@@ -1,34 +1,47 @@
 import {Button, Card, CircularProgress, Typography } from '@mui/material';
 import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BottomMusicImageHandler } from './BottomMusicImageHandler';
 import { SongFullscreenOverlayLyricsHandler } from './SongFullscreenOverlayLyricsHandler';
+import { SongFullscreenOverlayNextSongHandler } from './SongFullscreenOverlayNextSongHandler';
+
+type OverlayProps = { //constructor variables
+  visible: boolean
+};
 
 
-
-export const SongFullscreenOverlay = () => { 
+export const SongFullscreenOverlay = ({visible}:OverlayProps) => { 
   const currentSong = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
 
   const thumbnailString = useSelectedSongStore((state) => state.thumbnailString);
+
+  const [firstLoad, setFirstLoad] = useState<boolean>(true);
   //on mount and unmount
   useEffect(() => {
+    
+    if (visible == true){
+      setFirstLoad(false);
+    }
+    
 
-  //called when the component is unmounted
-  return () => {
+  }, [visible]);
 
-  };
-  }, []);
 
 
   return (
-    <div className='song_fullscreen_overlay_container'>
+    <div className={firstLoad === false ? (visible === false ? 'song_fullscreen_overlay_container_hidden' : 'song_fullscreen_overlay_container') : 'song_fullscreen_overlay_container_hidden_first_load'}>
       <div className='song_fullscreen_content_top_header'>
         <Typography color="white" variant="h3" component="div"> {currentSong?.name}</Typography>
         <Typography color="white" variant="h5" component="div"> {currentSong.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</Typography>
         {/*<Typography color="white" variant="h5" component="div"> {currentSong?.album === "N/A" ? "" : (currentSong?.album === currentSong?.name ? "Single" : currentSong?.album)}</Typography>*/}
         <Typography color="white" variant="h5" component="div"> {currentSong?.album === "N/A" ? "" : currentSong?.album}</Typography>
       </div>
+
+      <div className='next_song_header'>
+        {<SongFullscreenOverlayNextSongHandler/>}
+      </div>
+      
 
       <div className='song_fullscreen_content_main'>
 

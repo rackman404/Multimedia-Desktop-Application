@@ -12,7 +12,7 @@ type SongLiveLyricProps = { //instance variables
 export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => { 
   const [lyricData, setLyricData] = useState({} as SongLyricAPIData);
 
-  const [translatedLyricData, setTranslatedLyricData] = useState({} as SongLyricAPIData);
+  //const [translatedLyricData, setTranslatedLyricData] = useState({} as SongLyricAPIData);
   const [currentLyric, setCurrentLyric] = useState("");
   const [nextLyric, setNextLyric] = useState("");
 
@@ -28,8 +28,13 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
   const [progressIndicator, setProgressIndicator] = useState(<div/>);
 
+  //FOR USE BY BOTH THIS AND OVERLAY
+  const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
+  const setCurrentTranslatedLyricData = useSelectedSongStore((state) => state.setCurrentTranslatedLyricData);
+
   //FOR USE BY OVERLAY
   const currentLyricData = useSelectedSongStore((state) => state.setCurrentLyricData);
+  
 
   //get new lyric data on recieving new song meta data
   useEffect(() => {
@@ -38,6 +43,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
       if (sMetaData.songRawPath != ""){
 
         currentLyricData({} as SongLyricAPIData);
+        setCurrentTranslatedLyricData({} as SongLyricAPIData);
 
         setProgressIndicator(<LinearProgress/>)
         const result = await window.electron.ipcRenderer.invoke('audio', ["external_lyrics", sMetaData.songRawPath]) as SongLyricAPIData;
@@ -63,10 +69,10 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
   useEffect(() => {
     if (lyricData.lyrics == undefined){
-      setCurrentLyric("If this message doesn't disappear after loading bar disappears it means the lyric API could not find lyrics (either doesn't exist or metadata is fucked)");  
+      setCurrentLyric("Loading (If this doesn't Disappear, API couldn't find lyrics)");  
     }
     else if (lyricData.lyrics != undefined && lyricData.lyrics.length != 0){
-      if (currentLyric == "If this message doesn't disappear after loading bar disappears it means you're fucked bozo"){
+      if (currentLyric == "If this message doesn't disappear after loading bar disappears it means you're fucked bozo"){ //??
         setCurrentLyric("[Instrumental]");
       }
       else{
@@ -90,8 +96,8 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
         var lyricsTranslated = false;
         translatedText = "";
-        if (translatedLyricData.lyrics != undefined){
-          var translatedText = translatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)];
+        if (currentTranslatedLyricData.lyrics != undefined){
+          var translatedText = currentTranslatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)];
           lyricsTranslated = true;
         }
 
@@ -122,7 +128,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
           else{
             setNextLyric(lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);
               if (lyricsTranslated == true){
-                setNextTranslatedLyric(translatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);  
+                setNextTranslatedLyric(currentTranslatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);  
               }
           }  
 
@@ -150,7 +156,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
     }
     else{
       const result = await window.electron.ipcRenderer.invoke('audio', ["external_translated_lyrics", lyricData]) as SongLyricAPIData;
-      setTranslatedLyricData(result);
+      setCurrentTranslatedLyricData(result);
     }
 
 
@@ -162,9 +168,9 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
           <div className='content_grid_songlyriccard'>
             <div style={{height: "10vh"}}>
-              <div key={currentLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </div>
-              <br/>
-              <div key={nextLyric} className={fadeState} style={{color:"grey"}}> {nextLyric} </div>
+              <div className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} <br/> </div>
+              
+              <div className={fadeState} style={{color:"grey"}}> <br/>  {nextLyric} </div>
             </div>
 
             {/*divider*/}
@@ -177,9 +183,9 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
                 <RegularButton className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate</Typography></RegularButton>
               </div>
 
-              <div key={currentTranslatedLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} </div>
-              <br/>
-              <div key={nextTranslatedLyric} className={fadeState} style={{color:"grey"}}> {nextTranslatedLyric} </div>
+              <div className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} <br/> </div>
+              
+              <div className={fadeState} style={{color:"grey"}}> <br/> {nextTranslatedLyric} </div>
               
             </div>
 

@@ -1,4 +1,4 @@
-import {Button, Card, CircularProgress, Typography } from '@mui/material';
+import {Button, Card, CircularProgress, Divider, Typography } from '@mui/material';
 import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { useEffect, useState } from 'react';
@@ -27,11 +27,10 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
   const [fadeState, setFadeState] = useState('fade_in_text');
   const [currentOffset, setCurrentOffset] = useState(0);
 
-  const [progressIndicator, setProgressIndicator] = useState(<div/>);
-
-  //FOR USE BY OVERLAY
+  const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
+  const setCurrentTranslatedLyricData = useSelectedSongStore((state) => state.setCurrentTranslatedLyricData);
+  
   const lyricData = useSelectedSongStore((state) => state.currentLyricData);
-  const [translatedLyricData, setTranslatedLyricData] = useState({} as SongLyricAPIData); //NOT IMPLEMENTED
 
   useEffect(() => {
     //console.log(lyricData);
@@ -66,8 +65,8 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
         var lyricsTranslated = false;
         translatedText = "";
-        if (translatedLyricData.lyrics != undefined){
-          var translatedText = translatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)];
+        if (currentTranslatedLyricData.lyrics != undefined){
+          var translatedText = currentTranslatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)];
           lyricsTranslated = true;
         }
 
@@ -101,7 +100,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
               else{
                 nextLyricsArray[i] = (lyricData.lyrics[lyricData.timestamps.indexOf(closest)+i]);
                   if (lyricsTranslated == true){
-                    nextTranslatedLyricsArray[i] = translatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)+i];  
+                    nextTranslatedLyricsArray[i] = currentTranslatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)+i];  
                   }
               }  
 
@@ -133,7 +132,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
       }
       else{
         const result = await window.electron.ipcRenderer.invoke('audio', ["external_translated_lyrics", lyricData]) as SongLyricAPIData;
-        setTranslatedLyricData(result);
+        setCurrentTranslatedLyricData(result);
       }
   }
 
@@ -142,8 +141,10 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
     <div className='containers'>
         {translated === false ? <div>
             <div className='lyric_headers'>
-              <Typography color="white"> Synced Lyrics </Typography>
+              <Typography color="white"> Synced Lyrics  </Typography>
             </div>
+            <br/>
+            <Divider/> 
             <br/>
             <Typography color="white" key={currentLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </Typography>
             <br/>
@@ -163,8 +164,11 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
         <div>
             <div className='lyric_headers'>
-              <RegularButton onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate</Typography></RegularButton>
+              <RegularButton onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate </Typography> </RegularButton>
             </div>
+            <br/>
+            <Divider/> 
+
             <br/>
             <Typography color="white" key={currentLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} </Typography>
             <br/>

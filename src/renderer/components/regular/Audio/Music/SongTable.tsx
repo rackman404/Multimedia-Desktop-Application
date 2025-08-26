@@ -152,9 +152,9 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
   return (
       <div className='body_songtable'>
           <Card variant='outlined' className='top_bar_songtable'>
-              {isDisabled === false ? 
+              
               <div className='top_bar_content_songtable'>
-              <FormControl sx={{width: "8vw", marginRight: "1vw", marginTop: "10px"}}>
+              <FormControl sx={{width: "8vw", marginRight: "1vw", marginLeft: "1vw", marginTop: "10px"}}>
                 <InputLabel id="simple-select-label">Filter</InputLabel>
                 <Select sx={{height: "4vh"}}
                   labelId="simple-select-label"
@@ -191,8 +191,8 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
               </FormControl>
               
               </div>
-              :
-                <LinearProgress/>
+              {isDisabled === true ? <LinearProgress/> : null
+                
               }
       
               {/*
@@ -214,8 +214,8 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
           </Card>
           
           {isDisabled === false ? 
-          <TableContainer className='table_container_songtable' id={"scrollable"} component={Paper} sx={{ maxHeight: "77.8vh", width: "80vw" }} >
-              <Table size='small' id={"musictable"} stickyHeader aria-label="table" >
+          <TableContainer className='table_container_songtable' id={"scrollable"} component={Paper} sx={{ maxHeight: "77.8vh", width: "80vw"}} >
+              <Table size='small' id={"musictable"} stickyHeader aria-label="table">
                   <TableHead id={"musictableheader"} >
                       <TableHeaderRow>
                           <TableCell> Playing </TableCell>

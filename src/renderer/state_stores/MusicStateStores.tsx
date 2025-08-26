@@ -41,8 +41,6 @@ interface ISelectedSongState {
 
 export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
   selectedPlaySongMetaData: {
-    format: '',
-    fileSize: 0,
     metadataFormat: '',
     id: 0,
     name: '',
@@ -52,10 +50,7 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
     genre: [],
     playCount: 0,
     bitrate: 0,
-    coverImage: '',
-    coverImageFormat: '',
-    songRawPath: '',
-    comment: ''
+    songRawPath: ''
   },
   setSelectedPlaySongMetaData: (newSelectedPlaySongMetaData) =>set((state) => ({ selectedPlaySongMetaData: newSelectedPlaySongMetaData })),
   playState: false, 

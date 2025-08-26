@@ -8,11 +8,15 @@ labels: 'bug'
 
 ## Prerequisites
 
-<!-- If the following boxes are not ALL checked, your issue is likely to be closed -->
+<!-- If the following boxes are not ALL checked in a given sub section, please recreate the issue with all boxes checked first-->
 
+if using developmental build
 - [x] Using npm
 - [x] Using dotnet
 - [x] Using an up-to-date [`main` branch](https://github.com/rackman404/Multimedia-Desktop-Application/tree/main)
+
+if using production build
+- [x] Using the latest version of the application
 
 ## Expected Behavior
 
@@ -43,8 +47,12 @@ labels: 'bug'
 
 <!--- Include any change to developmental environment (if no change, leave altered version blank) -->
 
+if using developmental build
 - Node version : 20.13.1 | Altered Version: N/A
 - Dotnet version : 8.0.302 | Altered Version: N/A
-- Operating System and version : Windows 10 (23H2) | Altered Version: N/A 
+- Operating System and version:
 - Your application version: 
 
+if using production build
+- Operating System and version:
+- Your application version: 

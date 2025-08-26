@@ -33,7 +33,7 @@ export const Layout = () => {
 
     const [fullscreenComponent, setFullscreenComponent] = useState<any>();
 
-    //check for overflow and set a marquee if it does
+    /*
     useEffect(() => {
 
         if (fullscreenState == true){
@@ -45,6 +45,7 @@ export const Layout = () => {
         
 
     }, [fullscreenState]);
+    */
 
     // fullscreen selected song controls --------
 
@@ -57,6 +58,22 @@ export const Layout = () => {
         console.log("unmounted music controller");
         Howler.unload();
         setPlayState(false);
+
+        setFullscreenState(false);
+        setSelectedPlaySongMetaData(
+            {
+                metadataFormat: '',
+                id: 0,
+                name: '',
+                length: 0,
+                artist: [],
+                album: '',
+                genre: [],
+                playCount: 0,
+                bitrate: 0,
+                songRawPath: ''
+            }
+        );
     };
 
     }, []);
@@ -215,7 +232,7 @@ export const Layout = () => {
     return (
         
         <div>
-            {fullscreenComponent}
+            { <SongFullscreenOverlay visible={fullscreenState}/> /*fullscreenComponent*/}
             {/* yet another render of a component needed to fix async iamge loading issue, must refactor entire controller into backend to realistically fix this*/}
             {/* <> <div style={{animation:  "fadeIn 0.5s"}}> <BottomMusicControl key={selectedPlaySongMetaData.id} setSeek={changeSeek} setVolume={changeVolume} setNext={nextSong} setPrev={prevSong}/><Outlet/></div></> */}
             <> <div style={{animation:  "fadeIn 0.5s"}}> <BottomMusicControl setSeek={changeSeek} setVolume={changeVolume} setNext={nextSong} setPrev={prevSong}/><Outlet/></div></>

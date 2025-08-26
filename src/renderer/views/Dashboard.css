@@ -1,7 +1,12 @@
 .page_content_dashboard{
     display: grid;
-    grid-template-columns: 30vw 30vw 30vw;
-    grid-template-rows: auto;
+    justify-content: center;
+
+    grid-auto-flow: column;
+
+    max-height: 90vh;
+
+    grid-auto-columns: 30vw 40vw 30vw;
 }
 
 .card_dashboard{

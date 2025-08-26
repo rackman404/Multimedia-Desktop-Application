@@ -22,7 +22,7 @@ export const TopHeader = () => {
                         <Divider orientation="vertical" variant="middle" sx={{margin: "5px"}} />
 
                         <Card>
-                            <Chip label="Music" variant="filled" sx={{margin: "5px"}}/> 
+                            <Chip label="Music" variant="filled" sx={{margin: "5px"}} onClick ={() => {} }/> 
                             <LinkButton component={Link} to={'/audio/music/home'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Music")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Music</Typography></LinkButton>
                             <LinkButton component={Link} to={'/audio/music/playlists'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Playlists")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Playlists</Typography></LinkButton>
                         </Card>
@@ -30,7 +30,7 @@ export const TopHeader = () => {
                         <Divider orientation="vertical" variant="middle" flexItem />
 
                         <Card >
-                            <Chip label="Audio Utils" variant="filled" sx={{margin: "5px"}}/>   
+                            <Chip label="Audio Utils" variant="filled" sx={{margin: "5px"}} onClick ={() => {} }/>   
                             <LinkButton disabled component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Audio Edit")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">FFmpeg</Typography></LinkButton>
                             <LinkButton disabled component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Audio Edit")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Soulseek</Typography></LinkButton>
                         </Card>
@@ -39,7 +39,7 @@ export const TopHeader = () => {
                      </Toolbar>
                     <div style={{textAlign: "center", paddingTop: "1.5vh"}}>
                         Current:
-                        <Chip label={currentViewText} variant="outlined" />                        
+                        <Chip label={currentViewText} variant="outlined" onClick ={() => {} }/>                        
                     </div>
 
                     <Toolbar className='right_align_toolbar_topheader'>
@@ -47,13 +47,13 @@ export const TopHeader = () => {
                             <LinkButton component={Link} to={'/utility/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Settings")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Settings</Typography></LinkButton>
                             <LinkButton component={Link} to={'/utility/about'} sx={{margin: "5px"}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">About</Typography></LinkButton>
                             <LinkButton component={Link} to={'/utility/help'} sx={{margin: "5px"}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Help</Typography></LinkButton>
-                            <Chip label="Utility" variant="filled" sx={{margin: "5px"}}/>   
+                            <Chip label="Utility" variant="filled" sx={{margin: "5px"}} onClick ={() => {} }/>   
                         </Card>
 
                         <Card >                            
                             <LinkButton disabled component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Settings")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Player</Typography></LinkButton>
                             <LinkButton disabled component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Settings")}} variant="contained"><Typography fontSize={"0.75em"} noWrap component="div">Nyaa</Typography></LinkButton>
-                            <Chip label="Video" variant="filled" sx={{margin: "5px"}}/>   
+                            <Chip label="Video" variant="filled" sx={{margin: "5px"}} onClick ={() => {} }/>   
                         </Card>
                     </Toolbar>
 

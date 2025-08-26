@@ -1,3 +1,5 @@
+/* look into this for animations later https://stackoverflow.com/questions/12991164/maintaining-the-final-state-at-end-of-a-css-animation*/
+
 .content_bottommusiccontrol{
     position:fixed;
     left:20vw;
@@ -11,12 +13,27 @@
 
     height: 10.3vh;
 
+    animation: maxOn 2s ;
+}
+@keyframes maxOn {
+    100% { position:fixed; left:20vw; grid-template-columns: 15vw 0.1vw 50vw 0.1vw 15vw; }
+    0% {position:fixed; left:0vw; grid-template-columns: 0.01vw 0.1vw 80vw 0.1vw 20vw; }
 }
 
-@keyframes maxOff {
-    0% { position:fixed; left:20vw; grid-template-columns: 15vw 0.1vw 50vw 0.1vw 15vw; }
-    100% {position:fixed; left:0vw; grid-template-columns: 0.01vw 0.1vw 80vw 0.1vw 20vw; }
+.content_bottommusiccontrol_first_load{
+    position:fixed;
+    left:20vw;
+    bottom:0;
+    width:80vw;  
+    z-index: 10000;
+
+    display: grid;
+    grid-template-columns: 15vw 0.1vw 50vw 0.1vw 15vw;
+    grid-template-rows: auto;
+
+    height: 10.3vh;
 }
+
 
 .content_bottommusiccontrol_fullscreen{
     position:fixed;
@@ -35,6 +52,14 @@
 
     animation: maxOff 2s ;
 }
+
+
+
+@keyframes maxOff {
+    0% { position:fixed; left:20vw; grid-template-columns: 15vw 0.1vw 50vw 0.1vw 15vw; }
+    100% {position:fixed; left:0vw; grid-template-columns: 0.01vw 0.1vw 80vw 0.1vw 20vw; }
+}
+
 
 
 

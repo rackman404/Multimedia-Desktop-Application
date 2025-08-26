@@ -51,7 +51,26 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
     const [nameMarqueeState, setNameMarqueeState] = useState(false);
 
 
+    const [fullscreenButtonStatus, setFullscreenButtonStatus] = useState(false);
+    const [firstLoad, setFirstLoad] = useState<boolean>(true);
+    //on mount and unmount
+    useEffect(() => {
+        
+        setFullscreenButtonStatus(false);
 
+        if (FullscreenOverlayState == true){
+        setFirstLoad(false);
+        }
+        
+        const timeout = setTimeout(() => {
+            setFullscreenButtonStatus(true);
+        }, 2000)
+
+        return () => clearTimeout(timeout)
+
+        
+
+    }, [FullscreenOverlayState]);
 
     
     //check for overflow and set a marquee if it does
@@ -160,7 +179,7 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
     */
 
     return (
-        <div className={FullscreenOverlayState === false ? 'content_bottommusiccontrol' : 'content_bottommusiccontrol_fullscreen'}>        
+        <div className={firstLoad === false ? (FullscreenOverlayState === false ? 'content_bottommusiccontrol' : 'content_bottommusiccontrol_fullscreen') : 'content_bottommusiccontrol_first_load' }>        
                 <Card className='left_card_bottommusiccontrol' variant='outlined' key={currentSong.id}>
                     {<BottomMusicImageHandler />}
                     {/*
@@ -202,7 +221,7 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                         
                         <div>
                             <Button onClick={setPrev}><ArrowBackIosNewIcon/></Button>
-                            <ToggleButton value="control"  selected={PlayState} onChange={() => updatePlayState(!PlayState)}><PlayCircleIcon/></ToggleButton>
+                            <ToggleButton value="control"  selected={false} onChange={() => updatePlayState(!PlayState)}> {PlayState === false ? <PlayCircleIcon/> : <PauseCircleIcon/>} </ToggleButton>
                             <Button onClick={setNext}><ArrowForwardIosIcon/></Button>
                         </div>
 
@@ -217,7 +236,7 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                             </div>
 
                             <div>
-                            <Button onClick={() => FullscreenOverlayState === false ? setFullscreenOverlayState(true) : setFullscreenOverlayState(false)}> {FullscreenOverlayState === false ? "Enable" : "Disable"} Full View </Button>
+                            <Button disabled = {fullscreenButtonStatus === true ? false : true} onClick={() => FullscreenOverlayState === false ? setFullscreenOverlayState(true) : setFullscreenOverlayState(false)}> {FullscreenOverlayState === false ? "Enable" : "Disable"} Full View </Button>
                             </div>
                         </div>
                     </div> 

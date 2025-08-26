@@ -6,7 +6,8 @@
 
 .table_container_songtable{
     animation: fadeIn 0.5s;
-
+    position: absolute;
+    overflow-y:scroll;
 }
 
 .row_songtable{
@@ -29,16 +30,16 @@
 .top_bar_content_songtable{
     display: flex;
     flex-direction: row;
+    
+    position: absolute;
+    
 
     height: 5.2vh;
 
     justify-content: center;
     align-items: center;
 
-    animation: fadeIn 0.5s;
-
-    
-
+    /* animation: fadeIn 0.5s; */
 }
 
 @keyframes fadeIn {
