@@ -18,6 +18,7 @@ import Marquee from "react-fast-marquee";
 import { checkTextOverflow } from '../../../../../utils';
 import { grey } from '@mui/material/colors';
 import { BottomMusicImageHandler } from './BottomMusicImageHandler';
+import { BottomMusicTextHandler } from './BottomMusicTexthandler';
 
 type MusicControlProps = { //constructor variables
   setSeek: (newSeek:number) => void
@@ -42,34 +43,21 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
     const FullscreenOverlayState = useSelectedSongStore((state) => state.fullscreenState);
     const setFullscreenOverlayState = useSelectedSongStore((state) => state.setFullscreenState);
 
-    const setThumbnailString = useSelectedSongStore((state) => state.setThumbnailString);
-
-    const [cover, setCover] = useState<any>(<CardMedia
-        component="img"
-        width="100%"
-        height="65%"
-        image= {placeholderImage}
-        alt="Song Thumbnail Image"         
-        sx={{objectFit: "contain" }}
-    />);
-
     const [artistElement, setArtistElement] = useState<HTMLDivElement | null>();
     const [nameElement, setNameElement] = useState<HTMLDivElement | null>();
+
 
     const [artistMarqueeState, setArtistMarqueeState] = useState(false);
     const [nameMarqueeState, setNameMarqueeState] = useState(false);
 
-    //on mount and unmount
-    useEffect(() => {
-    //called when the component is unmounted
-    return () => {
-        setCover(<div/>);
-    };
-    }, []);
+
+
 
     
     //check for overflow and set a marquee if it does
     useEffect(() => {
+        setArtistElement(null);
+        setNameElement(null);
 
         if (artistElement != null && nameElement != null){
             setArtistMarqueeState(checkTextOverflow(artistElement));
@@ -77,7 +65,22 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
         }
         
 
-    }, [artistElement, nameElement]);
+    }, [currentSong]);
+    
+
+    /*
+    useEffect(() => {
+        const interval = setInterval(() => {  
+                
+            if (artistElement != null && nameElement != null){
+            setArtistMarqueeState(checkTextOverflow(artistElement));
+            setNameMarqueeState(checkTextOverflow(nameElement));
+            }
+    
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+    */
 
     /*
     useEffect(() => {
@@ -158,12 +161,13 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
 
     return (
         <div className={FullscreenOverlayState === false ? 'content_bottommusiccontrol' : 'content_bottommusiccontrol_fullscreen'}>        
-                <Card className='left_card_bottommusiccontrol' variant='outlined'>
-                    {<BottomMusicImageHandler key={currentSong.id}/>}
+                <Card className='left_card_bottommusiccontrol' variant='outlined' key={currentSong.id}>
+                    {<BottomMusicImageHandler />}
+                    {/*
                     <div>
                         <div ref={(el) => {setNameElement(el)}} id = "name" className='left_card_text_container_bottommusiccontrol'>
                         {nameMarqueeState === true ? 
-                        <Marquee speed={25} delay={1}>{<div style={{paddingRight: "5px"}}>{currentSong.name} {" "} | </div>}</Marquee>
+                        <Marquee speed={25} delay={1}>{<div id = "marquee" style={{paddingRight: "5px"}}>{currentSong.name} {" "} | </div>}</Marquee>
                         : currentSong.name}
                         </div>
 
@@ -172,10 +176,12 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                         
                         <div ref={(el) => {setArtistElement(el)}} id = "artist" className='left_card_text_container_bottommusiccontrol'>
                             {artistMarqueeState === true ? 
-                            <Marquee speed={25} delay={1}><div style={{paddingRight: "5px"}}>{currentSong.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))} {" "} |</div></Marquee>
+                            <Marquee speed={25} delay={1}><div id = "marquee" style={{paddingRight: "5px"}}>{currentSong.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))} {" "} |</div></Marquee>
                             : currentSong.artist.map((artist, index) => ( index === 0 ? artist : " and " + artist))}
                         </div>
                     </div>
+                    */}
+                    {<BottomMusicTextHandler />}
                 </Card>
 
                 <Divider orientation="vertical" />

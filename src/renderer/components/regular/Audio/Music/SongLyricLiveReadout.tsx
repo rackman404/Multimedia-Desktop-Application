@@ -54,9 +54,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
     })();
 
-    return () => {
-      // Function returned from useEffect is called on unmount
-      // Here it'll abort the fetch
+    return () => { //needed to discard old lyrics if the user skips through multiple songs (which may cause multiple lyric requests at once)
       console.log("DISCARDING LYRIC (no need as this lyric is outdated), was for: " + sMetaData.name);
       abort = true;
     }

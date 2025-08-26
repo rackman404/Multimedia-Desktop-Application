@@ -34,6 +34,9 @@ interface ISelectedSongState {
 
   currentLyricData: SongLyricAPIData
   setCurrentLyricData: (newCurrentLyricData: SongLyricAPIData) => void
+
+  currentTranslatedLyricData: SongLyricAPIData
+  setCurrentTranslatedLyricData: (currentTranslatedLyricData: SongLyricAPIData) => void
 }
 
 export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
@@ -79,5 +82,12 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
     lyrics: [],
     isInstrumental: false
   }, 
-  setCurrentLyricData: (newCurrentLyricData) =>set((state) => ({ currentLyricData: newCurrentLyricData }))
+  setCurrentLyricData: (newCurrentLyricData) =>set((state) => ({ currentLyricData: newCurrentLyricData })),
+  
+  currentTranslatedLyricData: {
+    timestamps: [],
+    lyrics: [],
+    isInstrumental: false
+  }, 
+  setCurrentTranslatedLyricData: (newCurrentTranslatedLyricData) =>set((state) => ({ currentTranslatedLyricData: newCurrentTranslatedLyricData }))
 }))

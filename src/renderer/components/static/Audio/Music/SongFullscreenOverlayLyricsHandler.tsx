@@ -94,7 +94,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
             if (lyricData.lyrics[lyricData.timestamps.indexOf(closest)+i] == "" || lyricData.lyrics[lyricData.timestamps.indexOf(closest)+i] == " "){
               nextLyricsArray[i] = "[Instrumental]";
                 if (lyricsTranslated == true){
-                  nextLyricsArray[i] = "[Instrumental]";  
+                  nextTranslatedLyricsArray[i] = "[Instrumental]";  
                 }
               }
 

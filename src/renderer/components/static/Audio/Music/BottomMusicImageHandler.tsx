@@ -35,12 +35,12 @@ export const BottomMusicImageHandler = () => {
     useEffect(() => {
     //called when the component is unmounted
     return () => {
-        setCover(<div/>);
+        console.log("UNMOUNTING BOTTOM THUMBNAIL");
     };
     }, []);
 
     useEffect(() => {
-
+        var abort = false;
         (async () => {
             if (currentSong.songRawPath != ""){
                 setThumbnailString("");
@@ -50,11 +50,17 @@ export const BottomMusicImageHandler = () => {
                 //console.log(result);
 
                 var cImg = placeholderImage;
-                if(result.coverImage != null){
-                cImg = await _arrayBufferToBase64(result.coverImage.data);
-                cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
 
-                    setThumbnailString(cImg);
+               
+                if(result.coverImage != null){
+                    cImg = await _arrayBufferToBase64(result.coverImage.data);
+                    cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
+
+                    console.log("was this song: + " + currentSong.name + " aborted? " + abort);
+                    if (abort == false){
+                        setThumbnailString(cImg);
+                    }
+                    
                 }
                 else{
                     setThumbnailString(placeholderImage);
@@ -78,6 +84,11 @@ export const BottomMusicImageHandler = () => {
                 />);
             }
         })();
+
+        return () => { //needed to discard old lyrics if the user skips through multiple songs (which may cause multiple lyric requests at once)
+            console.log("DISCARDING IMAGE DATA (no need as this image is outdated), was for: " + currentSong.name);
+            abort = true;
+        }
 
         
     }, [currentSong]);
