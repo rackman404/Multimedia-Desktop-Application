@@ -24,7 +24,6 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
   const [previousTimestamp, setPreviousTimestamp] = useState(0);
 
   const [fadeState, setFadeState] = useState('fade_in_text');
-  const [currentOffset, setCurrentOffset] = useState(0);
 
   const [progressIndicator, setProgressIndicator] = useState(<div/>);
 
@@ -32,8 +31,13 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const setCurrentTranslatedLyricData = useSelectedSongStore((state) => state.setCurrentTranslatedLyricData);
 
+  const currentOffset = useSelectedSongStore((state) => state.lyricOffset);
+  const setCurrentOffset = useSelectedSongStore((state) => state.setLyricOffset);
+
   //FOR USE BY OVERLAY
   const currentLyricData = useSelectedSongStore((state) => state.setCurrentLyricData);
+
+  
   
 
   //get new lyric data on recieving new song meta data
@@ -41,6 +45,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
     var abort = false;
     (async () => {
       if (sMetaData.songRawPath != ""){
+        setCurrentOffset(0);
 
         currentLyricData({} as SongLyricAPIData);
         setCurrentTranslatedLyricData({} as SongLyricAPIData);
@@ -82,17 +87,24 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
         //https://stackoverflow.com/questions/33309930/javascript-find-closest-number-in-array-without-going-over
 
-        
+        /*
         if (currentOffset < 0){
-          var closest = Math.max.apply(null, lyricData.timestamps.filter(function(v){return v <= (currentSeek-(currentOffset/1000))}));
-          var adjustedSeek = currentSeek-(currentOffset/1000);
+          var closest = Math.max.apply(null, lyricData.timestamps.filter(function(v){return v <= (currentSeek+(currentOffset/1000))}));
+          var adjustedSeek = currentSeek+(currentOffset/1000);
         }
         else{
           var closest = Math.max.apply(null, lyricData.timestamps.filter(function(v){return v <= (currentSeek+(currentOffset/1000))}));
           var adjustedSeek = currentSeek+(currentOffset/1000);
         }
+        */
+     
+        var closest = Math.max.apply(null, lyricData.timestamps.filter(function(v){return v <= (currentSeek+(currentOffset/1000))}));
+        var adjustedSeek = currentSeek+(currentOffset/1000);
         
-        var text = lyricData.lyrics[lyricData.timestamps.indexOf(closest)]
+        var text = lyricData.lyrics[lyricData.timestamps.indexOf(closest)];
+
+        console.log(text);
+        console.log(lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);
 
         var lyricsTranslated = false;
         translatedText = "";
@@ -102,7 +114,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
         }
 
         //console.log((closest + " " + (currentSeek+(currentOffset/1000))));
-
+        
         if (closest < (adjustedSeek) && previousTimestamp != closest){
           setFadeState("fade_in_text");
           
@@ -137,9 +149,16 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
         
         //console.log((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) - currentSeek);
-        if (((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) - currentSeek) < 0.15 && currentLyric == text){
-          setFadeState("fade_out_text");
+        if (currentOffset < 0){
+          if (((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) + currentSeek) < 0.15 && currentLyric == text){
+            setFadeState("fade_out_text");
+          }
+        }else{
+          if (((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) - currentSeek) < 0.15 && currentLyric == text){
+            setFadeState("fade_out_text");
+          }
         }
+
         
       }   
     }
@@ -180,7 +199,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
             <div style={{height: "8vh"}}>
               <div>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}> Translated Lyrics (Using DeepL) </Typography>
-                <RegularButton className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate</Typography></RegularButton>
+                <RegularButton variant='outlined' className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography></RegularButton>
               </div>
 
               <div className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} <br/> </div>
@@ -192,9 +211,9 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
           </div>
 
           <div className='row_songlyriccard'>
-            <RegularButton className='option_button_songlyriccard' onClick={() => (setCurrentOffset(currentOffset-100))}><Typography fontSize={"0.75em"} noWrap component="div">- Offset</Typography></RegularButton>
+            <RegularButton variant='outlined' className='option_button_songlyriccard' onClick={() => (setCurrentOffset(currentOffset-100))}><Typography fontSize={"0.75em"} noWrap component="div">- Offset</Typography></RegularButton>
             <div>Sync Offset: {currentOffset} ms</div>
-            <RegularButton className='option_button_songlyriccard' onClick={() => (setCurrentOffset(currentOffset+100))}><Typography fontSize={"0.75em"} noWrap component="div">+ Offset</Typography></RegularButton>
+            <RegularButton variant='outlined' className='option_button_songlyriccard' onClick={() => (setCurrentOffset(currentOffset+100))}><Typography fontSize={"0.75em"} noWrap component="div">+ Offset</Typography></RegularButton>
           </div>
           
           

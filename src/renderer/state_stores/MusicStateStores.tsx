@@ -10,6 +10,12 @@ interface ISelectedSongState {
   allSongMetaData: SongMetaDataSimple[] | null
   setAllSongMetaData: (newAllSongMetaData: SongMetaDataSimple[] | null) => void
 
+  searchSongMetaData: SongMetaDataSimple[] | null
+  setSearchSongMetaData: (searchSongMetaData: SongMetaDataSimple[] | null) => void
+
+  playListSongMetaData: SongMetaDataSimple[] | null
+  setPlayListSongMetaData: (playListSongMetaData: SongMetaDataSimple[] | null) => void
+
   playState: boolean
   setPlayState: (newPlayState: boolean) => void
   currentSeek: number
@@ -31,6 +37,9 @@ interface ISelectedSongState {
 
   thumbnailString: string
   setThumbnailString: (newThumbnalString: string) => void
+
+  lyricOffset: number
+  setLyricOffset: (lyricOffset: number) => void
 
   currentLyricData: SongLyricAPIData
   setCurrentLyricData: (newCurrentLyricData: SongLyricAPIData) => void
@@ -61,8 +70,14 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
   setCurrentVolume: (newCurrentVolume) =>set((state) => ({ currentVolume: newCurrentVolume })),
   currentPlayer: null, 
   setCurrentPlayer: (newPlayer) =>set((state) => ({ currentPlayer: newPlayer })),
+
   allSongMetaData: null, 
   setAllSongMetaData: (newAllSongMetaData) =>set((state) => ({ allSongMetaData: newAllSongMetaData })),
+  searchSongMetaData: null, 
+  setSearchSongMetaData: (newSearchSongMetaData) =>set((state) => ({ searchSongMetaData: newSearchSongMetaData })),
+  playListSongMetaData: null, 
+  setPlayListSongMetaData: (newPlayListSongMetaData) =>set((state) => ({ playListSongMetaData: newPlayListSongMetaData })),
+
   shuffleState: false, 
   setShuffleState: (newshuffleState) =>set((state) => ({ shuffleState: newshuffleState })),
   loopState: false, 
@@ -71,6 +86,9 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
   setFullscreenState: (newFullScreenState) =>set((state) => ({ fullscreenState: newFullScreenState })),
   thumbnailString: placeholderImage, 
   setThumbnailString: (newThumbnalString) =>set((state) => ({ thumbnailString: newThumbnalString })),
+
+  lyricOffset: 0, 
+  setLyricOffset: (newLyricOffset) =>set((state) => ({ lyricOffset: newLyricOffset })),
 
   currentLyricData: {
     timestamps: [],

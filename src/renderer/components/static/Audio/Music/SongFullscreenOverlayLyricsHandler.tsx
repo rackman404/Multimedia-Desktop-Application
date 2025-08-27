@@ -25,7 +25,8 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
   const [previousTimestamp, setPreviousTimestamp] = useState(0);
 
   const [fadeState, setFadeState] = useState('fade_in_text');
-  const [currentOffset, setCurrentOffset] = useState(0);
+
+  const currentOffset = useSelectedSongStore((state) => state.lyricOffset);
 
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const setCurrentTranslatedLyricData = useSelectedSongStore((state) => state.setCurrentTranslatedLyricData);
@@ -52,15 +53,9 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
         //https://stackoverflow.com/questions/33309930/javascript-find-closest-number-in-array-without-going-over
 
         
-        if (currentOffset < 0){
-          var closest = Math.max.apply(null, lyricData.timestamps.filter(function(v){return v <= (currentSeek-(currentOffset/1000))}));
-          var adjustedSeek = currentSeek-(currentOffset/1000);
-        }
-        else{
-          var closest = Math.max.apply(null, lyricData.timestamps.filter(function(v){return v <= (currentSeek+(currentOffset/1000))}));
-          var adjustedSeek = currentSeek+(currentOffset/1000);
-        }
-        
+        var closest = Math.max.apply(null, lyricData.timestamps.filter(function(v){return v <= (currentSeek+(currentOffset/1000))}));
+        var adjustedSeek = currentSeek+(currentOffset/1000);
+
         var text = lyricData.lyrics[lyricData.timestamps.indexOf(closest)]
 
         var lyricsTranslated = false;
@@ -111,9 +106,15 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
           setNextTranslatedLyrics(nextTranslatedLyricsArray);  
 
             
-          //console.log((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) - currentSeek);
-            if (((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + LYRICS_DISPLAYED_AT_ONCE + 1]) - currentSeek) < 0.15 && currentLyric == text){
-              setFadeState("fade_out_text");
+            //console.log((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) - currentSeek);
+            if (currentOffset < 0){
+              if (((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) + currentSeek) < 0.15 && currentLyric == text){
+                setFadeState("fade_out_text");
+              }
+            }else{
+              if (((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) - currentSeek) < 0.15 && currentLyric == text){
+                setFadeState("fade_out_text");
+              }
             }
           }
       }   
@@ -164,7 +165,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
         <div>
             <div className='lyric_headers'>
-              <RegularButton onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate </Typography> </RegularButton>
+              <RegularButton variant='outlined' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography> </RegularButton>
             </div>
             <br/>
             <Divider/> 

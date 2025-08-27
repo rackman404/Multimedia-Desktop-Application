@@ -92,3 +92,10 @@ export type DeepLStatistics = {
     characterUsage: string;
     deepLConnectionStatus: string;
 }
+
+//for use by song table view selection
+export enum ActiveSongListState {
+    Main,
+    Search,
+    Playlist
+}

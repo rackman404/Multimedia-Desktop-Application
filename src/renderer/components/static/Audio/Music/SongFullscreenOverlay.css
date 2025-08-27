@@ -69,9 +69,10 @@
 
     height: 90vh;
 
-    grid-auto-columns: 30vw 40vw 30vw;
+    grid-auto-columns: 30vw 38vw 30vw;
     
-    
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
 .img_frame{

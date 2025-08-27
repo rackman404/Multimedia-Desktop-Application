@@ -7,7 +7,7 @@ import * as deepl from 'deepl-node';
 //NOTE for anyone using this other than myself: \https://www.deepl.com/en/your-account/keys register for a deepL account if you want access to translator services within this application
 
 
-const options = {appInfo: { appName: 'Node Song Lyric Translation Service', appVersion: 'N/A' },};
+const optionsApplication = {appInfo: { appName: 'Node Song Lyric Translation Service', appVersion: 'N/A' },};
 
 export class AudioDeepLTranslator{
 
@@ -41,7 +41,7 @@ export class AudioDeepLTranslator{
 
         //console.log(songLyricData.lyrics);
 
-        const deeplClient = new deepl.DeepLClient(deepLKey, options);
+        const deeplClient = new deepl.DeepLClient(deepLKey, optionsApplication);
         
         await (async () => {
             const targetLang: deepl.TargetLanguageCode = 'en-US';
@@ -49,6 +49,12 @@ export class AudioDeepLTranslator{
                 songLyricData.lyrics,
                 null,
                 targetLang,
+                {
+                    splitSentences: 'nonewlines',
+                    formality: 'prefer_less',
+                    modelType: 'prefer_quality_optimized',
+                    context: 'Song Lyrics'
+                }
             ).catch((error) => {
                 console.error(error);
             });
@@ -80,7 +86,7 @@ export class AudioDeepLTranslator{
         var stats = {} as DeepLStatistics;
 
         if (deepLKey != ""){
-            const deeplClient = new deepl.DeepLClient(deepLKey, options);
+            const deeplClient = new deepl.DeepLClient(deepLKey, optionsApplication);
             
             stats.deepLConnectionStatus = "Connected";
             const usage = await deeplClient.getUsage().catch((error) => {
