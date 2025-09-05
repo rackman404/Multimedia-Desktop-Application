@@ -25,10 +25,13 @@ export class AudioManager{
     fileMusicPath: string;
     fileConfigPath: string;
 
-    songMetaDataFull: SongMetaData[] | undefined
-    songMetaDataSimple: SongMetaDataSimple[] | undefined
+    //songMetaDataFull: SongMetaData[] | undefined
+    //songMetaDataSimple: SongMetaDataSimple[] | undefined
 
-
+    mainSongMetaData: SongMetaDataSimple[] | undefined
+    searchSongMetaData: SongMetaDataSimple[] | undefined
+    playlistSongMetaData: SongMetaDataSimple[] | undefined
+    
     constructor() {
         this.broker = new AudioBroker(this);
         this.audioPlayback = new AudioPlayBackController();

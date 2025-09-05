@@ -1,8 +1,7 @@
 .content_topheader{
     position:sticky;
     left:0vw;
-    width:100vw;
-        
+    width:100vw;  
 }
 
 .horizontal_grid_topheader{
@@ -10,12 +9,24 @@
     grid-template-columns: 47.5vw 5vw 47.5vw;
     grid-template-rows: 1;
     min-height:7vh;
-    
+    max-height:7vh;
+
     max-width: 100%;
+    min-width: 0;
     
 }
 
 .right_align_toolbar_topheader{
     margin-left: auto; 
     margin-right: 0;
+}
+
+.button_element{
+    max-height:3vh;
+}
+
+.card_element{
+    display: flex;
+    grid-template-rows: 1;
+    max-height:4vh;
 }

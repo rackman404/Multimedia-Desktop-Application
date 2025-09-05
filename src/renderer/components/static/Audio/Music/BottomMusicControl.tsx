@@ -27,6 +27,8 @@ type MusicControlProps = { //constructor variables
   setPrev: ()  => void
 };
 
+const FONTSCALE = "0.75vw";
+
 export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicControlProps) => {
     const updatePlayState = useSelectedSongStore((state) => state.setPlayState);
     const PlayState = useSelectedSongStore((state) => state.playState);
@@ -210,33 +212,33 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                     <div className='center_controls_right_left_container'>
                         <div className='right_control_center_bottommusiccontrol'>
                             <div>
-                            <Button onClick={() => shuffleState === false ? setShuffleState(true) : setShuffleState(false)}> {shuffleState === false ? "Enable" : "Disable"} Shuffle </Button>
+                            <Button className='button_element' onClick={() => shuffleState === false ? setShuffleState(true) : setShuffleState(false)}   > <Typography fontSize={FONTSCALE} noWrap component="div">{shuffleState === false ? "Enable" : "Disable"} Shuffle</Typography>  </Button>
                             </div>
 
                             <div>
-                            <Button onClick={() => loopState === false ? setLoop(true) : setLoop(false)}> {loopState === false ? "Enable" : "Disable"} Loop </Button>
+                            <Button className='button_element' onClick={() => loopState === false ? setLoop(true) : setLoop(false)}> <Typography fontSize={FONTSCALE} noWrap component="div"> {loopState === false ? "Enable" : "Disable"} Loop </Typography> </Button>
                             </div>
 
                         </div>
                         
-                        <div>
-                            <Button onClick={setPrev}><ArrowBackIosNewIcon/></Button>
-                            <ToggleButton value="control"  selected={false} onChange={() => updatePlayState(!PlayState)}> {PlayState === false ? <PlayCircleIcon/> : <PauseCircleIcon/>} </ToggleButton>
-                            <Button onClick={setNext}><ArrowForwardIosIcon/></Button>
+                        <div className='play_control_center_bottommusiccontrol'>
+                            <Button className='button_element' onClick={setPrev} sx={{fontSize: '1vw'}}><ArrowBackIosNewIcon fontSize='inherit'/></Button>
+                            <ToggleButton className='button_element' sx={{fontSize: '1vw'}} value="control" selected={false} onChange={() => updatePlayState(!PlayState)}> {PlayState === false ? <PlayCircleIcon fontSize='inherit'/> : <PauseCircleIcon fontSize='inherit'/>} </ToggleButton>
+                            <Button className='button_element' onClick={setNext} sx={{fontSize: '1vw'}}><ArrowForwardIosIcon fontSize='inherit'/></Button>
                         </div>
 
 
                         <div className='left_control_center_bottommusiccontrol'>
                             <div>
-                            <Button disabled onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> {shuffleState === false ? "Hide" : "Show"} Controls </Button>
+                            <Button className='button_element' disabled onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> <Typography fontSize={FONTSCALE} noWrap component="div">  {shuffleState === false ? "Hide" : "Show"} Controls </Typography> </Button>
                             </div>
 
                             <div>
-                            <Button disabled onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> {shuffleState === false ? "Enable" : "Disable"} Normalization </Button>
+                            <Button className='button_element' disabled onClick={() => shuffleState === false ? setLoop(true) : setLoop(false)}> <Typography fontSize={FONTSCALE} noWrap component="div">  {shuffleState === false ? "Enable" : "Disable"} Normalization </Typography> </Button>
                             </div>
 
                             <div>
-                            <Button disabled = {fullscreenButtonStatus === true ? false : true} onClick={() => FullscreenOverlayState === false ? setFullscreenOverlayState(true) : setFullscreenOverlayState(false)}> {FullscreenOverlayState === false ? "Enable" : "Disable"} Full View </Button>
+                            <Button className='button_element' disabled = {fullscreenButtonStatus === true ? false : true} onClick={() => FullscreenOverlayState === false ? setFullscreenOverlayState(true) : setFullscreenOverlayState(false)}> <Typography fontSize={FONTSCALE} noWrap component="div"> {FullscreenOverlayState === false ? "Enable" : "Disable"} Full View </Typography> </Button>
                             </div>
                         </div>
                     </div> 
@@ -247,7 +249,7 @@ export const BottomMusicControl = ({setSeek, setVolume, setNext, setPrev}:MusicC
                     <div className='seek_component_bottommusiccontrol'>
                         <Toolbar>
                             {fmtMSS(Math.round(currentSeek))}
-                            <Slider size="small" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{maxWidth: "100em", marginLeft: "10px", marginRight: "10px"}} onChange={userSeekChange} />
+                            <Slider size="medium" aria-label="Volume" value={currentSeek} max={currentSong.length} sx={{ marginLeft: "10px", marginRight: "10px"}} onChange={userSeekChange} />
                             {fmtMSS(Math.round(currentSong.length))}
                         </Toolbar>
                     </div>

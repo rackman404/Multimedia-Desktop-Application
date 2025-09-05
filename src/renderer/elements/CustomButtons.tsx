@@ -23,6 +23,8 @@ export const LinkButton = styled(Button)<ILinkButton>(({ theme }) => ({
   '&:hover': {
     backgroundColor: grey[800],
   },
+  overflow:"hidden",
+  textOverflow: "ellipsis",
 }));
 
 export const RegularButton = styled(Button)(({ theme }) => ({
@@ -31,6 +33,8 @@ export const RegularButton = styled(Button)(({ theme }) => ({
   '&:hover': {
     backgroundColor: grey[800],
   },
+  overflow:"hidden",
+  textOverflow: "ellipsis"
 }));
 
 export const TableHeaderRow = styled(TableRow)(({ theme }) => ({

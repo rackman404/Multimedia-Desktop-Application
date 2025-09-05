@@ -13,6 +13,7 @@ import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
 import { TopHeader } from './components/static/TopHeader';
 import { BottomMusicControl } from './components/static/Audio/Music/BottomMusicControl';
 import MusicController from './views/audio/music/MusicController';
+import { useGlobalSettingsState } from './state_stores/GlobalSettingsStateStore';
 
 var theme = createTheme({
   colorSchemes: {
@@ -51,7 +52,21 @@ var theme = createTheme({
 
 theme = responsiveFontSizes(theme);
 
+
+
 export default function App() {
+  const setMouseState = useGlobalSettingsState((state) => state.setIsMouseDown);
+
+  document.body.onpointerdown = function() { 
+    setMouseState(true);
+    //console.log("mouse down");
+  }
+
+  document.body.onpointerup = function() { 
+    setMouseState(false);
+    //console.log("mouse up");
+  }
+
   return (
     <ThemeProvider theme={theme}>
     <Router>

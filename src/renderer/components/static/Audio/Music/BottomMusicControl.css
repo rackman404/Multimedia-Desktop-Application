@@ -115,7 +115,7 @@
 .center_card_bottommusiccontrol{
     background: linear-gradient(rgba(34, 34, 34, 0.26),rgb(44, 44, 44), rgb(34, 34, 34, 0.26));
 
-    height: 100%;
+    height: 10.3vh;
     width: 100%;    
 }
 
@@ -123,7 +123,7 @@
 .right_card_bottommusiccontrol{
     background: linear-gradient(rgb(34, 34, 34),rgb(44, 44, 44), rgb(34, 34, 34));
 
-    height: 100%;
+    height: 10.3vh;
     width: 100%;
 
 }
@@ -132,6 +132,7 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
+    
 }
 
 .center_controls_right_left_container{
@@ -142,6 +143,8 @@
     justify-content: space-between;
 
     column-gap: 1vw;  
+
+    
 }
 
 .right_control_center_bottommusiccontrol{
@@ -154,7 +157,20 @@
     flex-direction: row;
 }
 
+.play_control_center_bottommusiccontrol{
+    display: flex;
+    flex-direction: row;
+    grid-template-rows: 1;
+}
+
+
 .absolute_center_bottommusiccontrol{
     display: absolute;
 }
 
+.button_element{
+    max-height:3vh;
+
+    overflow:hidden;
+    text-overflow:ellipsis;
+}

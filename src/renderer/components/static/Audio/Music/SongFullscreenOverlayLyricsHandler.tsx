@@ -37,7 +37,11 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
     //console.log(lyricData);
     if (lyricData.lyrics == undefined){
       setCurrentLyric("No Lyrics / Loading");  
+      setCurrentTranslatedLyric("");
+      setNextTranslatedLyrics([""]);
       setNextLyric([""]);  
+
+      setPreviousTimestamp(0);
     }
     else if (lyricData.lyrics != undefined && lyricData.lyrics.length != 0){
       
@@ -67,7 +71,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
         //console.log((closest + " " + (currentSeek+(currentOffset/1000))));
 
-        if (closest < (adjustedSeek) && previousTimestamp != closest){
+        if (closest < (adjustedSeek) && (previousTimestamp != closest || previousTimestamp == 0)){
           setFadeState("fade_in_text");
           
           if (text == "" || text == " "){
@@ -147,7 +151,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
             <br/>
             <Divider/> 
             <br/>
-            <Typography color="white" key={currentLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </Typography>
+            <Typography color="white" className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </Typography>
             <br/>
             {nextLyrics.map((lyric) => 
 
@@ -171,7 +175,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
             <Divider/> 
 
             <br/>
-            <Typography color="white" key={currentLyric} className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} </Typography>
+            <Typography color="white"  className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} </Typography>
             <br/>
             {nextTranslatedLyrics.map((lyric) => 
 

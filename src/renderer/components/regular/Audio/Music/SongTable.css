@@ -19,6 +19,14 @@
     scroll-behavior: smooth;
 }
 
+.top_bar_songtable_expanded{
+    height: 10.4vh;
+    width: 80vw;
+
+    background: linear-gradient(to right bottom,rgb(41, 41, 41),rgb(49, 49, 49));
+    
+}
+
 .top_bar_songtable{
     height: 5.2vh;
     width: 80vw;
@@ -27,20 +35,44 @@
     
 }
 
-.top_bar_content_songtable{
+
+.top_bar_content_songtable_expanded{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     
     position: absolute;
-    
 
-    height: 5.2vh;
+    height: 10.4vh;
 
     justify-content: center;
     align-items: center;
 
     /* animation: fadeIn 0.5s; */
 }
+
+.top_bar_content_songtable{
+    display: flex;
+    flex-direction: column;
+    
+    position: absolute;
+    
+    height: 5.2vh;
+
+ 
+    align-items: center;
+
+    /* animation: fadeIn 0.5s; */
+}
+
+.top_bar_content_songtable_row{
+    display: flex;
+    flex-direction: row;
+    height: 5.2vh;
+
+    /* animation: fadeIn 0.5s; */
+}
+
+
 
 @keyframes fadeIn {
   0% { opacity: 0; }

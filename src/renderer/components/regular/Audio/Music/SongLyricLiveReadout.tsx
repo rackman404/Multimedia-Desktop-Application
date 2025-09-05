@@ -46,6 +46,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
     (async () => {
       if (sMetaData.songRawPath != ""){
         setCurrentOffset(0);
+        setPreviousTimestamp(0);
 
         currentLyricData({} as SongLyricAPIData);
         setCurrentTranslatedLyricData({} as SongLyricAPIData);
@@ -115,7 +116,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
         //console.log((closest + " " + (currentSeek+(currentOffset/1000))));
         
-        if (closest < (adjustedSeek) && previousTimestamp != closest){
+        if (closest < (adjustedSeek) && (previousTimestamp != closest || previousTimestamp == 0)){
           setFadeState("fade_in_text");
           
           if (text == "" || text == " "){
@@ -201,8 +202,10 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}> Translated Lyrics (Using DeepL) </Typography>
                 <RegularButton variant='outlined' className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography></RegularButton>
               </div>
+              
 
-              <div className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} <br/> </div>
+
+              <div className={fadeState} style={{fontStyle: 'oblique'}}> <br/> {currentTranslatedLyric} <br/> </div>
               
               <div className={fadeState} style={{color:"grey"}}> <br/> {nextTranslatedLyric} </div>
               

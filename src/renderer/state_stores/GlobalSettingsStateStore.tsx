@@ -8,6 +8,9 @@ interface IGlobalSettingsState {
     setNetworkState: (newNetworkState: boolean) => void
     fullscreenState: boolean
     setFullscreenState: (newFullScreenState: boolean) => void
+
+    isMouseDown: boolean
+    setIsMouseDown: (newMouseDown: boolean) => void
 }
 
 export const useGlobalSettingsState = create<IGlobalSettingsState>((set) => ({
@@ -17,5 +20,7 @@ export const useGlobalSettingsState = create<IGlobalSettingsState>((set) => ({
     setNetworkState: (newNetworkState) =>set((state) => ({ networkState: newNetworkState })),
     fullscreenState: false,
     setFullscreenState: (newFullScreenState) =>set((state) => ({ fullscreenState: newFullScreenState })),
+    isMouseDown: false,
+    setIsMouseDown: (newMouseDown) =>set((state) => ({ isMouseDown: newMouseDown })),
 }))
 

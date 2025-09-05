@@ -93,9 +93,29 @@ export type DeepLStatistics = {
     deepLConnectionStatus: string;
 }
 
-//for use by song table view selection
+//for use by song table view selection ---
 export enum ActiveSongListState {
     Main,
     Search,
     Playlist
 }
+
+export enum SongSearchTypeState {
+    Artist = "Artist",
+    Name = "Name",
+    Genre = "Genre",
+    Album = "Album"
+}
+
+export type SS = keyof typeof SongSearchTypeState;
+
+/*
+//https://stackoverflow.com/questions/62082215/typescript-map-all-enum-values-as-key
+export const SongSearchTypeStateMap: Record<SongSearchTypeState, string> = {
+    [SongSearchTypeState.Artist]: "Artist",
+    [SongSearchTypeState.Name]: "Name",
+    [SongSearchTypeState.Genre]: "Genre",
+    [SongSearchTypeState.Album]: "Album"
+};
+*/
+// ---

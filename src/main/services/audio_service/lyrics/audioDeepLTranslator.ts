@@ -53,7 +53,7 @@ export class AudioDeepLTranslator{
                     splitSentences: 'nonewlines',
                     formality: 'prefer_less',
                     modelType: 'prefer_quality_optimized',
-                    context: 'Song Lyrics'
+                    //context: 'Song Lyrics' //https://developers.deepl.com/docs/learning-how-tos/cookbook/context-parameter-examples#example-context-parameter-examples
                 }
             ).catch((error) => {
                 console.error(error);
