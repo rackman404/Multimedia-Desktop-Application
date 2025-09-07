@@ -101,7 +101,7 @@ export const Layout = () => {
                 {secondaryCard}
             </div>
             
-            <SongTable sMetaData={metaData} selectedInfoCardFunction={setSelectedInfoCardMetaData} selectedPlayDataFunction={setSelectedPlayMetaData}/>
+            <SongTable isPlaylistTable={false} sMetaData={metaData} selectedInfoCardFunction={setSelectedInfoCardMetaData} selectedPlayDataFunction={setSelectedPlayMetaData}/>
             
         </div>
     )

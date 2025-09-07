@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import { Button, ButtonGroup, Chip, createTheme, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Switch, ThemeProvider, useColorScheme } from '@mui/material';
 import { RegularButton } from '../elements/CustomButtons';
 import { ipcRenderer } from 'electron';
+import { ServicesEnum } from '../../typesIPC';
 
 
 export const Layout = () => {
@@ -18,14 +19,16 @@ export const Layout = () => {
             
             <Card className='card_dashboard'> <h2>Welcome</h2><Divider/> 
             
-            Current Features
 
-            <br/>
+            <Divider/>
 
-            
-            Projected Features
-            
-            <br/>
+            <RegularButton onClick={    
+                () => {
+                    
+                window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["exit"]);
+
+                
+            }}>Exit</RegularButton>
             
             </Card>
 

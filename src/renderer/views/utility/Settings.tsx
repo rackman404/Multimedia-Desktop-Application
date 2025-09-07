@@ -6,19 +6,24 @@ import { Button, ButtonBase, ButtonGroup, Chip, createTheme, Divider, FormContro
 import { ipcRenderer } from 'electron';
 import { RegularButton } from '../../elements/CustomButtons';
 import { useGlobalSettingsState } from '../../state_stores/GlobalSettingsStateStore';
-import { DeepLStatistics } from '../../../types';
+import { DeepLStatistics, DefaultSettingParameters, SettingParameters } from '../../../types';
+import { ServicesEnum } from '../../../typesIPC';
 
 export const Layout = () => {
     const discordState = useGlobalSettingsState((state) => state.discordRichPresenceState);
     const setDiscordState = useGlobalSettingsState((state) => state.setDiscordRichPresenceState);
 
+    /*
     const networkState = useGlobalSettingsState((state) => state.networkState);
     const setNetworkState = useGlobalSettingsState((state) => state.setNetworkState);
 
     const fullscreenState = useGlobalSettingsState((state) => state.fullscreenState);
     const setFullscreenState = useGlobalSettingsState((state) => state.setFullscreenState);
+    */
 
     const [deepLStatistics, setDeepLStatistics] = useState<DeepLStatistics>();
+
+    const [parameters, setParameters] = useState<SettingParameters>();
 
     //on mount and unmount
     useEffect(() => {
@@ -27,11 +32,19 @@ export const Layout = () => {
 
         getDeepLStatistics();
 
+        fetchData();
+
         //called when the component is unmounted
         return () => {
 
         };
     }, []);
+
+    //https://dev.to/sergioholgado/how-to-fetch-data-before-rendering-in-react-js-3750 
+    const fetchData = async () => {
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , ["get_parameters"]));
+    }
+    
 
     async function getDiscordStatus(){
         console.log("discord: " + discordState);
@@ -45,21 +58,25 @@ export const Layout = () => {
     async function setNetwork(state: boolean){
         console.log("changing network connection");
         if (state == true){
-            const result = await window.electron.ipcRenderer.sendMessage('settings', ["network", "true"]);
+            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["network", "true"]);
         }
         if (state == false){
-            const result = await window.electron.ipcRenderer.sendMessage('settings', ["network", "false"]);
+            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["network", "false"]);
         }
+
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , ["get_parameters"]));
     }
 
     async function setFullscreen(state: boolean){
         console.log("changing fullscreen state");
         if (state == true){
-            const result = await window.electron.ipcRenderer.sendMessage('settings', ["fullscreen", "true"]);
+            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["fullscreen", "true"]);
         }
         if (state == false){
-            const result = await window.electron.ipcRenderer.sendMessage('settings', ["fullscreen", "false"]);
+            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["fullscreen", "false"]);
         }
+
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , ["get_parameters"]));
     }
 
     function setRichPresence(state: boolean){
@@ -135,7 +152,7 @@ export const Layout = () => {
                                 <Typography noWrap component="div">Set Default Live Lyrics Offset</Typography>
                             </Tooltip>
         
-                            <TextField id="inputfieldoffset" label="Set Offset" variant="standard" sx={{marginLeft: "auto"}} /> 
+                            <TextField id="inputfieldoffset" label="Set Offset" variant="standard" sx={{marginLeft: "auto"}} defaultValue={parameters?.MusicSettings.DefaultLyricOffset}/> 
                             
                             <RegularButton
                             sx={{marginLeft: "auto"}}
@@ -144,12 +161,26 @@ export const Layout = () => {
                             </RegularButton>  
                         </div>
 
-                            <div className='row_settings'>
+                        <div className='row_settings'>
                             <Tooltip title="Default step increment is 100ms per step">
                                 <Typography noWrap component="div">Set Offset Step Increment</Typography>
                             </Tooltip>
         
-                            <TextField id="inputfieldoffset" label="Set Step Increment" variant="standard" sx={{marginLeft: "auto"}} /> 
+                            <TextField id="inputfieldoffset" label="Set Step Increment" variant="standard" sx={{marginLeft: "auto"}} defaultValue={parameters?.MusicSettings.DefaultOffstepIncrement}/> 
+                            
+                            <RegularButton
+                            sx={{marginLeft: "auto"}}
+                            onClick={() => discordState === false ? (setDiscordState(true), setRichPresence(true)) : (setDiscordState(false), setRichPresence(false))}> 
+                                Submit
+                            </RegularButton>  
+                        </div>
+
+                        <div className='Set row_settings Key'>
+                            <Tooltip title="Retrieve your key from the following Url: https://www.deepl.com/en/your-account/keys (requires DeepL Account)">
+                                <Typography noWrap component="div">DeepL Key</Typography>
+                            </Tooltip>
+        
+                            <TextField id="inputfieldoffset" label="Set Key" variant="standard" sx={{marginLeft: "auto"}} defaultValue={parameters?.MusicSettings.DeepLKey}/> 
                             
                             <RegularButton
                             sx={{marginLeft: "auto"}}
@@ -170,10 +201,10 @@ export const Layout = () => {
                                 <Typography noWrap component="div">Internet Networking</Typography>
                             </Tooltip>
 
-                            <RegularButton className={networkState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
+                            <RegularButton className={parameters?.GeneralSettings.networkState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
                             sx={{marginLeft: "auto"}}
-                            onClick={() => networkState === false ? (setNetworkState(true), setNetwork(true)) :  (setNetworkState(false), setNetwork(false))}> 
-                                {networkState === false ? "Enable" : "Disable"} 
+                            onClick={() => parameters?.GeneralSettings.networkState === false ? (setNetwork(true)) :  (setNetwork(false))}> 
+                                {parameters?.GeneralSettings.networkState === false ? "Enable" : "Disable"} 
                             </RegularButton>  
                         </div>
 
@@ -184,10 +215,10 @@ export const Layout = () => {
                                 <Typography noWrap component="div">Full Screen</Typography>
                             </Tooltip>
 
-                            <RegularButton className={fullscreenState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
+                            <RegularButton className={parameters?.GeneralSettings.fullscreenState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
                             sx={{marginLeft: "auto"}}
-                            onClick={() => fullscreenState === false ? (setFullscreenState(true), setFullscreen(true)) :  (setFullscreenState(false), setFullscreen(false))}> 
-                                {fullscreenState === false ? "Windowed" : "Fullscreen"} 
+                            onClick={() => parameters?.GeneralSettings.fullscreenState === false ? (setFullscreen(true)) :  (setFullscreen(false))}> 
+                                {parameters?.GeneralSettings.fullscreenState === false ? "Windowed" : "Fullscreen"} 
                             </RegularButton>  
                         </div>
 

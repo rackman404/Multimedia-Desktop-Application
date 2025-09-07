@@ -21,14 +21,24 @@ import { NyaaScraper } from './services/nyaa_service/nyaaScraper';
 import { SettingsManager } from './services/settings_service/settingsManager';
 import { DiscordManager } from './services/discord_service/discordManager';
 import { ServiceManager } from './services/serviceManager';
+import { DefaultSettingParameters } from '../types';
 
 
 export const PRODUCTIONMUSICFILEDIRECTORY = path.join(__dirname, '../../../../' + "music");
 export const BINARYDEPENDENCYDIRECTORY = path.join(__dirname, '../../../../' + "binary_dependencies");
-export const PRODUCTIONCONFIGDIRECTORY = path.join(__dirname, '../../../../' + "config");
+//export const PRODUCTIONCONFIGDIRECTORY = path.join(__dirname, '../../../../' + "config");
+//export const PRODUCTIONCONFIGFILE = path.join(PRODUCTIONCONFIGDIRECTORY, "config.json");
+
 //export const PRODUCTIONMUSICFILEDIRECTORY = __dirname + '../../../../' + "music";
 
+//export const DEVELOPMENTCONFIGDIRECTORY = '_sample_development_folder/sample_config';
+//export const DEVELOPMENTCONFIGFILE = path.join(DEVELOPMENTCONFIGDIRECTORY, "config.json");
+
+export const CONFIGDIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "config") : '_sample_development_folder/sample_config');
+export const CONFIGFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY, "config.json") : path.join(CONFIGDIRECTORY, "config.json"));
+
 export const MINIMUMWINDOWSIZE = {x: 1920/2, y:1080/2};
+
 
 class AppUpdater {
   constructor() {
@@ -172,7 +182,7 @@ ipcMain.handle('discord', async (event, arg) => {
 
 const createWindow = async () => {
   //backend folder setup
-  if (app.isPackaged == false){ // fork process directly from main.py when not packaged (compiled into exe)
+  if (app.isPackaged == false){ 
 
   }
   else{
@@ -180,18 +190,23 @@ const createWindow = async () => {
     if (!fs.existsSync(PRODUCTIONMUSICFILEDIRECTORY)){
       fs.mkdirSync(PRODUCTIONMUSICFILEDIRECTORY);
     }
+    /*
     if (!fs.existsSync(PRODUCTIONCONFIGDIRECTORY)){
       fs.mkdirSync(PRODUCTIONCONFIGDIRECTORY);
-
-      fs.writeFile(path.join(PRODUCTIONCONFIGDIRECTORY, "config.json"), "{\"DeepLAPIKey\": \"\"} ", function(err) {
+      //populate with default config file if doesn't exist
+      var defaultConfig = JSON.stringify(DefaultSettingParameters, null, 1); 
+      fs.writeFile(path.join(PRODUCTIONCONFIGDIRECTORY, "config.json"), defaultConfig, function(err) {
         if(err) {
             return console.log(err);
         }
         console.log("The file was saved!");
       }); 
     }
+    */
     //fs.writeFileSync(PRODUCTIONMUSICFILEDIRECTORY, "Hey there!");
   }; 
+
+    
 
       
   //---------------------------------
@@ -255,12 +270,14 @@ const createWindow = async () => {
     return { action: 'deny' };
   });
 
-  
 
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  
+  serviceManager.SetupApplication();
 };
 
 

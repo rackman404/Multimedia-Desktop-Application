@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, ButtonBase, ButtonGroup, Card, CardContent, Checkbox, Chip, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, ToggleButton, Toolbar, Typography } from '@mui/material';
 import './SongLyricCard.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { RegularButton } from '../../../../elements/CustomButtons';
@@ -10,51 +10,49 @@ import { useGlobalSettingsState } from '../../../../state_stores/GlobalSettingsS
 
 type SongToggleButtonProps = { //instance variables
   songID: number
+  selectedRef: boolean
   setListStatus: (id: number) => void
 }
 
-export const SongToggleButton = ({songID, setListStatus}:SongToggleButtonProps) => { 
-  const[selected, setSelected] = useState(false);
+export const SongToggleButton = ({songID, selectedRef, setListStatus}:SongToggleButtonProps) => { 
   const mouseState = useGlobalSettingsState((state) => state.isMouseDown);
-
-  const[clicked, setClicked] = useState(false);
 
   return (
       <ToggleButton
-        selected={selected} 
+        selected={selectedRef} 
         value={"check"}
-        onClick={event => {event.stopPropagation();}}
+        onClick={event => {
+          //setListStatus(songID);
+          event.stopPropagation();
+        }}
         
-        onMouseDown={ event =>
+        onMouseUp={ event =>
           {
-             { /**/
-              setClicked(true);
-              
-              setSelected(!selected);
+             { 
               setListStatus(songID);
-              console.log("on mouse down detected");
+              //event.stopPropagation();
+              console.log("up detected");
               event.stopPropagation();
               }
           }
         }
         
-
         onMouseEnter={event => {
             //console.log(mouseState);
 
+            //console.log("enter detected");
             if (mouseState == true){
-              console.log("on mouse enter detected");
-              setSelected(!selected);
+              event.stopPropagation();
+              //setSelected(!selected);
               setListStatus(songID);
               
             }
           }
         }
-
-        onMouseLeave={() => setClicked(false)}
-
+        
         onChange={event => 
           {
+            
             /*
             setSelected(!selected);
             setListStatus(songID);
@@ -63,7 +61,7 @@ export const SongToggleButton = ({songID, setListStatus}:SongToggleButtonProps) 
           }
         }
         >
-          {selected === true ? <div/>//<CheckIcon fontSize='inherit'/> 
+          {selectedRef === true ? <div/>//<CheckIcon fontSize='inherit'/> 
           : <div/>}
         </ToggleButton>
     );

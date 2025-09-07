@@ -24,6 +24,10 @@ export class SettingsBroker {
         console.log("recieved from broker (changing network)");
         this.settingsManager.SetFullscreen(arg[1]);
         break;
+      case "exit": 
+        console.log("recieved from broker (exit application)");
+        this.settingsManager.ExitApplication();
+        break;
       default:
         console.log("ERROR: SETTINGS BROKER ON (INVALID RESPONSE)");
 

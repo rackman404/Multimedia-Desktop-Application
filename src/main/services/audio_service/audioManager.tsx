@@ -5,8 +5,8 @@ import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
-import { DeepLStatistics, SongLyricAPIData, SongMetaData, SongMetaDataSimple } from "../../../types";
-import { PRODUCTIONCONFIGDIRECTORY, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
+import { DeepLStatistics, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple } from "../../../types";
+import { CONFIGFILE, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
 import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
 import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
 
@@ -23,11 +23,11 @@ export class AudioManager{
     audioTranslator: AudioDeepLTranslator;
 
     fileMusicPath: string;
-    fileConfigPath: string;
 
     //songMetaDataFull: SongMetaData[] | undefined
     //songMetaDataSimple: SongMetaDataSimple[] | undefined
 
+    //session metadata stores
     mainSongMetaData: SongMetaDataSimple[] | undefined
     searchSongMetaData: SongMetaDataSimple[] | undefined
     playlistSongMetaData: SongMetaDataSimple[] | undefined
@@ -42,20 +42,15 @@ export class AudioManager{
         if (app.isPackaged == false){ //developmental file path
             this.fileMusicPath = __dirname;
             this.fileMusicPath = path.join(this.fileMusicPath, '../../_sample_development_folder/sample_music');
-
-            this.fileConfigPath = __dirname;
-            this.fileConfigPath = path.join(this.fileMusicPath, '../../_sample_development_folder/sample_config');
-
             console.log("audio manager dev file path: " + this.fileMusicPath);
             
         }
         else{
             this.fileMusicPath = PRODUCTIONMUSICFILEDIRECTORY;
-            this.fileConfigPath = PRODUCTIONCONFIGDIRECTORY;
-
             //this.fileMusicPath = "";
         }
     }
+    
 
     /*
     * Algorithm Steps:
@@ -161,9 +156,10 @@ export class AudioManager{
         var DeepLKey: string
 
 
-        var rawdata = fs.readFileSync(path.join(this.fileConfigPath, 'config.json'));
-        var jsonConfig = JSON.parse(rawdata.toString());
-        DeepLKey = jsonConfig.DeepLAPIKey;
+        //var rawdata = fs.readFileSync(path.join(this.fileConfigPath, 'config.json'));
+        var rawdata = fs.readFileSync(CONFIGFILE);
+        var jsonConfig = JSON.parse(rawdata.toString()) as SettingParameters;
+        DeepLKey = jsonConfig.MusicSettings.DeepLKey;
 
         if (DeepLKey == ""){//no deepL key was provided, return the original
             return songData;
@@ -177,10 +173,11 @@ export class AudioManager{
     async getDeepLStatistics(): Promise<DeepLStatistics | undefined>{
         var DeepLKey: string
 
-
-        var rawdata = fs.readFileSync(path.join(this.fileConfigPath, 'config.json'));
-        var jsonConfig = JSON.parse(rawdata.toString());
-        DeepLKey = jsonConfig.DeepLAPIKey;
+        
+        //var rawdata = fs.readFileSync(path.join(this.fileConfigPath, 'config.json'));
+        var rawdata = fs.readFileSync(CONFIGFILE);
+        var jsonConfig = JSON.parse(rawdata.toString()) as SettingParameters;
+        DeepLKey = jsonConfig.MusicSettings.DeepLKey;
 
         var characters = await this.audioTranslator.requestDeepLStatistics(DeepLKey);
 

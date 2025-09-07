@@ -64,11 +64,14 @@ export type IPCData = {
 }
 
 
-
+/* peristent settings */
 export type SettingParameters = {
-    //Frontend settings
-    viewState: ViewState
+    GeneralSettings: GeneralSettingParameters,
+    MusicSettings: MusicSettingParameters
+}
 
+/* peristent settings */
+export type GeneralSettingParameters = {
     //main window settings
     fullscreenState: boolean
     networkState: boolean
@@ -76,6 +79,34 @@ export type SettingParameters = {
     //misc settings
     discordRichPresenceState: boolean
 }
+
+export type MusicSettingParameters = {
+    //Lyrics
+    DeepLKey: string,
+
+    DefaultLyricOffset: number,
+    DefaultOffstepIncrement: number,
+}
+
+export const DefaultMusicSettingParameters: MusicSettingParameters = {
+    DeepLKey: " ",
+    DefaultLyricOffset: 0,
+    DefaultOffstepIncrement: 0
+}
+
+export const DefaultGeneralSettingParameters: GeneralSettingParameters = {
+    fullscreenState: false,
+    networkState: true,
+    discordRichPresenceState: false
+
+}
+
+export const DefaultSettingParameters: SettingParameters = {
+    GeneralSettings: DefaultGeneralSettingParameters,
+    MusicSettings: DefaultMusicSettingParameters
+}
+
+/* peristent settings */
 
 
  
@@ -107,7 +138,19 @@ export enum SongSearchTypeState {
     Album = "Album"
 }
 
-export type SS = keyof typeof SongSearchTypeState;
+export enum SongColumnTypes {
+    Select = "Select",
+    Playing = "Playing",
+    Name = "Name",
+    Length = "Length",
+    Artist = "Artist",
+    Genre = "Genre",
+    Bitrate = "Bitrate",
+    InternalID = "Internal ID"
+}
+
+export const ColumnEnumArray: SongColumnTypes[] = Object.keys(SongColumnTypes) as SongColumnTypes[];
+export const SearchEnumArray: SongSearchTypeState[] = Object.keys(SongSearchTypeState) as SongSearchTypeState[];
 
 /*
 //https://stackoverflow.com/questions/62082215/typescript-map-all-enum-values-as-key
