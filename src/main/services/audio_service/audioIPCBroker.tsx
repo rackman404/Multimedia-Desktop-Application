@@ -3,6 +3,7 @@ import * as fs from "fs"
 import { AudioManager } from "./audioManager";
 
 import {Howl, Howler} from 'howler';
+import { IPCMethodAPI, IPCServicesMessageInterface } from "../../../typesIPC";
 
 
 export class AudioBroker {
@@ -12,11 +13,11 @@ export class AudioBroker {
     this.audioManager = audioController;
   }
 
-  eventOn(event: Electron.IpcMainEvent, arg: string){
+  eventOn(event: Electron.IpcMainEvent, arg: IPCServicesMessageInterface){
     console.log("handling audio event from broker; arg: " + arg);
 
-    switch(arg.toString()){
-      case "get_all_metadata":
+    switch(arg.service){
+      case IPCMethodAPI.AudioOneWayIPC.placeholder:
         console.log("Sending all audio metadata");
         
         break;
@@ -27,10 +28,10 @@ export class AudioBroker {
     }
   }
 
-  eventHandle(event: Electron.IpcMainInvokeEvent, arg: any[]){
+  eventHandle(event: Electron.IpcMainInvokeEvent, arg: IPCServicesMessageInterface){
     console.log("handling audio event from broker; arg: " + arg);
 
-    switch(arg[0].toString()){
+    switch(arg.service){
       /* unused?
       case "get_all_metadata": //TEST ONLY
         console.log("Sending all audio metadata");
@@ -47,33 +48,33 @@ export class AudioBroker {
 
         break;
       */
-      case "get_all_metadata_simple":
+      case IPCMethodAPI.AudioTwoWayIPC.getAllMetadataSimple:
         console.log("Sending all simple audio metadata");
         
         return this.audioManager.getAllSongDataSimple();
 
         break;
-      case "get_metadata_full":
+      case IPCMethodAPI.AudioTwoWayIPC.getSelectedMetadataFull:
         console.log("Sending full data");
         
-        return this.audioManager.getSpecifiedSongDataFull(parseInt(arg[1]), arg[2]);
+        return this.audioManager.getSpecifiedSongDataFull(parseInt(arg.content[0]), arg.content[1]);
 
         break;
-      case "external_lyrics":
+      case IPCMethodAPI.AudioTwoWayIPC.externalLyrics:
         console.log("getting lyrics");
         
-        return this.audioManager.getExternalLyrics(arg[1]);
+        return this.audioManager.getExternalLyrics(arg.content[0]);
 
         break;
 
-      case "external_translated_lyrics":
+      case IPCMethodAPI.AudioTwoWayIPC.externalTranslatedLyrics:
         console.log("getting translated lyrics");
           
-          return this.audioManager.getExternalTranslatedLyrics(arg[1]);
+          return this.audioManager.getExternalTranslatedLyrics(arg.content[0]);
 
           break;
 
-      case "external_deepl_stats":
+      case IPCMethodAPI.AudioTwoWayIPC.externalDeepLStats:
         console.log("getting deepL statistics");
           
           return this.audioManager.getDeepLStatistics();

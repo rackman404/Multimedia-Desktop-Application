@@ -4,6 +4,7 @@ import { SettingsManager } from "./settingsManager";
 
 import {Howl, Howler} from 'howler';
 
+import { IPCMethodAPI, IPCServicesMessageInterface } from "../../../typesIPC";
 
 export class SettingsBroker {
   settingsManager: SettingsManager;
@@ -12,19 +13,19 @@ export class SettingsBroker {
     this.settingsManager = settingsController;
   }
 
-  eventOn(event: Electron.IpcMainEvent, arg: string){
+  eventOn(event: Electron.IpcMainEvent, arg: IPCServicesMessageInterface){
     console.log("handling settings message event from broker; arg: " + arg);
 
-    switch(arg[0].toString()){
-      case "network": 
+    switch(arg.service){
+      case IPCMethodAPI.SettingsOneWayIPC.network:
         console.log("recieved from broker (changing network)");
-        this.settingsManager.SetNetwork(arg[1]);
+        this.settingsManager.SetNetwork(arg.content[0]);
         break;
-      case "fullscreen": 
-        console.log("recieved from broker (changing network)");
-        this.settingsManager.SetFullscreen(arg[1]);
+      case IPCMethodAPI.SettingsOneWayIPC.fullscreen:
+        console.log("recieved from broker (changing full screen)");
+        this.settingsManager.SetFullscreen(arg.content[0]);
         break;
-      case "exit": 
+      case IPCMethodAPI.SettingsOneWayIPC.exit:
         console.log("recieved from broker (exit application)");
         this.settingsManager.ExitApplication();
         break;
@@ -34,11 +35,11 @@ export class SettingsBroker {
     }
   }
 
-  eventHandle(event: Electron.IpcMainInvokeEvent, arg: string[]){
+  eventHandle(event: Electron.IpcMainInvokeEvent, arg: IPCServicesMessageInterface){
     console.log("handling settings reply event from broker; args: " + arg);
 
-    switch(arg[0].toString()){
-      case "get_parameters": 
+    switch(arg.service){
+      case IPCMethodAPI.SettingsTwoWayIPC.getParameters: 
         console.log("recieved from broker (getting parameters)");
         return this.settingsManager.GetParameters();
         break;

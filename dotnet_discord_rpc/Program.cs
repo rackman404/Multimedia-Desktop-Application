@@ -1,6 +1,7 @@
 ﻿
 
 using System.Text;
+using System.Text.Unicode;
 
 public struct RPCData
 {
@@ -108,6 +109,8 @@ public class DiscordController
     {
         Console.WriteLine("Initializing Controller");
 
+        UTF8Test();
+
         discord = new Discord.Discord(CLIENT_ID, (System.UInt64)Discord.CreateFlags.NoRequireDiscord);
         activityManager = discord.GetActivityManager();
 
@@ -120,8 +123,10 @@ public class DiscordController
 
         var activity = new Discord.Activity
         {
-            State = "ロストア.",
+            State = "N/A",
             Details = "Idling",
+            //State =  Encoding.UTF8.GetString(bytes),
+            //Details =  Encoding.UTF8.GetString(bytes),
             Assets = tempAssets,
             Timestamps = timestamps,
         };
@@ -135,6 +140,20 @@ public class DiscordController
         });
     } 
 
+
+    public void UTF8Test(){
+
+
+
+        string str = "たとえる";
+        byte[] bytes = Encoding.Default.GetBytes(str);
+        str = Encoding.UTF8.GetString(bytes);
+
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+        Console.WriteLine("Test UTF8 String: " + str);
+    }
+
     public void UpdateRichPresence(RPCData data)
     {
         Discord.ActivityAssets tempAssets = new Discord.ActivityAssets();
@@ -144,8 +163,6 @@ public class DiscordController
         Discord.ActivityTimestamps timestamps = new Discord.ActivityTimestamps();
         timestamps.Start = data.startTimestamp;
         //timestamps.End = data.endTimestamp;
-
-        //Console.WriteLine("ロストア");
 
         Discord.Activity activity = new Discord.Activity
         {

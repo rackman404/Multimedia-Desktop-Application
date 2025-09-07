@@ -7,7 +7,7 @@ import { ipcRenderer } from 'electron';
 import { RegularButton } from '../../elements/CustomButtons';
 import { useGlobalSettingsState } from '../../state_stores/GlobalSettingsStateStore';
 import { DeepLStatistics, DefaultSettingParameters, SettingParameters } from '../../../types';
-import { ServicesEnum } from '../../../typesIPC';
+import { IPCMethodAPI, ServicesEnum } from '../../../typesIPC';
 
 export const Layout = () => {
     const discordState = useGlobalSettingsState((state) => state.discordRichPresenceState);
@@ -42,50 +42,50 @@ export const Layout = () => {
 
     //https://dev.to/sergioholgado/how-to-fetch-data-before-rendering-in-react-js-3750 
     const fetchData = async () => {
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , ["get_parameters"]));
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
     }
     
 
     async function getDiscordStatus(){
         console.log("discord: " + discordState);
-        setDiscordState (await window.electron.ipcRenderer.invoke('discord', ["client_status"]));
+        setDiscordState (await window.electron.ipcRenderer.invoke(ServicesEnum.discord, {service: IPCMethodAPI.DiscordTwoWayIPC.clientStatus, content: [""]}));
     }
 
     async function getDeepLStatistics(){
-        setDeepLStatistics (await window.electron.ipcRenderer.invoke('audio', ["external_deepl_stats"]) as DeepLStatistics);
+        setDeepLStatistics (await window.electron.ipcRenderer.invoke(ServicesEnum.audio, ["external_deepl_stats"]) as DeepLStatistics);
     }
 
     async function setNetwork(state: boolean){
         console.log("changing network connection");
         if (state == true){
-            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["network", "true"]);
+            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.network, content: ["true"]});
         }
         if (state == false){
-            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["network", "false"]);
+            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.network, content: ["false"]});
         }
 
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , ["get_parameters"]));
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
     }
 
     async function setFullscreen(state: boolean){
         console.log("changing fullscreen state");
         if (state == true){
-            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["fullscreen", "true"]);
+            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.fullscreen, content: ["true"]});
         }
         if (state == false){
-            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["fullscreen", "false"]);
+            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.fullscreen, content: ["false"]});
         }
 
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , ["get_parameters"]));
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
     }
 
     function setRichPresence(state: boolean){
         console.log("changing fullscreen state");
         if (state == true){
-            window.electron.ipcRenderer.sendMessage('discord', ["enable_client"]);
+            window.electron.ipcRenderer.sendMessage(ServicesEnum.discord, {service: IPCMethodAPI.DiscordOneWayIPC.enableClient, content: [""]});
         }
         if (state == false){
-            window.electron.ipcRenderer.sendMessage('discord', ["disable_client"]);
+            window.electron.ipcRenderer.sendMessage(ServicesEnum.discord, {service: IPCMethodAPI.DiscordOneWayIPC.disableClient, content: [""]});
         }
     }
     

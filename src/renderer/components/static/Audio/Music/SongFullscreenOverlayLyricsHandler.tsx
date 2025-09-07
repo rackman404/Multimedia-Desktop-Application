@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { BottomMusicImageHandler } from './BottomMusicImageHandler';
 import { SongLyricAPIData } from '../../../../../types';
 import { RegularButton } from '../../../../elements/CustomButtons';
+import { IPCMethodAPI, ServicesEnum } from '../../../../../typesIPC';
 
 
 type SongFullscreenOverlayLyricsHandlerProps = { //constructor variables
@@ -136,7 +137,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
         console.log("lyric data is undefined!, cannot add translated lyrics");
       }
       else{
-        const result = await window.electron.ipcRenderer.invoke('audio', ["external_translated_lyrics", lyricData]) as SongLyricAPIData;
+        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.externalTranslatedLyrics, content: [lyricData]}) as SongLyricAPIData;
         setCurrentTranslatedLyricData(result);
       }
   }

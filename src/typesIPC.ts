@@ -1,57 +1,57 @@
 //file for defined ipc method invocation types/enums (instead of using strings)
 
-export enum SettingsOneWayIPC {
-    network,
-    fullscreen,
-    exit,
+export namespace IPCMethodAPI{
+    export enum SettingsOneWayIPC {
+        network,
+        fullscreen,
+        exit,
+    }
+
+    export enum SettingsTwoWayIPC {
+        getParameters
+    }
+
+    export enum AudioOneWayIPC {
+        placeholder
+    }
+
+    export enum AudioTwoWayIPC {
+        getAllMetadataSimple,
+        getSelectedMetadataFull,
+        externalLyrics,
+        externalTranslatedLyrics,
+        externalDeepLStats
+    }
+
+    export enum DiscordOneWayIPC {
+        enableClient,
+        disableClient,
+        songNotification
+    }
+
+    export enum DiscordTwoWayIPC {
+        clientStatus
+    }
 }
 
-export enum SettingsTwoWayIPC {
-    getParameters
-}
+export type IPCServicesMessageInterface = {
+    //service: IPCServicesInterface //which service's methods to use
+    service: IPCMethodAPI.SettingsOneWayIPC | 
+    IPCMethodAPI.SettingsTwoWayIPC | 
+    IPCMethodAPI.DiscordOneWayIPC | 
+    IPCMethodAPI.DiscordTwoWayIPC | 
+    IPCMethodAPI.AudioOneWayIPC | 
+    IPCMethodAPI.AudioTwoWayIPC 
 
-export type SettingsIPC = {
-    oneWay: SettingsOneWayIPC
-    twoWay: SettingsTwoWayIPC
+    content: any[] //the content to send to method
 }
 
 /*
-export enum MusicOneWayIPC {
-    placeholder
-}
-
-export enum MusicTwoWayIPC {
-    getAllMetadataSimple,
-    getSelectedMetadataFull,
-    externalLyrics,
-    externalTranslatedLyrics,
-    externalDeepLStats
-}
-
-export type MusicIPC = {
-    oneWay: MusicOneWayIPC
-    twoWay: MusicTwoWayIPC
-}
-
-export enum DiscordOneWayIPC {
-    enableClient,
-    disableClient,
-    songNotification
-}
-
-export enum DiscordTwoWayIPC {
-    clientStatus
-}
-
-export type DiscordIPC = {
-    oneWay: DiscordOneWayIPC
-    twoWay: DiscordTwoWayIPC
+export type IPCServicesMessageReturnInterface = {
+    code: any
+    content: any[] //the content to send to method
 }
 */
-
-export type IPCServicesInterface = {
-    settings: SettingsIPC
-}
 
 
 export enum ServicesEnum {

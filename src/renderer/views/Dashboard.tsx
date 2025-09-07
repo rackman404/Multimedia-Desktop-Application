@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import { Button, ButtonGroup, Chip, createTheme, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Switch, ThemeProvider, useColorScheme } from '@mui/material';
 import { RegularButton } from '../elements/CustomButtons';
 import { ipcRenderer } from 'electron';
-import { ServicesEnum } from '../../typesIPC';
+import { IPCMethodAPI, ServicesEnum } from '../../typesIPC';
 
 
 export const Layout = () => {
@@ -25,7 +25,7 @@ export const Layout = () => {
             <RegularButton onClick={    
                 () => {
                     
-                window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , ["exit"]);
+                window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.exit, content: [""]});
 
                 
             }}>Exit</RegularButton>

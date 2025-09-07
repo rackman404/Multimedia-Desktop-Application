@@ -11,6 +11,7 @@ import {useSelectedSongStore } from '../../../state_stores/MusicStateStores';
 
 import { Howl, Howler } from 'howler';
 import { SongFullscreenOverlay } from '../../../components/static/Audio/Music/SongFullscreenOverlay';
+import { IPCMethodAPI, ServicesEnum } from '../../../../typesIPC';
 
 export const Layout = () => {
     const playState = useSelectedSongStore((state) => state.playState);
@@ -224,7 +225,7 @@ export const Layout = () => {
             setPlayState(true);
 
 
-            window.electron.ipcRenderer.sendMessage('discord', ["song_notification", "Song: " + selectedPlaySongMetaData.name, "Artist: " + selectedPlaySongMetaData.artist, "0", "0", "https://www.iconsdb.com/icons/preview/gray/note-xxl.png"]);
+            window.electron.ipcRenderer.sendMessage(ServicesEnum.discord, {service: IPCMethodAPI.DiscordOneWayIPC.songNotification, content: ["Song: " + selectedPlaySongMetaData.name, "Artist: " + selectedPlaySongMetaData.artist, "0", "0", "https://www.iconsdb.com/icons/preview/gray/note-xxl.png"]});
         }
     }
 

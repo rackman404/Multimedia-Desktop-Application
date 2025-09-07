@@ -13,6 +13,7 @@ import { fmtMSS } from '../../../../Common';
 
 import placeholderImage from '../../../../../../assets/music_no_thumbnail.png';
 import { SongMetaData } from '../../../../../types';
+import { IPCMethodAPI, ServicesEnum } from '../../../../../typesIPC';
 
 
 
@@ -45,7 +46,7 @@ export const BottomMusicImageHandler = () => {
             if (currentSong.songRawPath != ""){
                 setThumbnailString("");
 
-                const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", currentSong.id, currentSong.songRawPath]) as SongMetaData;
+                const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.getSelectedMetadataFull, content: [currentSong.id, currentSong.songRawPath]}) as SongMetaData;
                 //console.log("cover image" +  sMetaData?.coverImage);
                 //console.log(result);
 

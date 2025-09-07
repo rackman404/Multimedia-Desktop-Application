@@ -94,17 +94,17 @@ export class ServiceManager {
   }
 
   IPCCalls(){
-    ipcMain.on('audio', async (event, arg) => {
+    ipcMain.on(ServicesEnum.audio, async (event, arg) => {
       if (arg != ""){
         this.audioManager.broker.eventOn(event, arg);
       }
       else{
-        event.reply('audio', console.log("Undefined ipc one way from bus audio"));
+        event.reply(ServicesEnum.audio, console.log("Undefined ipc one way from bus audio"));
       }
 
     });
 
-    ipcMain.handle('audio', async (event, arg) => {
+    ipcMain.handle(ServicesEnum.audio, async (event, arg) => {
         if (arg != ""){
           return this.audioManager.broker.eventHandle(event, arg);
         }
@@ -117,7 +117,7 @@ export class ServiceManager {
         this.settingsManager.broker.eventOn(event, arg);
       }
       else{
-        event.reply('settings', console.log("Undefined ipc one way from bus settings"));
+        event.reply(ServicesEnum.settings, console.log("Undefined ipc one way from bus settings"));
       }
 
     });
@@ -129,17 +129,17 @@ export class ServiceManager {
       }
     );
 
-    ipcMain.on('discord', async (event, arg) => {
+    ipcMain.on(ServicesEnum.discord, async (event, arg) => {
       if (arg != ""){
         this.discordManager.broker.eventOn(event, arg);
       }
       else{
-        event.reply('discord', console.log("Undefined ipc one way from bus discord"));
+        event.reply(ServicesEnum.discord, console.log("Undefined ipc one way from bus discord"));
       }
 
     });
 
-    ipcMain.handle('discord', async (event, arg) => {
+    ipcMain.handle(ServicesEnum.discord, async (event, arg) => {
         if (arg != ""){
           return this.discordManager.broker.eventHandle(event, arg);
         }

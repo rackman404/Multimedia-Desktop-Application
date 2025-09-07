@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { SongLyricAPIData, SongMetaDataSimple } from '../../../../../types';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { RegularButton } from '../../../../elements/CustomButtons';
+import { IPCMethodAPI, ServicesEnum } from '../../../../../typesIPC';
 
 type SongLiveLyricProps = { //instance variables
   sMetaData: SongMetaDataSimple
@@ -52,7 +53,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
         setCurrentTranslatedLyricData({} as SongLyricAPIData);
 
         setProgressIndicator(<LinearProgress/>)
-        const result = await window.electron.ipcRenderer.invoke('audio', ["external_lyrics", sMetaData.songRawPath]) as SongLyricAPIData;
+        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.externalLyrics, content: [sMetaData.songRawPath]}) as SongLyricAPIData;
         setLyricData(result);
 
         if (abort == false){
@@ -175,7 +176,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
       console.log("lyric data is undefined!, cannot add translated lyrics");
     }
     else{
-      const result = await window.electron.ipcRenderer.invoke('audio', ["external_translated_lyrics", lyricData]) as SongLyricAPIData;
+      const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.externalTranslatedLyrics, content: [lyricData]}) as SongLyricAPIData;
       setCurrentTranslatedLyricData(result);
     }
 

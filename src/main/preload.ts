@@ -3,8 +3,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { ServicesEnum } from '../typesIPC';
 
-
-export type Channels = 'ipc-example' | 'audio' | 'discord' | ServicesEnum;
+//export type Channels = 'ipc-example' | 'audio' | 'discord' | 'settings';
+export type Channels = ServicesEnum;
 //export type Channels = Services;
 
 /*

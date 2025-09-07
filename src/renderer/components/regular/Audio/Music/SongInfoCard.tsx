@@ -8,6 +8,7 @@ import placeholderImage from '../../../../../../assets//music_no_thumbnail.png';
 import { SongMetaData, SongMetaDataSimple } from '../../../../../types';
 import { fmtMSS } from '../../../../Common';
 import { RegularButton } from '../../../../elements/CustomButtons';
+import { IPCMethodAPI, ServicesEnum } from '../../../../../typesIPC';
 
 type SongInfoProps = { //constructor variables
   sMetaData: SongMetaDataSimple
@@ -96,7 +97,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
 
     (async () => {
       if (sMetaData.songRawPath != ""){
-        const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", sMetaData.id, sMetaData.songRawPath]) as SongMetaData;
+        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.getSelectedMetadataFull, content: [sMetaData.id, sMetaData.songRawPath]}) as SongMetaData;
         //console.log("cover image" +  sMetaData?.coverImage);
         //console.log(result);
 

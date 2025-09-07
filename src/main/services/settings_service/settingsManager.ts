@@ -49,6 +49,7 @@ export class SettingsManager{
         console.log("window was set in settings manager");
     }
 
+
     //true online, false offline
     async SetNetwork(state: string){
         
@@ -83,6 +84,7 @@ export class SettingsManager{
         }
 
         if (this.mainWindow != undefined){
+            console.log("(SettingsManager.ts) now setting full screen state to " + stateBool);
             this.windowController.SetFullscreen(stateBool, this.mainWindow);
         }
 

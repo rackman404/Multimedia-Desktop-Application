@@ -1,6 +1,5 @@
 import { app } from "electron";
 import { AudioBroker } from "./audioIPCBroker";
-import { AudioPlayBackController } from "./audioPlaybackController";
 import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
@@ -17,7 +16,6 @@ type MetaDatas = {
 
 export class AudioManager{
     broker: AudioBroker;
-    audioPlayback: AudioPlayBackController;
     audioMetadata: AudioMetadataReader;
     audioLyrics: AudioWebLyricReader;
     audioTranslator: AudioDeepLTranslator;
@@ -34,7 +32,6 @@ export class AudioManager{
     
     constructor() {
         this.broker = new AudioBroker(this);
-        this.audioPlayback = new AudioPlayBackController();
         this.audioMetadata = new AudioMetadataReader();
         this.audioLyrics = new AudioWebLyricReader();
         this.audioTranslator = new AudioDeepLTranslator();
