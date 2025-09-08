@@ -300,6 +300,7 @@ export const Layout = () => {
 
 
             window.electron.ipcRenderer.sendMessage(ServicesEnum.discord, {service: IPCMethodAPI.DiscordOneWayIPC.songNotification, content: ["Song: " + selectedPlaySongMetaData.name, "Artist: " + selectedPlaySongMetaData.artist, "0", "0", "https://www.iconsdb.com/icons/preview/gray/note-xxl.png"]});
+            window.electron.ipcRenderer.sendMessage(ServicesEnum.audio, {service: IPCMethodAPI.AudioOneWayIPC.storeLastPlayedSong, content: [selectedPlaySongMetaData]});
         }
     }
 

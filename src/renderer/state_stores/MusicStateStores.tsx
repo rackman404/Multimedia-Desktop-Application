@@ -22,6 +22,9 @@ interface ISelectedSongState {
   activeSongListState: ActiveSongListState
   setActiveSongListState: (newActiveSongListState: ActiveSongListState) => void
 
+  currentlySelectedSongList: SongMetaDataSimple[] | null
+  setCurrentlySelectedSongList: (currentlySelectedSongList: SongMetaDataSimple[] | null) => void
+
   playState: boolean
   setPlayState: (newPlayState: boolean) => void
   currentSeek: number
@@ -46,12 +49,12 @@ interface ISelectedSongState {
 
   lyricOffset: number
   setLyricOffset: (lyricOffset: number) => void
-
   currentLyricData: SongLyricAPIData
   setCurrentLyricData: (newCurrentLyricData: SongLyricAPIData) => void
-
   currentTranslatedLyricData: SongLyricAPIData
   setCurrentTranslatedLyricData: (currentTranslatedLyricData: SongLyricAPIData) => void
+
+  
 }
 
 export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
@@ -88,6 +91,8 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
 
   activeSongListState: ActiveSongListState.Main, 
   setActiveSongListState: (newActiveSongListState) =>set((state) => ({ activeSongListState: newActiveSongListState })),
+  currentlySelectedSongList: null,
+  setCurrentlySelectedSongList: (newCurrentlySelectedSongList) =>set((state) => ({ currentlySelectedSongList: newCurrentlySelectedSongList })),
 
   shuffleState: false, 
   setShuffleState: (newshuffleState) =>set((state) => ({ shuffleState: newshuffleState })),

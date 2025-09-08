@@ -1,0 +1,13 @@
+.card_songlastplayedcard{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+
+    text-align: center;
+    
+  /* required for button panel to be relative to parent but absolute to itself */
+  position: relative;
+
+  /* scale font based on UI */
+  font-size: 5px;
+  font-size: 0.85vw;
+}
+

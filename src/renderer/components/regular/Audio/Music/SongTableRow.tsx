@@ -64,7 +64,6 @@ export const SongTableRow = memo(({sMetaDataThisRef, indexRef, columnOnRef, curr
                 {columnOnRef[0] === true ? <TableCell  component="th" scope="row">
                 <SongToggleButton key={selectedButtonStateRef.toString()} songID={indexRef} setListStatus={setSelectStatusRef} selectedRef={selectedButtonStateRef}/>
                 </TableCell> : undefined}
-                
                 {columnOnRef[1] === true ? <TableCell component="th" scope="row"> {currentSongRef === true ? <PlayCircleIcon/> : " "} </TableCell> : undefined}
                 {columnOnRef[2] === true ? <TableCell  component="th" scope="row">{sMetaDataThisRef.name}</TableCell> : undefined}
                 {columnOnRef[3] === true ? <TableCell align="left">{fmtMSS(sMetaDataThisRef.length)}</TableCell> : undefined}

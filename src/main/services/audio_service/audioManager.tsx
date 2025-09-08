@@ -4,8 +4,8 @@ import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
-import { DeepLStatistics, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
-import { CONFIGFILE, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
+import { DeepLStatistics, MiscData, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
+import { CONFIGFILE, MISCDATAFILE, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
 import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
 import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
 import { AudioSearch } from "./filters/audioSearch";
@@ -32,7 +32,7 @@ export class AudioManager{
     searchMainSongMetaData: SongMetaDataSimple[] | undefined
     playlistSongMetaData: SongMetaDataSimple[] | undefined
     playlistSearchSongMetaData: SongMetaDataSimple[] | undefined
-    
+
     constructor() {
         this.broker = new AudioBroker(this);
         this.audioMetadata = new AudioMetadataReader();
@@ -202,15 +202,40 @@ export class AudioManager{
     }
 
     //song search
-
     async searchAllSongsSimple(searchString: string, searchType: SongSearchTypeState): Promise<SongMetaDataSimple[] | undefined>{
         var list = await this.audioSearch.searchSongs(searchString, searchType, this.mainSongMetaData);
         this.searchMainSongMetaData = list;
         return list;
     }
 
+    
+    async getLastSearchedAllSongSimple(): Promise<SongMetaDataSimple[] | undefined>{ //unused
+        return this.searchMainSongMetaData;
+    }
+
     async searchPlaylistSongsSimple(searchString: string, searchType: SongSearchTypeState): Promise<SongMetaDataSimple[] | undefined>{ //implement when playlists are implemented
+        return undefined;
+    }
+
+    //Misc. 
+    async storeLastPlayedSong(song: SongMetaDataSimple): Promise<SongMetaDataSimple | undefined>{ //implement when playlists are implemented
+        var miscDataFile = fs.readFileSync(MISCDATAFILE);
+        var jsonData = JSON.parse(miscDataFile.toString()) as MiscData;
+        
+        jsonData.lastPlayedSong = song;
+
+        var updated = JSON.stringify(jsonData, null, 1); 
+        fs.writeFileSync(MISCDATAFILE, updated); 
 
         return undefined;
     }
+
+    async retrieveLastPlayedSong(): Promise<SongMetaDataSimple | undefined>{ //implement when playlists are implemented
+        var miscDataFile = fs.readFileSync(MISCDATAFILE);
+        var jsonData = JSON.parse(miscDataFile.toString()) as MiscData;
+
+        return jsonData.lastPlayedSong;
+    }
+
+
 }

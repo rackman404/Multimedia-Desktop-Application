@@ -37,6 +37,8 @@ export const BINARYDEPENDENCYDIRECTORY = path.join(__dirname, '../../../../' + "
 export const CONFIGDIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "config") : '_sample_development_folder/sample_config');
 export const CONFIGFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY, "config.json") : path.join(CONFIGDIRECTORY, "config.json"));
 
+export const MISCDATAFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY, "misc_data.json") : path.join(CONFIGDIRECTORY, "misc_data.json"));
+
 export const MINIMUMWINDOWSIZE = {x: 1920/2, y:1080/2};
 
 
@@ -230,6 +232,7 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      nodeIntegrationInWorker: true,
       webSecurity: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

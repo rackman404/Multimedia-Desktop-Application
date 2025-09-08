@@ -4,6 +4,7 @@ import { AudioManager } from "./audioManager";
 
 import {Howl, Howler} from 'howler';
 import { IPCMethodAPI, IPCServicesMessageInterface } from "../../../typesIPC";
+import { SongMetaDataSimple } from "../../../types";
 
 
 export class AudioBroker {
@@ -17,9 +18,9 @@ export class AudioBroker {
     console.log("handling audio event from broker; arg: " + arg);
 
     switch(arg.service){
-      case IPCMethodAPI.AudioOneWayIPC.placeholder:
-        console.log("Sending all audio metadata");
-        
+      case IPCMethodAPI.AudioOneWayIPC.storeLastPlayedSong:
+        console.log("Storing Last Played Song");
+        this.audioManager.storeLastPlayedSong(arg.content[0] as SongMetaDataSimple);
         break;
 
       default:
@@ -92,6 +93,12 @@ export class AudioBroker {
         console.log("searching specified playlist list");
           
         return this.audioManager.searchPlaylistSongsSimple(arg.content[0], arg.content[1]);
+
+      break;
+      case IPCMethodAPI.AudioTwoWayIPC.retrieveLastPlayedSong:
+        console.log("retrieving last played song");
+          
+        return this.audioManager.retrieveLastPlayedSong();
 
       break;
 

@@ -12,7 +12,8 @@ export namespace IPCMethodAPI{
     }
 
     export enum AudioOneWayIPC {
-        placeholder
+        //misc
+        storeLastPlayedSong
     }
 
     export enum AudioTwoWayIPC {
@@ -24,7 +25,10 @@ export namespace IPCMethodAPI{
 
         //song search
         searchAllSongsSimple,
-        searchPlaylistSongsSimple
+        searchPlaylistSongsSimple,
+
+        //misc
+        retrieveLastPlayedSong
     }
 
     export enum DiscordOneWayIPC {
@@ -36,6 +40,14 @@ export namespace IPCMethodAPI{
     export enum DiscordTwoWayIPC {
         clientStatus
     }
+
+    export enum UtilityOneWayIPC {
+        placeholder,
+    }
+
+    export enum UtilityTwoWayIPC {
+        imgStringToThumbnail
+    }
 }
 
 export type IPCServicesMessageInterface = {
@@ -45,7 +57,9 @@ export type IPCServicesMessageInterface = {
     IPCMethodAPI.DiscordOneWayIPC | 
     IPCMethodAPI.DiscordTwoWayIPC | 
     IPCMethodAPI.AudioOneWayIPC | 
-    IPCMethodAPI.AudioTwoWayIPC 
+    IPCMethodAPI.AudioTwoWayIPC |
+    IPCMethodAPI.UtilityOneWayIPC | 
+    IPCMethodAPI.UtilityTwoWayIPC 
 
     content: any[] //the content to send to method
 }
@@ -62,5 +76,6 @@ export enum ServicesEnum {
     settings = 'settings',
     audio = 'audio',
     discord = 'discord',
+    utility = 'utility',
     ipcExample = 'ipc-example',
 }

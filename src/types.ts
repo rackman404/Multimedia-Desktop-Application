@@ -95,11 +95,14 @@ export type GeneralSettingParameters = {
 }
 
 export type MusicSettingParameters = {
+    //configs --
+
     //Lyrics
     DeepLKey: string,
-
     DefaultLyricOffset: number,
     DefaultOffstepIncrement: number,
+
+    // ---
 }
 
 export const DefaultMusicSettingParameters: MusicSettingParameters = {
@@ -122,7 +125,19 @@ export const DefaultSettingParameters: SettingParameters = {
 
 /* peristent settings */
 
+/* peristent misc storage */
 
+export type MiscData = {
+    //music --
+    lastPlayedSong: SongMetaDataSimple
+}
+
+export const DefaultMiscData: MiscData = {
+    lastPlayedSong: DEFAULTSONGMETADATASIMPLE
+}
+
+
+/* peristent storage */
  
 export enum ViewState {
     Dashboard,

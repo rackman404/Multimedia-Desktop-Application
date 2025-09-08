@@ -1,18 +1,20 @@
 import * as fs from "fs" 
 import path from "path";
-import { DefaultSettingParameters, SettingParameters } from "../../types";
+import { DefaultMiscData, DefaultSettingParameters, SettingParameters } from "../../types";
 import { AudioManager } from "./audio_service/audioManager";
 import { DiscordManager } from "./discord_service/discordManager";
 import { SettingsManager } from "./settings_service/settingsManager";
 
 import { app, ipcMain } from "electron";
-import { CONFIGDIRECTORY, CONFIGFILE} from "../main";
+import { CONFIGDIRECTORY, CONFIGFILE, MISCDATAFILE} from "../main";
 import { ServicesEnum } from "../../typesIPC";
+import { UtilityManager } from "./utility/utilityManager";
 
 export class ServiceManager {
   discordManager: DiscordManager;
   audioManager: AudioManager;
   settingsManager: SettingsManager;
+  utilityManager: UtilityManager;
 
   constructor() {
     /*
@@ -57,13 +59,20 @@ export class ServiceManager {
       fs.writeFileSync(CONFIGFILE, defaultConfig); 
       console.log("Config File Successfully created!");
     } 
+
+      if (!fs.existsSync(MISCDATAFILE)){
+      console.log("misc data File doesn't exist, creating data file");
+
+      var defaultData = JSON.stringify(DefaultMiscData, null, 1); 
+      fs.writeFileSync(MISCDATAFILE, defaultData); 
+      console.log("Data File Successfully created!");
+    } 
     
 
     this.discordManager = new DiscordManager();
     this.audioManager = new AudioManager();
     this.settingsManager = new SettingsManager();
-
-
+    this.utilityManager = new UtilityManager();
 
     this.IPCCalls();
 
@@ -142,6 +151,23 @@ export class ServiceManager {
     ipcMain.handle(ServicesEnum.discord, async (event, arg) => {
         if (arg != ""){
           return this.discordManager.broker.eventHandle(event, arg);
+        }
+      }
+    );
+
+    ipcMain.on(ServicesEnum.utility, async (event, arg) => {
+      if (arg != ""){
+        this.utilityManager.broker.eventOn(event, arg);
+      }
+      else{
+        event.reply(ServicesEnum.utility, console.log("Undefined ipc one way from utility discord"));
+      }
+
+    });
+
+    ipcMain.handle(ServicesEnum.utility, async (event, arg) => {
+        if (arg != ""){
+          return this.utilityManager.broker.eventHandle(event, arg);
         }
       }
     );
