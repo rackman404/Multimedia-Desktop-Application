@@ -23,8 +23,7 @@ export const Layout = () => {
     const selectedPlaySongMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
     const setSelectedPlaySongMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
 
-    const activeSongListState = useSelectedSongStore((state) => state.activeSongListState);
-
+    
     const allSongMetaData = useSelectedSongStore((state) => state.allSongMetaData);
     const searchSongMetaData = useSelectedSongStore((state) => state.searchSongMetaData);
     const playlistSongMetaData = useSelectedSongStore((state) => state.playListSongMetaData);
@@ -39,19 +38,35 @@ export const Layout = () => {
 
     //const [fullscreenComponent, setFullscreenComponent] = useState<any>();
 
-    /*
+    const activeSongListState = useSelectedSongStore((state) => state.activeSongListState);
+    const currentlySelectedSongList = useSelectedSongStore((state) => state.currentlySelectedSongList);
+    const setCurrentlySelectedSongList = useSelectedSongStore((state) => state.setCurrentlySelectedSongList);
+
+    
     useEffect(() => {
 
-        if (fullscreenState == true){
-            setFullscreenComponent(<SongFullscreenOverlay/>);
-        }
-        else{
-            setFullscreenComponent(null);
-        }
-        
+        //(async () => {
 
-    }, [fullscreenState]);
-    */
+        
+            switch(activeSongListState){
+                case (ActiveSongListState.Main):
+                    console.log("LOADING MUSIC DATA");
+                    setCurrentlySelectedSongList(allSongMetaData);
+                    break;
+                case (ActiveSongListState.SearchMain):
+                    setCurrentlySelectedSongList(searchSongMetaData);
+                    break;
+                case (ActiveSongListState.Playlist):
+                    setCurrentlySelectedSongList(playlistSongMetaData);
+                    break;
+                case (ActiveSongListState.SearchPlaylist):
+                    setCurrentlySelectedSongList(searchPlayListSongMetaData);
+                    break;
+            }
+        //})();
+
+    }, [activeSongListState, , allSongMetaData, searchSongMetaData, playlistSongMetaData, searchPlayListSongMetaData]);
+    
 
     // fullscreen selected song controls --------
 
@@ -92,6 +107,7 @@ export const Layout = () => {
         else if (useSelectedSongStore.getState().shuffleState == true){
             console.log('Finished! shuffle state is:' + useSelectedSongStore.getState().shuffleState); // unsure why shuffle bool value is delayed by 1 song unless we get it directly
             
+            /*
             switch (activeSongListState) {
                 case ActiveSongListState.Main:
                     if (allSongMetaData != null){
@@ -109,6 +125,14 @@ export const Layout = () => {
                     break;
                 default:
                     break;
+            }
+            */
+
+
+            if (currentlySelectedSongList != null){
+                var num = Math.floor(Math.random() * currentlySelectedSongList.length - 1);
+                console.log('Shuffling song, new song id is: ' + num);
+                    setSelectedPlaySongMetaData(currentlySelectedSongList[num])
             }
             
         }
@@ -200,6 +224,7 @@ export const Layout = () => {
     }
 
     function nextSong(){
+        /*
         var list = null;
         switch (activeSongListState) {
             case ActiveSongListState.Main:
@@ -211,11 +236,12 @@ export const Layout = () => {
             default:
                 break;
         }
+        */
 
-        if (list != null && selectedPlaySongMetaData.id < list.length){
-            if ((selectedPlaySongMetaData.id + 1) < list.length ){
-                console.log((selectedPlaySongMetaData.id + 1) + " " + list[selectedPlaySongMetaData.id].name);
-                setSelectedPlaySongMetaData(list[selectedPlaySongMetaData.id + 1]);
+        if (currentlySelectedSongList != null && selectedPlaySongMetaData.id < currentlySelectedSongList.length){
+            if ((selectedPlaySongMetaData.id + 1) < currentlySelectedSongList.length ){
+                console.log((selectedPlaySongMetaData.id + 1) + " " + currentlySelectedSongList[selectedPlaySongMetaData.id].name);
+                setSelectedPlaySongMetaData(currentlySelectedSongList[selectedPlaySongMetaData.id + 1]);
             }
             else{
                 setPlayState(false);
@@ -227,6 +253,7 @@ export const Layout = () => {
     }
 
     function prevSong(){
+        /*
         var list = null;
         switch (activeSongListState) {
             case ActiveSongListState.Main:
@@ -238,11 +265,12 @@ export const Layout = () => {
             default:
                 break;
         }
+        */
 
-        if (list != null && selectedPlaySongMetaData.id < list.length){
+        if (currentlySelectedSongList != null && selectedPlaySongMetaData.id < currentlySelectedSongList.length){
             if ((selectedPlaySongMetaData.id - 1) != -1){
-                console.log((selectedPlaySongMetaData.id - 1) + " " + list[selectedPlaySongMetaData.id].name);
-                setSelectedPlaySongMetaData(list[selectedPlaySongMetaData.id - 1]);
+                //console.log((selectedPlaySongMetaData.id - 1) + " " + list[selectedPlaySongMetaData.id].name);
+                setSelectedPlaySongMetaData(currentlySelectedSongList[selectedPlaySongMetaData.id - 1]);
             }
             else{
                 setPlayState(false);
@@ -256,7 +284,7 @@ export const Layout = () => {
     function playSong(){
         //setPlayState(false);
 
-        console.log("playing new song");
+        //console.log("playing new song");
 
         trackObject?.stop();
         trackObject?.unload();

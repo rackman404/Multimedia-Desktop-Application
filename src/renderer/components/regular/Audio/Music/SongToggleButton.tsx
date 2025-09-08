@@ -17,6 +17,24 @@ type SongToggleButtonProps = { //instance variables
 export const SongToggleButton = ({songID, selectedRef, setListStatus}:SongToggleButtonProps) => { 
   const mouseState = useGlobalSettingsState((state) => state.isMouseDown);
 
+  //on mount and unmount
+  useEffect(() => {
+
+  //console.log("table button for: " + songID + " was rerendered");
+
+  //called when the component is unmounted
+  return () => {
+
+  };
+  }, []);
+
+  /*
+  useEffect(() => {
+    console.log("button" + songID + " : " + selectedRef);
+
+  }, [selectedRef]);
+  */
+ 
   return (
       <ToggleButton
         selected={selectedRef} 

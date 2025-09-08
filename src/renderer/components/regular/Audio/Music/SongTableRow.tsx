@@ -1,4 +1,4 @@
-import { memo } from "react"
+import { memo, useEffect } from "react"
 import { SongMetaDataSimple } from "../../../../../types"
 import { CardActionArea, TableRow, TableCell, SxProps } from "@mui/material"
 import { fmtMSS } from "../../../../Common"
@@ -33,7 +33,7 @@ type SongLiveLyricProps = { //instance variables
   indexRef: number
 
   columnOnRef: boolean[]
-  currentSongRef: SongMetaDataSimple
+  currentSongRef: boolean
   selectedButtonStateRef: boolean
   setSelectStatusRef: (index: number) => void
   selectedPlayDataFunctionRef: (data:SongMetaDataSimple) => void
@@ -44,20 +44,28 @@ type SongLiveLyricProps = { //instance variables
   //highlightedRef: boolean
 }
 
-const SongTableRow = ({sMetaDataThisRef, indexRef, columnOnRef, currentSongRef, selectedButtonStateRef, setSelectStatusRef, selectedPlayDataFunctionRef, selectFullDataInfoCardRef, selectedRef}: SongLiveLyricProps) => { 
+export const SongTableRow = memo(({sMetaDataThisRef, indexRef, columnOnRef, currentSongRef, selectedButtonStateRef, setSelectStatusRef, selectedPlayDataFunctionRef, selectFullDataInfoCardRef, selectedRef}: SongLiveLyricProps) => { 
+    //on mount and unmount
+    useEffect(() => {
 
+    //console.log("table row for: " + sMetaDataThisRef.name + " was rerendered");
+
+    //called when the component is unmounted
+    return () => {
+
+    };
+    }, []);
+    
     return (
         <CardActionArea className='row_songtable' id={"tablerow" + sMetaDataThisRef.id} key={"tablerow" + sMetaDataThisRef.id}  component={TableRow} sx={selectedRef === true ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCardRef(sMetaDataThisRef)} 
             onDoubleClick=
-            {(e) => {
-            selectedPlayDataFunctionRef(sMetaDataThisRef);
-            }}
+            {() => selectedPlayDataFunctionRef(sMetaDataThisRef)}
             > 
                 {columnOnRef[0] === true ? <TableCell  component="th" scope="row">
                 <SongToggleButton key={selectedButtonStateRef.toString()} songID={indexRef} setListStatus={setSelectStatusRef} selectedRef={selectedButtonStateRef}/>
                 </TableCell> : undefined}
                 
-                {columnOnRef[1] === true ? <TableCell component="th" scope="row"> {currentSongRef.id === indexRef ? <PlayCircleIcon/> : " "} </TableCell> : undefined}
+                {columnOnRef[1] === true ? <TableCell component="th" scope="row"> {currentSongRef === true ? <PlayCircleIcon/> : " "} </TableCell> : undefined}
                 {columnOnRef[2] === true ? <TableCell  component="th" scope="row">{sMetaDataThisRef.name}</TableCell> : undefined}
                 {columnOnRef[3] === true ? <TableCell align="left">{fmtMSS(sMetaDataThisRef.length)}</TableCell> : undefined}
                 {columnOnRef[4] === true ? <TableCell align="left">{sMetaDataThisRef.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</TableCell> : undefined}
@@ -68,8 +76,7 @@ const SongTableRow = ({sMetaDataThisRef, indexRef, columnOnRef, currentSongRef, 
 
     )
 
+});
 
-}
 
-
-export default memo(SongTableRow);
+//export default memo(SongTableRow);

@@ -41,6 +41,20 @@ export type SongMetaDataSimple = {
     songRawPath: string,
 }
 
+
+export const DEFAULTSONGMETADATASIMPLE = {
+    metadataFormat: '',
+    id: 0,
+    name: '',
+    length: 0,
+    artist: [''],
+    album: '',
+    genre: [''],
+    playCount: 0,
+    bitrate: 0,
+    songRawPath: ''
+}
+
 export type NyaaWebData = {
     title: string;
     magnet : string;

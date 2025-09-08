@@ -57,7 +57,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
         setLyricData(result);
 
         if (abort == false){
-          console.log("GOT LYRICS FOR" + sMetaData.name);
+          //console.log("GOT LYRICS FOR " + sMetaData.name);
           currentLyricData(result);
         }
 
@@ -68,7 +68,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
     })();
 
     return () => { //needed to discard old lyrics if the user skips through multiple songs (which may cause multiple lyric requests at once)
-      console.log("DISCARDING LYRIC (no need as this lyric is outdated), was for: " + sMetaData.name);
+      //console.log("DISCARDING LYRIC (no need as this lyric is outdated), was for: " + sMetaData.name);
       abort = true;
     }
   }, [sMetaData]);
@@ -105,8 +105,8 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
         
         var text = lyricData.lyrics[lyricData.timestamps.indexOf(closest)];
 
-        console.log(text);
-        console.log(lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);
+        //console.log(text);
+        //console.log(lyricData.lyrics[lyricData.timestamps.indexOf(closest)+1]);
 
         var lyricsTranslated = false;
         translatedText = "";

@@ -1,5 +1,5 @@
 import { Card, FormControl, InputLabel, Select, TextField, Button, Divider, ListItemText, LinearProgress, SelectChangeEvent, MenuItem, Menu, Checkbox, Popper, Box } from "@mui/material";
-import { ActiveSongListState, ColumnEnumArray, SearchEnumArray, SongColumnTypes, SongMetaDataSimple, SongSearchTypeState } from "../../../../../types";
+import { ActiveSongListState, ColumnEnumArray, DEFAULTSONGMETADATASIMPLE, SearchEnumArray, SongColumnTypes, SongMetaDataSimple, SongSearchTypeState } from "../../../../../types";
 import { useState } from "react";
 import './SongTable.css';
 
@@ -43,7 +43,7 @@ export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, in
     const[dropDownState, setDropDownState] = useState<boolean>(false); 
 
     const[refreshButtonState, setRefreshButtonState] = useState<boolean>(false);
-    const[searchButtonState, setSearchButtonState] = useState<boolean>(false);
+    const[searchButtonState, setSearchButtonState] = useState<boolean>(true);
 
     const [searchValue, setSearchValue] = useState('');
 
@@ -54,6 +54,8 @@ export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, in
     const setSelectedPlayMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
 
     const setAllMetaData = useSelectedSongStore((state) => state.setAllSongMetaData);
+
+
     const setActiveSongListState = useSelectedSongStore((state) => state.setActiveSongListState);
     
     async function RefreshMetaData(){
@@ -75,8 +77,9 @@ export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, in
     }
 
     const setSearchSongMetaData = useSelectedSongStore((state) => state.setSearchSongMetaData);
+
     async function SearchMetadata(){
-        setSearchButtonState(true);
+        setSearchButtonState(false);
         setTableDisabledRef(true);
         if (isPlaylistTableRef == false){
             const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.searchAllSongsSimple, content: [searchValue, search]});  
@@ -84,30 +87,22 @@ export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, in
             setInSearchModeRef(true);
             setActiveSongListState(ActiveSongListState.SearchMain);
 
-            setSelectedPlayMetaData({
-                metadataFormat: "",
-                id: 0,
-                name: "",
-                length: 0,
-                artist: [],
-                album: "",
-                genre: [],
-                playCount: 0,
-                bitrate: 0,
-                songRawPath: ""
-            });
+            
+
+            setSelectedPlayMetaData(DEFAULTSONGMETADATASIMPLE);
         }
         else{
             //TO DO
         }
-        setTableDisabledRef(false);     
-        setSearchButtonState(false);
+        setTableDisabledRef(false); 
     }
 
     async function ResetSearch(){
         setSearchSongMetaData([] as SongMetaDataSimple[]);
         setActiveSongListState(ActiveSongListState.Main);
         setInSearchModeRef(false);
+
+        setSearchButtonState(true);
 
         setSelectedPlayMetaData({
             metadataFormat: "",
@@ -145,7 +140,7 @@ export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, in
                         setSearchValue(event.target.value);
                     }}
                     />          
-                    <Button disabled={searchButtonState} onClick={() => SearchMetadata()}><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
+                    <Button onClick={() => SearchMetadata()}><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
                     <Button onClick={() => ResetSearch()} disabled={searchButtonState}><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
                     <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
                     <Button onClick={() => scrollToElementInTableRef(currentSongIDRef)}> <div style={{fontSize: FONTSCALE}}>Zoom To Active</div></Button>

@@ -14,7 +14,7 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import CheckIcon from '@mui/icons-material/Check';
 import { SongToggleButton } from './SongToggleButton';
 import { SongTableTopBar } from './SongTableTopBar';
-import SongTableRow from './SongTableRow';
+import {SongTableRow} from './SongTableRow';
 
 /*
 const dataRowSX: SxProps = {
@@ -80,12 +80,15 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
 
   const [inSearchMode, setInSearchMode] = useState<boolean>(false);
 
-  const searchPlayListSongMetaData = useSelectedSongStore((state) => state.searchPlayListSongMetaData);
-  const setSearchPlayListSongMetaData = useSelectedSongStore((state) => state.setSearchplayListSongMetaData);
+  //const searchPlayListSongMetaData = useSelectedSongStore((state) => state.searchPlayListSongMetaData);
+  const setSearchPlayListSongMetaData = useSelectedSongStore((state) => state.setSearchSongMetaData);
   const searchSongMetaData = useSelectedSongStore((state) => state.searchSongMetaData);
   const setSearchSongMetaData = useSelectedSongStore((state) => state.setSearchSongMetaData);
 
-  const setActiveSongListState = useSelectedSongStore((state) => state.activeSongListState);
+  const currentlySelectedSongList = useSelectedSongStore((state) => state.currentlySelectedSongList);
+
+  
+
   //on mount and unmount
   useEffect(() => {
 
@@ -115,9 +118,10 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
     var altered = old.slice();
     altered[index] = !altered[index];
 
-    setSelectedButtonList(altered);
+    console.log("selected: " + index + "state: " + selectedButtonList[index] +  " " + selectedButtonList.length);
 
-    //console.log("selected: " + index + "state: " + selectedButtonList[index] +  " " + selectedButtonList.length);
+    setSelectedButtonList(altered);
+    
   }
 
   async function setColumnState(index: number){
@@ -228,151 +232,30 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
             setInSearchModeRef={setInSearchMode}
           />
           
-          {/*
-          <Card variant='outlined' className='top_bar_songtable'>
-              
-              <div className='top_bar_content_songtable'>
-              <FormControl sx={{width: "8vw", marginRight: "1vw", marginLeft: "1vw", marginTop: "10px"}}>
-                <InputLabel id="simple-select-label">Filter</InputLabel>
-                <Select sx={{height: "4vh"}}
-                  labelId="simple-select-label"
-                  id="simple-select"
-                  value={search}
-                  label= "yes"
-                  onChange={handleSearchChange}
-                >
-                  <MenuItem value={SongSearchTypeState.Album}>{SongSearchTypeState.Album}</MenuItem>
-                  <MenuItem value={SongSearchTypeState.Genre}>{SongSearchTypeState.Genre}</MenuItem>
-                  <MenuItem value={SongSearchTypeState.Name}>{SongSearchTypeState.Name}</MenuItem>
-                </Select>
-              </FormControl>
-
-              <TextField id="searchfield" label="Search" variant="standard" />          
-              <Button disabled><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
-              <Button disabled><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
-              <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              <Button onClick={() => scrollToElementInTable(currentSong.id)}> <div style={{fontSize: FONTSCALE}}>Zoom To Active</div></Button>
-              <Button onClick={() => scrollToElementInTable(infoCardSongID)}> <div style={{fontSize: FONTSCALE}}>Zoom To Selected</div></Button>
-              <Button onClick={() => autoFocus === false ? setAutoFocus(true) : setAutoFocus(false)}> <div style={{fontSize: FONTSCALE}}> {autoFocus === false ? "Enable" : "Disable"} Autozoom</div> </Button>
-              <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              <Button disabled><div style={{fontSize: FONTSCALE}}> Force Reload Song List</div></Button>
-              
-              <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-              
-              <FormControl sx={{width: "8vw", marginRight: "1vw"}}>
-                <Button disabled onClick={(e) => {setAnchor(e.currentTarget), setDropDownState(true)}}>Columns <ArrowDropDownIcon/></Button>
-                <Menu anchorEl={anchor} open={dropDownState}>
-                 <MenuItem defaultChecked > <ListItemText primary="Name" /> </MenuItem>
-                 <MenuItem defaultChecked > <ListItemText primary="Name" /> </MenuItem>
-                 <MenuItem defaultChecked > <ListItemText primary="Name" /> </MenuItem>
-                </Menu>
-              </FormControl>
-
-              <Divider orientation="vertical" flexItem sx={{marginLeft: "-1.5vw", marginRight: "5px"}} />
-
-              <Button onClick={(e) => {setExpandHeaderState(!expandHeaderState)}}> <ArrowDropDownIcon/></Button>
-              
-              </div>
-              {isDisabled === true ? <LinearProgress/> : null
-                
-              }
-      
-
-          </Card>
-          */}
-          
           {isDisabled === false ? 
           <TableContainer className='table_container_songtable' id={"scrollable"} component={Paper} sx={{ maxHeight: (expandHeaderState == false ? "77.8vh" : "72.6vh"), width: "80vw"}} >
               <Table size='small' id={"musictable"} stickyHeader aria-label="table">
                   <TableHead id={"musictableheader"} >
                       <TableHeaderRow>
                         {ColumnEnumArray.map((val, index) => ( columnOn[index] === true ? <TableCell align="left">{val}</TableCell> : undefined))}
-                        {/*
-                          <TableCell>Select</TableCell>
-                          <TableCell>Playing</TableCell>
-                          <TableCell>Name</TableCell>
-                          <TableCell align="right">Length (Mins)</TableCell>
-                          <TableCell align="right">Artist</TableCell>
-                          <TableCell align="right">Genre</TableCell>
-                          <TableCell align="right">Bit Rate (kbps)</TableCell>
-                          <TableCell align="right">Internal ID</TableCell>
-                          */}
                       </TableHeaderRow>
                   </TableHead>
                   <TableBody>
               
                   {//https://stackoverflow.com/questions/54045094/use-buttonbase-for-ripple-effect-on-material-ui-tablerow
-                  inSearchMode == false ? sMetaData?.map((sMetaDataThis, index) => (
-                    
+                  currentlySelectedSongList?.map((sMetaDataThis, index) => (
                     <SongTableRow 
                       sMetaDataThisRef={sMetaDataThis}
                       indexRef={index}
                       columnOnRef={columnOn}
-                      currentSongRef={currentSong}
+                      currentSongRef={currentSong.id === index ? true : false}
                       selectedButtonStateRef={selectedButtonList[index]}
                       setSelectStatusRef={setSelectStatus}
                       selectFullDataInfoCardRef={selectFullDataInfoCard} 
                       selectedPlayDataFunctionRef={selectedPlayDataFunction}     
                       selectedRef={highlighted === index ? true : false}               
-                    />
-                    
-                    /*
-                      <CardActionArea className='row_songtable' id={"tablerow" + sMetaDataThis.id} key={"tablerow" + sMetaDataThis.id}  component={TableRow} sx={highlighted === index ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCard(sMetaDataThis)} 
-                      onDoubleClick=
-                      {(e) => {
-                        selectedPlayDataFunction(sMetaDataThis);
-                      }}
-                      > 
-                          {columnOn[0] === true ? <TableCell  component="th" scope="row">
-                            <SongToggleButton key={selectedButtonList[index].toString()} songID={index} setListStatus={setSelectStatus} selectedRef={selectedButtonList[index]}/>
-                          </TableCell> : undefined}
-                          
-                          {columnOn[1] === true ? <TableCell component="th" scope="row"> {currentSong.id === index ? <PlayCircleIcon/> : " "} </TableCell> : undefined}
-                          {columnOn[2] === true ? <TableCell  component="th" scope="row">{sMetaDataThis.name}</TableCell> : undefined}
-                          {columnOn[3] === true ? <TableCell align="left">{fmtMSS(sMetaDataThis.length)}</TableCell> : undefined}
-                          {columnOn[4] === true ? <TableCell align="left">{sMetaDataThis.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</TableCell> : undefined}
-                          {columnOn[5] === true ? <TableCell align="left">{sMetaDataThis.genre?.map((genre, index) => ( index === 0 ? genre : ", " + genre))}</TableCell> : undefined}
-                          {columnOn[6] === true ? <TableCell align="left">{Math.round(sMetaDataThis.bitrate)}</TableCell> : undefined}   
-                          {columnOn[7] === true ? <TableCell align="left">{Math.round(sMetaDataThis.id)}</TableCell> : undefined}   
-                      </CardActionArea>
-                    */
-
-                  )) :
-                  searchSongMetaData?.map((sMetaDataThis, index) => (
-                    <SongTableRow 
-                      sMetaDataThisRef={sMetaDataThis}
-                      indexRef={index}
-                      columnOnRef={columnOn}
-                      currentSongRef={currentSong}
-                      selectedButtonStateRef={selectedButtonList[index]}
-                      setSelectStatusRef={setSelectStatus}
-                      selectFullDataInfoCardRef={selectFullDataInfoCard} 
-                      selectedPlayDataFunctionRef={selectedPlayDataFunction}     
-                      selectedRef={highlighted === index ? true : false}               
-                    />
-
-                    /*
-                      <CardActionArea className='row_songtable' id={"tablerow" + sMetaDataThis.id} key={"tablerow" + sMetaDataThis.id}  component={TableRow} sx={highlighted === index ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCard(sMetaDataThis)} 
-                      onDoubleClick=
-                      {(e) => {
-                        selectedPlayDataFunction(sMetaDataThis);
-                      }}
-                      > 
-                          {columnOn[0] === true ? <TableCell  component="th" scope="row">
-                            <SongToggleButton key={selectedButtonList[index].toString()} songID={index} setListStatus={setSelectStatus} selectedRef={selectedButtonList[index]}/>
-                          </TableCell> : undefined}
-                          
-                          {columnOn[1] === true ? <TableCell component="th" scope="row"> {currentSong.id === index ? <PlayCircleIcon/> : " "} </TableCell> : undefined}
-                          {columnOn[2] === true ? <TableCell  component="th" scope="row">{sMetaDataThis.name}</TableCell> : undefined}
-                          {columnOn[3] === true ? <TableCell align="left">{fmtMSS(sMetaDataThis.length)}</TableCell> : undefined}
-                          {columnOn[4] === true ? <TableCell align="left">{sMetaDataThis.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</TableCell> : undefined}
-                          {columnOn[5] === true ? <TableCell align="left">{sMetaDataThis.genre?.map((genre, index) => ( index === 0 ? genre : ", " + genre))}</TableCell> : undefined}
-                          {columnOn[6] === true ? <TableCell align="left">{Math.round(sMetaDataThis.bitrate)}</TableCell> : undefined}   
-                          {columnOn[7] === true ? <TableCell align="left">{Math.round(sMetaDataThis.id)}</TableCell> : undefined}   
-                      </CardActionArea>
-                    */
-
-                  ))
+                    ></SongTableRow>
+                  )) 
 
 
                   }

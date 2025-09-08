@@ -36,7 +36,7 @@ export const BottomMusicImageHandler = () => {
     useEffect(() => {
     //called when the component is unmounted
     return () => {
-        console.log("UNMOUNTING BOTTOM THUMBNAIL");
+        //console.log("UNMOUNTING BOTTOM THUMBNAIL");
     };
     }, []);
 
@@ -87,7 +87,7 @@ export const BottomMusicImageHandler = () => {
         })();
 
         return () => { //needed to discard old lyrics if the user skips through multiple songs (which may cause multiple lyric requests at once)
-            console.log("DISCARDING IMAGE DATA (no need as this image is outdated), was for: " + currentSong.name);
+            //console.log("DISCARDING IMAGE DATA (no need as this image is outdated), was for: " + currentSong.name);
             abort = true;
         }
 
