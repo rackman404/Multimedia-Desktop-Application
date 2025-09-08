@@ -14,6 +14,7 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import CheckIcon from '@mui/icons-material/Check';
 import { SongToggleButton } from './SongToggleButton';
 import { SongTableTopBar } from './SongTableTopBar';
+import SongTableRow from './SongTableRow';
 
 /*
 const dataRowSX: SxProps = {
@@ -302,6 +303,20 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
               
                   {//https://stackoverflow.com/questions/54045094/use-buttonbase-for-ripple-effect-on-material-ui-tablerow
                   inSearchMode == false ? sMetaData?.map((sMetaDataThis, index) => (
+                    
+                    <SongTableRow 
+                      sMetaDataThisRef={sMetaDataThis}
+                      indexRef={index}
+                      columnOnRef={columnOn}
+                      currentSongRef={currentSong}
+                      selectedButtonStateRef={selectedButtonList[index]}
+                      setSelectStatusRef={setSelectStatus}
+                      selectFullDataInfoCardRef={selectFullDataInfoCard} 
+                      selectedPlayDataFunctionRef={selectedPlayDataFunction}     
+                      selectedRef={highlighted === index ? true : false}               
+                    />
+                    
+                    /*
                       <CardActionArea className='row_songtable' id={"tablerow" + sMetaDataThis.id} key={"tablerow" + sMetaDataThis.id}  component={TableRow} sx={highlighted === index ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCard(sMetaDataThis)} 
                       onDoubleClick=
                       {(e) => {
@@ -320,10 +335,23 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                           {columnOn[6] === true ? <TableCell align="left">{Math.round(sMetaDataThis.bitrate)}</TableCell> : undefined}   
                           {columnOn[7] === true ? <TableCell align="left">{Math.round(sMetaDataThis.id)}</TableCell> : undefined}   
                       </CardActionArea>
-                    
+                    */
 
                   )) :
                   searchSongMetaData?.map((sMetaDataThis, index) => (
+                    <SongTableRow 
+                      sMetaDataThisRef={sMetaDataThis}
+                      indexRef={index}
+                      columnOnRef={columnOn}
+                      currentSongRef={currentSong}
+                      selectedButtonStateRef={selectedButtonList[index]}
+                      setSelectStatusRef={setSelectStatus}
+                      selectFullDataInfoCardRef={selectFullDataInfoCard} 
+                      selectedPlayDataFunctionRef={selectedPlayDataFunction}     
+                      selectedRef={highlighted === index ? true : false}               
+                    />
+
+                    /*
                       <CardActionArea className='row_songtable' id={"tablerow" + sMetaDataThis.id} key={"tablerow" + sMetaDataThis.id}  component={TableRow} sx={highlighted === index ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCard(sMetaDataThis)} 
                       onDoubleClick=
                       {(e) => {
@@ -342,7 +370,7 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                           {columnOn[6] === true ? <TableCell align="left">{Math.round(sMetaDataThis.bitrate)}</TableCell> : undefined}   
                           {columnOn[7] === true ? <TableCell align="left">{Math.round(sMetaDataThis.id)}</TableCell> : undefined}   
                       </CardActionArea>
-                    
+                    */
 
                   ))
 
