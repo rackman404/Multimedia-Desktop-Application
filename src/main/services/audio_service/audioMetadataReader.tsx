@@ -65,7 +65,7 @@ export class AudioMetadataReader{
     }
 
     //temp
-    async readMetaData(id:number, file_path: string): Promise<SongMetaData>{
+    async readMetaData(id:number, file_path: string): Promise<SongMetaData | null>{
         var sMetadata = {} as SongMetaData;
         var osStats = fs.statSync(file_path);
 
@@ -129,7 +129,8 @@ export class AudioMetadataReader{
         */
 
     } catch (error: any) {
-        console.error('Error parsing metadata:', error.message);
+        console.error('Error parsing metadata (readMetaData):', error.message);
+        return null;
     }
 
     return sMetadata;
@@ -233,7 +234,7 @@ export class AudioMetadataReader{
         
     }
 
-    async readMetaDataSimple(id:number, file_path: string): Promise<SongMetaDataSimple>{
+    async readMetaDataSimple(id:number, file_path: string): Promise<SongMetaDataSimple | null>{
         var sMetadata = {} as SongMetaDataSimple;
         var osStats = fs.statSync(file_path);
 
@@ -268,6 +269,7 @@ export class AudioMetadataReader{
 
         } catch (error: any) {
             console.error('Error parsing metadata:', error.message);
+            return null;
         }
 
         return sMetadata;   

@@ -87,7 +87,13 @@ export class AudioManager{
 
             try{
                 if (folderDetected != true){
-                    datas.push(await this.audioMetadata.readMetaDataSimple(id, path.join(recursedPath, songsPath[i])));
+                    var dataNew = await this.audioMetadata.readMetaDataSimple(id, path.join(recursedPath, songsPath[i]));
+                    if (dataNew != null){
+                        datas.push(dataNew);
+                    }
+                    else{
+                        console.log("recursive song metadata gathering ignored:" + path.join(recursedPath, songsPath[i]));
+                    }
                 }
                 else{
                     id--;//must decrement id when a folder is detected to ensure that the id count doesn't skip 1 everytime a folder is detected
@@ -146,11 +152,16 @@ export class AudioManager{
     }
 
     async getExternalLyrics(song_path: string): Promise<SongLyricAPIData | undefined>{
-        var songData: SongMetaDataSimple
+        var songData: SongMetaDataSimple | null;
         var lyrics: SongLyricAPIData
 
         songData = await this.audioMetadata.readMetaDataSimple(-1, song_path);
-        lyrics = await this.audioLyrics.requestLyricData(songData);
+        if (songData != null){
+            lyrics = await this.audioLyrics.requestLyricData(songData);
+        }
+        else{
+            return undefined;
+        }
 
         return lyrics;
     }
