@@ -51,7 +51,7 @@ export class AudioBroker {
       case IPCMethodAPI.AudioTwoWayIPC.getAllMetadataSimple:
         console.log("Sending all simple audio metadata");
         
-        return this.audioManager.getAllSongDataSimple();
+        return this.audioManager.getAllSongDataSimple(arg.content[0]);
 
         break;
       case IPCMethodAPI.AudioTwoWayIPC.getSelectedMetadataFull:
@@ -70,19 +70,33 @@ export class AudioBroker {
       case IPCMethodAPI.AudioTwoWayIPC.externalTranslatedLyrics:
         console.log("getting translated lyrics");
           
-          return this.audioManager.getExternalTranslatedLyrics(arg.content[0]);
+        return this.audioManager.getExternalTranslatedLyrics(arg.content[0]);
 
-          break;
+      break;
 
       case IPCMethodAPI.AudioTwoWayIPC.externalDeepLStats:
         console.log("getting deepL statistics");
           
-          return this.audioManager.getDeepLStatistics();
+        return this.audioManager.getDeepLStatistics();
 
-          break;
+      break;
+
+      case IPCMethodAPI.AudioTwoWayIPC.searchAllSongsSimple:
+        console.log("searching all songs list: " + arg.content.toString());
+          
+        return this.audioManager.searchAllSongsSimple(arg.content[0], arg.content[1]);
+
+      break;
+
+      case IPCMethodAPI.AudioTwoWayIPC.searchPlaylistSongsSimple:
+        console.log("searching specified playlist list");
+          
+        return this.audioManager.searchPlaylistSongsSimple(arg.content[0], arg.content[1]);
+
+      break;
 
       default:
-        console.log("ERROR: AUDIO BROKER (INVALID RESPONSE)");
+        console.log("ERROR: AUDIO BROKER (INVALID RESPONSE): " + arg);
 
     }
   }

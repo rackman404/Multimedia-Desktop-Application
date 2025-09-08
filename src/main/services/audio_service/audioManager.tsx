@@ -4,10 +4,11 @@ import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
-import { DeepLStatistics, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple } from "../../../types";
+import { DeepLStatistics, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
 import { CONFIGFILE, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
 import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
 import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
+import { AudioSearch } from "./filters/audioSearch";
 
 type MetaDatas = {
     full: SongMetaData[],
@@ -19,6 +20,7 @@ export class AudioManager{
     audioMetadata: AudioMetadataReader;
     audioLyrics: AudioWebLyricReader;
     audioTranslator: AudioDeepLTranslator;
+    audioSearch: AudioSearch;
 
     fileMusicPath: string;
 
@@ -27,14 +29,16 @@ export class AudioManager{
 
     //session metadata stores
     mainSongMetaData: SongMetaDataSimple[] | undefined
-    searchSongMetaData: SongMetaDataSimple[] | undefined
+    searchMainSongMetaData: SongMetaDataSimple[] | undefined
     playlistSongMetaData: SongMetaDataSimple[] | undefined
+    playlistSearchSongMetaData: SongMetaDataSimple[] | undefined
     
     constructor() {
         this.broker = new AudioBroker(this);
         this.audioMetadata = new AudioMetadataReader();
         this.audioLyrics = new AudioWebLyricReader();
         this.audioTranslator = new AudioDeepLTranslator();
+        this.audioSearch = new AudioSearch();
 
         if (app.isPackaged == false){ //developmental file path
             this.fileMusicPath = __dirname;
@@ -102,16 +106,20 @@ export class AudioManager{
 
     //------- public methods
 
-    
-
-    async getAllSongDataSimple(): Promise<SongMetaDataSimple[] | undefined>{
-        var songsPath = fs.readdirSync(this.fileMusicPath);
-
+    async getAllSongDataSimple(refresh: boolean): Promise<SongMetaDataSimple[] | undefined>{
         var songData = [] as SongMetaDataSimple[];
 
-        songData = await this._recursiveSearchSimple(songData, this.fileMusicPath, 0);
+        if (this.mainSongMetaData == undefined || refresh == true){
+            var songsPath = fs.readdirSync(this.fileMusicPath);
+            songData = await this._recursiveSearchSimple(songData, this.fileMusicPath, 0);
 
-        return songData;
+            this.mainSongMetaData = songData;
+
+            return songData;
+        }
+        else{
+            return this.mainSongMetaData;
+        }
     }
 
     /* unused?
@@ -181,4 +189,16 @@ export class AudioManager{
         return characters;
     }
 
+    //song search
+
+    async searchAllSongsSimple(searchString: string, searchType: SongSearchTypeState): Promise<SongMetaDataSimple[] | undefined>{
+        var list = await this.audioSearch.searchSongs(searchString, searchType, this.mainSongMetaData);
+        this.searchMainSongMetaData = list;
+        return list;
+    }
+
+    async searchPlaylistSongsSimple(searchString: string, searchType: SongSearchTypeState): Promise<SongMetaDataSimple[] | undefined>{ //implement when playlists are implemented
+
+        return undefined;
+    }
 }

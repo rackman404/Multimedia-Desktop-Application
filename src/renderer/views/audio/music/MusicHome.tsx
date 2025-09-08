@@ -3,17 +3,18 @@ import './MusicHome.css';
 import { SongTable } from '../../../components/regular/Audio/Music/SongTable';
 import { SongInfoCard } from '../../../components/regular/Audio/Music/SongInfoCard';
 import { SongEditCard } from '../../../components/regular/Audio/Music/SongEditCard';
-import { SongMetaData, SongMetaDataSimple } from '../../../../types';
+import { ActiveSongListState, SongMetaData, SongMetaDataSimple } from '../../../../types';
 import { useSelectedSongStore } from '../../../state_stores/MusicStateStores';
 import { SongLyricCard } from '../../../components/regular/Audio/Music/SongLyricCard';
 import { RegularButton } from '../../../elements/CustomButtons';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Card, Paper } from '@mui/material';
+import { IPCMethodAPI, ServicesEnum } from '../../../../typesIPC';
 
 export const Layout = () => {
 
 
-    const [metaData, setMetaData] = useState<SongMetaDataSimple[] | null>(null);
+    //const [metaData, setMetaData] = useState<SongMetaDataSimple[] | null>(null);
 
     const [selectedInfoCardMetaData, setSelectedInfoCardMetaData] = useState<SongMetaDataSimple>({
         name: "NO MUSIC",
@@ -28,6 +29,7 @@ export const Layout = () => {
         album: ''
     });
 
+    const metaData = useSelectedSongStore((state) => state.allSongMetaData);
     const selectedPlayMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
     const setSelectedPlayMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
     const setAllMetaData = useSelectedSongStore((state) => state.setAllSongMetaData);
@@ -35,15 +37,17 @@ export const Layout = () => {
     //https://stackoverflow.com/questions/65827305/passing-a-component-to-the-usestate-hook
     const [secondaryCard, setSecondaryCard] = useState(() => <SongLyricCard key={selectedPlayMetaData.name} sMetaData={selectedPlayMetaData}/>);
 
-
+    const setActiveSongListState = useSelectedSongStore((state) => state.setActiveSongListState);
 
     useEffect(() => {//initial load
+        setActiveSongListState(ActiveSongListState.Main);
+
         (async () => {
             console.log("LOADING MUSIC DATA");
-            const result = await window.electron.ipcRenderer.invoke('audio', ["get_all_metadata_simple"]);
-            setMetaData(result);         
+            const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.getAllMetadataSimple, content: [false]});
+            //setMetaData(result);         
             setAllMetaData(result);
-    })();
+        })();
         
     }, []); 
 

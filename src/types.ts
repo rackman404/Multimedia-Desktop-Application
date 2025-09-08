@@ -127,8 +127,9 @@ export type DeepLStatistics = {
 //for use by song table view selection ---
 export enum ActiveSongListState {
     Main,
-    Search,
-    Playlist
+    SearchMain,
+    Playlist,
+    SearchPlaylist
 }
 
 export enum SongSearchTypeState {

@@ -1,10 +1,12 @@
 import { Card, FormControl, InputLabel, Select, TextField, Button, Divider, ListItemText, LinearProgress, SelectChangeEvent, MenuItem, Menu, Checkbox, Popper, Box } from "@mui/material";
-import { ColumnEnumArray, SearchEnumArray, SongColumnTypes, SongSearchTypeState } from "../../../../../types";
+import { ActiveSongListState, ColumnEnumArray, SearchEnumArray, SongColumnTypes, SongMetaDataSimple, SongSearchTypeState } from "../../../../../types";
 import { useState } from "react";
 import './SongTable.css';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import { useSelectedSongStore } from "../../../../state_stores/MusicStateStores";
+import { IPCMethodAPI, ServicesEnum } from "../../../../../typesIPC";
 
 type SongTableTopBarProps = { //constructor variables
   scrollToElementInTableRef: (id: number) => void
@@ -23,32 +25,113 @@ type SongTableTopBarProps = { //constructor variables
   
   setColumnOnRef: (index: number) => void
   columnOnRef: boolean[]
+
+  setTableDisabledRef: (state: boolean) => void
+
+  isPlaylistTableRef: boolean
+
+  inSearchModeRef: boolean
+  setInSearchModeRef: (state: boolean) => void
 };
 
 const FONTSCALE = "0.75vw";
 
-export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, infoCardSongIDRef, isDisabledRef, setAutoFocusRef, autoFocusRef, expandHeaderStateRef, setExpandHeaderStateRef, selectSongsRef, setColumnOnRef, columnOnRef}: SongTableTopBarProps) => { 
+export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, infoCardSongIDRef, isDisabledRef, setAutoFocusRef, autoFocusRef, expandHeaderStateRef, setExpandHeaderStateRef, selectSongsRef, setColumnOnRef, columnOnRef, setTableDisabledRef, isPlaylistTableRef, inSearchModeRef, setInSearchModeRef}: SongTableTopBarProps) => { 
     const[search, setSearch] = useState(SongSearchTypeState.Name);
 
     const[anchor, setAnchor] = useState<any>(null);
-    const[dropDownState, setDropDownState] = useState<boolean>(false);
+    const[dropDownState, setDropDownState] = useState<boolean>(false); 
 
+    const[refreshButtonState, setRefreshButtonState] = useState<boolean>(false);
+    const[searchButtonState, setSearchButtonState] = useState<boolean>(false);
+
+    const [searchValue, setSearchValue] = useState('');
 
     const handleSearchChange = (event: SelectChangeEvent) => {
         setSearch(event.target.value as SongSearchTypeState);
     };
 
+    const setSelectedPlayMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
+
+    const setAllMetaData = useSelectedSongStore((state) => state.setAllSongMetaData);
+    const setActiveSongListState = useSelectedSongStore((state) => state.setActiveSongListState);
+    
+    async function RefreshMetaData(){
+        ResetSearch();
+        
+        setAllMetaData(null);
+        setRefreshButtonState(true);
+        setTableDisabledRef(true);
+        if (isPlaylistTableRef == false){
+            const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.getAllMetadataSimple, content: [true]});  
+            setAllMetaData(result);
+        }
+        else{
+
+        }
+        setTableDisabledRef(false);     
+        setRefreshButtonState(false);
+
+    }
+
+    const setSearchSongMetaData = useSelectedSongStore((state) => state.setSearchSongMetaData);
+    async function SearchMetadata(){
+        setSearchButtonState(true);
+        setTableDisabledRef(true);
+        if (isPlaylistTableRef == false){
+            const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.searchAllSongsSimple, content: [searchValue, search]});  
+            setSearchSongMetaData(result);
+            setInSearchModeRef(true);
+            setActiveSongListState(ActiveSongListState.SearchMain);
+
+            setSelectedPlayMetaData({
+                metadataFormat: "",
+                id: 0,
+                name: "",
+                length: 0,
+                artist: [],
+                album: "",
+                genre: [],
+                playCount: 0,
+                bitrate: 0,
+                songRawPath: ""
+            });
+        }
+        else{
+            //TO DO
+        }
+        setTableDisabledRef(false);     
+        setSearchButtonState(false);
+    }
+
+    async function ResetSearch(){
+        setSearchSongMetaData([] as SongMetaDataSimple[]);
+        setActiveSongListState(ActiveSongListState.Main);
+        setInSearchModeRef(false);
+
+        setSelectedPlayMetaData({
+            metadataFormat: "",
+            id: 0,
+            name: "",
+            length: 0,
+            artist: [],
+            album: "",
+            genre: [],
+            playCount: 0,
+            bitrate: 0,
+            songRawPath: ""
+        });
+    }
+
     return (
             <Card variant='outlined' className={expandHeaderStateRef === false ? 'top_bar_songtable' : 'top_bar_songtable_expanded'}>
               <div className='top_bar_content_songtable'>
                 <div className='top_bar_content_songtable_row'>
-                    <FormControl sx={{width: "8vw", marginRight: "1vw", marginLeft: "1vw", marginTop: "10px"}}>
-                        <InputLabel id="simple-select-label">Filter</InputLabel>
-                        <Select sx={{height: "4vh"}}
+                    <FormControl  variant="standard" sx={{width: "8vw", marginRight: "1vw", marginLeft: "1vw"}}>
+                        <InputLabel >Filter By:</InputLabel>
+                        <Select sx={{height: "3.5vh"}}
                         labelId="simple-select-label"
-                        id="simple-select"
                         value={search}
-                        label= "yes"
                         onChange={handleSearchChange}
                         >
                             {
@@ -57,15 +140,19 @@ export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, in
                         </Select>
                     </FormControl>
 
-                    <TextField id="searchfield" label="Search" variant="standard" />          
-                    <Button disabled><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
-                    <Button disabled><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
+                    <TextField value={searchValue} id="searchfield" label="Search" variant="standard" onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                    {
+                        setSearchValue(event.target.value);
+                    }}
+                    />          
+                    <Button disabled={searchButtonState} onClick={() => SearchMetadata()}><div style={{fontSize: FONTSCALE}}>Submit</div></Button>
+                    <Button onClick={() => ResetSearch()} disabled={searchButtonState}><div style={{fontSize: FONTSCALE}}>Reset Search</div></Button>
                     <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
                     <Button onClick={() => scrollToElementInTableRef(currentSongIDRef)}> <div style={{fontSize: FONTSCALE}}>Zoom To Active</div></Button>
                     <Button onClick={() => scrollToElementInTableRef(infoCardSongIDRef)}> <div style={{fontSize: FONTSCALE}}>Zoom To Selected</div></Button>
                     <Button onClick={() => autoFocusRef === false ? setAutoFocusRef(true) : setAutoFocusRef(false)}> <div style={{fontSize: FONTSCALE}}> {autoFocusRef === false ? "Enable" : "Disable"} Autozoom</div> </Button>
                     <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
-                    <Button disabled><div style={{fontSize: FONTSCALE}}> Force Reload Song List</div></Button>
+                    <Button disabled={refreshButtonState} onClick={() => RefreshMetaData()}><div style={{fontSize: FONTSCALE}}> Refresh Songs </div></Button>
                     
                     <Divider orientation="vertical" flexItem sx={{marginLeft: "5px", marginRight: "5px"}} />
                     

@@ -52,7 +52,7 @@ export const Layout = () => {
     }
 
     async function getDeepLStatistics(){
-        setDeepLStatistics (await window.electron.ipcRenderer.invoke(ServicesEnum.audio, ["external_deepl_stats"]) as DeepLStatistics);
+        setDeepLStatistics (await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.externalDeepLStats, content: [""]}));
     }
 
     async function setNetwork(state: boolean){

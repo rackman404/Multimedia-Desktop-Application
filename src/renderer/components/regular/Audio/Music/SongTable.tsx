@@ -77,6 +77,24 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
   //shared by table content and top bar column states
   const[columnOn, setColumnOn] = useState([] as boolean[]);
 
+  const [inSearchMode, setInSearchMode] = useState<boolean>(false);
+
+  const searchPlayListSongMetaData = useSelectedSongStore((state) => state.searchPlayListSongMetaData);
+  const setSearchPlayListSongMetaData = useSelectedSongStore((state) => state.setSearchplayListSongMetaData);
+  const searchSongMetaData = useSelectedSongStore((state) => state.searchSongMetaData);
+  const setSearchSongMetaData = useSelectedSongStore((state) => state.setSearchSongMetaData);
+
+  const setActiveSongListState = useSelectedSongStore((state) => state.activeSongListState);
+  //on mount and unmount
+  useEffect(() => {
+
+    //called when the component is unmounted
+    return () => {
+      setSearchPlayListSongMetaData(null);
+      setSearchSongMetaData(null);
+    };
+  }, []);
+
   async function selectFullDataInfoCard(rowData: SongMetaDataSimple){
     //const result = await window.electron.ipcRenderer.invoke('audio', ["get_metadata_full", rowData.id, rowData.songRawPath]);
     //setHighlighted(rowData.id);
@@ -191,7 +209,7 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
   return (
       <div className='body_songtable'>
 
-          <SongTableTopBar 
+          <SongTableTopBar  
             scrollToElementInTableRef={scrollToElementInTable} 
             currentSongIDRef={currentSong.id} 
             infoCardSongIDRef={infoCardSongID} 
@@ -203,6 +221,10 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
             selectSongsRef={selectSongs}
             setColumnOnRef={setColumnState}
             columnOnRef={columnOn}
+            setTableDisabledRef={setDisabled}
+            isPlaylistTableRef={isPlaylistTable}
+            inSearchModeRef={inSearchMode}
+            setInSearchModeRef={setInSearchMode}
           />
           
           {/*
@@ -279,10 +301,7 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                   <TableBody>
               
                   {//https://stackoverflow.com/questions/54045094/use-buttonbase-for-ripple-effect-on-material-ui-tablerow
-                  sMetaData ? sMetaData.map((sMetaDataThis, index) => (
-                    
-                    
-                    
+                  inSearchMode == false ? sMetaData?.map((sMetaDataThis, index) => (
                       <CardActionArea className='row_songtable' id={"tablerow" + sMetaDataThis.id} key={"tablerow" + sMetaDataThis.id}  component={TableRow} sx={highlighted === index ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCard(sMetaDataThis)} 
                       onDoubleClick=
                       {(e) => {
@@ -303,7 +322,31 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
                       </CardActionArea>
                     
 
-                  )) : null
+                  )) :
+                  searchSongMetaData?.map((sMetaDataThis, index) => (
+                      <CardActionArea className='row_songtable' id={"tablerow" + sMetaDataThis.id} key={"tablerow" + sMetaDataThis.id}  component={TableRow} sx={highlighted === index ? dataRowSelectedSX : dataRowSX } onClick={() => selectFullDataInfoCard(sMetaDataThis)} 
+                      onDoubleClick=
+                      {(e) => {
+                        selectedPlayDataFunction(sMetaDataThis);
+                      }}
+                      > 
+                          {columnOn[0] === true ? <TableCell  component="th" scope="row">
+                            <SongToggleButton key={selectedButtonList[index].toString()} songID={index} setListStatus={setSelectStatus} selectedRef={selectedButtonList[index]}/>
+                          </TableCell> : undefined}
+                          
+                          {columnOn[1] === true ? <TableCell component="th" scope="row"> {currentSong.id === index ? <PlayCircleIcon/> : " "} </TableCell> : undefined}
+                          {columnOn[2] === true ? <TableCell  component="th" scope="row">{sMetaDataThis.name}</TableCell> : undefined}
+                          {columnOn[3] === true ? <TableCell align="left">{fmtMSS(sMetaDataThis.length)}</TableCell> : undefined}
+                          {columnOn[4] === true ? <TableCell align="left">{sMetaDataThis.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</TableCell> : undefined}
+                          {columnOn[5] === true ? <TableCell align="left">{sMetaDataThis.genre?.map((genre, index) => ( index === 0 ? genre : ", " + genre))}</TableCell> : undefined}
+                          {columnOn[6] === true ? <TableCell align="left">{Math.round(sMetaDataThis.bitrate)}</TableCell> : undefined}   
+                          {columnOn[7] === true ? <TableCell align="left">{Math.round(sMetaDataThis.id)}</TableCell> : undefined}   
+                      </CardActionArea>
+                    
+
+                  ))
+
+
                   }
                   </TableBody>
               </Table>

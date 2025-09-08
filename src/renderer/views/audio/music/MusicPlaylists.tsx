@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './MusicPlaylists.css';
-import { SongMetaDataSimple } from '../../../../types';
+import { ActiveSongListState, SongMetaDataSimple } from '../../../../types';
 import { useSelectedSongStore } from '../../../state_stores/MusicStateStores';
 import { SongLyricCard } from '../../../components/regular/Audio/Music/SongLyricCard';
 import { SongInfoCard } from '../../../components/regular/Audio/Music/SongInfoCard';
@@ -28,6 +28,12 @@ export const Layout = () => {
     const [refreshState, setRefreshState] = useState(false);
     //https://stackoverflow.com/questions/65827305/passing-a-component-to-the-usestate-hook
     const [secondaryCard, setSecondaryCard] = useState(() => <SongLyricCard key={selectedPlayMetaData.name} sMetaData={selectedPlayMetaData}/>);
+
+    const setActiveSongListState = useSelectedSongStore((state) => state.setActiveSongListState);
+
+    useEffect(() => {//initial load
+          setActiveSongListState(ActiveSongListState.Playlist);
+    });
 
     return (
         <div className='content_musicplaylists'>

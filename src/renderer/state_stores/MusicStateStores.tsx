@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { SongLyricAPIData, SongMetaData, SongMetaDataSimple } from '../../types'
+import { ActiveSongListState, SongLyricAPIData, SongMetaData, SongMetaDataSimple } from '../../types'
 
 import placeholderImage from '../../../assets/music_no_thumbnail.png';
 
@@ -11,10 +11,16 @@ interface ISelectedSongState {
   setAllSongMetaData: (newAllSongMetaData: SongMetaDataSimple[] | null) => void
 
   searchSongMetaData: SongMetaDataSimple[] | null
-  setSearchSongMetaData: (searchSongMetaData: SongMetaDataSimple[] | null) => void
+  setSearchSongMetaData: (newSearchSongMetaData: SongMetaDataSimple[] | null) => void
 
   playListSongMetaData: SongMetaDataSimple[] | null
-  setPlayListSongMetaData: (playListSongMetaData: SongMetaDataSimple[] | null) => void
+  setPlayListSongMetaData: (newPlayListSongMetaData: SongMetaDataSimple[] | null) => void
+
+  searchPlayListSongMetaData: SongMetaDataSimple[] | null
+  setSearchplayListSongMetaData: (newSearchPlayListSongMetaData: SongMetaDataSimple[] | null) => void
+
+  activeSongListState: ActiveSongListState
+  setActiveSongListState: (newActiveSongListState: ActiveSongListState) => void
 
   playState: boolean
   setPlayState: (newPlayState: boolean) => void
@@ -77,6 +83,11 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
   setSearchSongMetaData: (newSearchSongMetaData) =>set((state) => ({ searchSongMetaData: newSearchSongMetaData })),
   playListSongMetaData: null, 
   setPlayListSongMetaData: (newPlayListSongMetaData) =>set((state) => ({ playListSongMetaData: newPlayListSongMetaData })),
+  searchPlayListSongMetaData: null, 
+  setSearchplayListSongMetaData: (newSearchPlayListSongMetaData) =>set((state) => ({ searchPlayListSongMetaData: newSearchPlayListSongMetaData })),
+
+  activeSongListState: ActiveSongListState.Main, 
+  setActiveSongListState: (newActiveSongListState) =>set((state) => ({ activeSongListState: newActiveSongListState })),
 
   shuffleState: false, 
   setShuffleState: (newshuffleState) =>set((state) => ({ shuffleState: newshuffleState })),

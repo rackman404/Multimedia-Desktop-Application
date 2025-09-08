@@ -20,7 +20,11 @@ export namespace IPCMethodAPI{
         getSelectedMetadataFull,
         externalLyrics,
         externalTranslatedLyrics,
-        externalDeepLStats
+        externalDeepLStats,
+
+        //song search
+        searchAllSongsSimple,
+        searchPlaylistSongsSimple
     }
 
     export enum DiscordOneWayIPC {
@@ -57,6 +61,6 @@ export type IPCServicesMessageReturnInterface = {
 export enum ServicesEnum {
     settings = 'settings',
     audio = 'audio',
-    discord = 'ipc-example',
+    discord = 'discord',
     ipcExample = 'ipc-example',
 }

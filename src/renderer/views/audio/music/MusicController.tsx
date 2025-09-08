@@ -4,7 +4,7 @@ import './../../../App.css';
 import { SongTable } from '../../../components/regular/Audio/Music/SongTable';
 import { SongInfoCard } from '../../../components/regular/Audio/Music/SongInfoCard';
 import { SongEditCard } from '../../../components/regular/Audio/Music/SongEditCard';
-import { SongMetaData } from '../../../../types';
+import { ActiveSongListState, SongMetaData } from '../../../../types';
 import { BottomMusicControl } from '../../../components/static/Audio/Music/BottomMusicControl';
 import { Outlet, useNavigate } from 'react-router-dom';
 import {useSelectedSongStore } from '../../../state_stores/MusicStateStores';
@@ -23,7 +23,12 @@ export const Layout = () => {
     const selectedPlaySongMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
     const setSelectedPlaySongMetaData = useSelectedSongStore((state) => state.setSelectedPlaySongMetaData);
 
+    const activeSongListState = useSelectedSongStore((state) => state.activeSongListState);
+
     const allSongMetaData = useSelectedSongStore((state) => state.allSongMetaData);
+    const searchSongMetaData = useSelectedSongStore((state) => state.searchSongMetaData);
+    const playlistSongMetaData = useSelectedSongStore((state) => state.playListSongMetaData);
+    const searchPlayListSongMetaData = useSelectedSongStore((state) => state.searchPlayListSongMetaData);
 
     const trackObject = useSelectedSongStore((state) => state.currentPlayer);
     const setTrackObject = useSelectedSongStore((state) => state.setCurrentPlayer);
@@ -32,7 +37,7 @@ export const Layout = () => {
     const fullscreenState = useSelectedSongStore((state) => state.fullscreenState);
     const setFullscreenState = useSelectedSongStore((state) => state.setFullscreenState);
 
-    const [fullscreenComponent, setFullscreenComponent] = useState<any>();
+    //const [fullscreenComponent, setFullscreenComponent] = useState<any>();
 
     /*
     useEffect(() => {
@@ -86,11 +91,26 @@ export const Layout = () => {
         }
         else if (useSelectedSongStore.getState().shuffleState == true){
             console.log('Finished! shuffle state is:' + useSelectedSongStore.getState().shuffleState); // unsure why shuffle bool value is delayed by 1 song unless we get it directly
-            if (allSongMetaData != null){
-            var num = Math.floor(Math.random() * allSongMetaData.length - 1);
-            console.log('Shuffling song, new song id is: ' + num);
-                setSelectedPlaySongMetaData(allSongMetaData[num])
+            
+            switch (activeSongListState) {
+                case ActiveSongListState.Main:
+                    if (allSongMetaData != null){
+                        var num = Math.floor(Math.random() * allSongMetaData.length - 1);
+                        console.log('Shuffling song, new song id is: ' + num);
+                            setSelectedPlaySongMetaData(allSongMetaData[num])
+                    }
+                    break;
+                case ActiveSongListState.SearchMain:
+                    if (searchSongMetaData != null){
+                        var num = Math.floor(Math.random() * searchSongMetaData.length - 1);
+                        console.log('Shuffling song, new song id is: ' + num);
+                            setSelectedPlaySongMetaData(searchSongMetaData[num])
+                    }
+                    break;
+                default:
+                    break;
             }
+            
         }
         else{
             nextSong();
@@ -180,27 +200,53 @@ export const Layout = () => {
     }
 
     function nextSong(){
-        if (allSongMetaData != null){
-            if ((selectedPlaySongMetaData.id + 1) < allSongMetaData.length ){
-                console.log((selectedPlaySongMetaData.id + 1) + " " + allSongMetaData[selectedPlaySongMetaData.id].name);
-                setSelectedPlaySongMetaData(allSongMetaData[selectedPlaySongMetaData.id + 1]);
+        var list = null;
+        switch (activeSongListState) {
+            case ActiveSongListState.Main:
+                list = allSongMetaData;
+                break;
+            case ActiveSongListState.SearchMain:
+                list = searchSongMetaData;
+                break;
+            default:
+                break;
+        }
+
+        if (list != null && selectedPlaySongMetaData.id < list.length){
+            if ((selectedPlaySongMetaData.id + 1) < list.length ){
+                console.log((selectedPlaySongMetaData.id + 1) + " " + list[selectedPlaySongMetaData.id].name);
+                setSelectedPlaySongMetaData(list[selectedPlaySongMetaData.id + 1]);
             }
             else{
                 setPlayState(false);
                 setTrackObject(null);
+                Howler.unload();
             }
 
         }
     }
 
     function prevSong(){
-        if (allSongMetaData != null){
-            if ((selectedPlaySongMetaData.id - 1) != -1 ){
-                console.log((selectedPlaySongMetaData.id - 1) + " " + allSongMetaData[selectedPlaySongMetaData.id].name);
-                setSelectedPlaySongMetaData(allSongMetaData[selectedPlaySongMetaData.id - 1]);
+        var list = null;
+        switch (activeSongListState) {
+            case ActiveSongListState.Main:
+                list = allSongMetaData;
+                break;
+            case ActiveSongListState.SearchMain:
+                list = searchSongMetaData;
+                break;
+            default:
+                break;
+        }
+
+        if (list != null && selectedPlaySongMetaData.id < list.length){
+            if ((selectedPlaySongMetaData.id - 1) != -1){
+                console.log((selectedPlaySongMetaData.id - 1) + " " + list[selectedPlaySongMetaData.id].name);
+                setSelectedPlaySongMetaData(list[selectedPlaySongMetaData.id - 1]);
             }
             else{
                 setPlayState(false);
+                Howler.unload();
                 setTrackObject(null);
             }
 
