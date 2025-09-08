@@ -93,6 +93,7 @@ export class AudioManager{
                     }
                     else{
                         console.log("recursive song metadata gathering ignored:" + path.join(recursedPath, songsPath[i]));
+                        id--;
                     }
                 }
                 else{
