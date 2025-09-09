@@ -14,7 +14,7 @@ export class UtilityBroker {
   }
 
   eventOn(event: Electron.IpcMainEvent, arg: IPCServicesMessageInterface){
-    console.log("handling settings message event from broker; arg: " + arg);
+    console.log("handling settings message event from broker; arg: ");
 
     switch(arg.service){
       case IPCMethodAPI.UtilityOneWayIPC.placeholder:
@@ -26,7 +26,7 @@ export class UtilityBroker {
   }
 
   eventHandle(event: Electron.IpcMainInvokeEvent, arg: IPCServicesMessageInterface){
-    console.log("handling utility reply event from broker; args: " + arg);
+    //console.log("handling utility reply event from broker; args: " + arg);
 
     switch(arg.service){
       case IPCMethodAPI.UtilityTwoWayIPC.imgStringToThumbnail: 

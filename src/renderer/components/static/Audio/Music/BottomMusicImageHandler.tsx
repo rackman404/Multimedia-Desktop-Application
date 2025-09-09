@@ -41,7 +41,7 @@ export const BottomMusicImageHandler = () => {
     }, []);
 
     useEffect(() => {
-        var abort = false;
+        //var abort = false;
         (async () => {
             if (currentSong.songRawPath != ""){
                 setThumbnailString("");
@@ -50,9 +50,19 @@ export const BottomMusicImageHandler = () => {
                 //console.log("cover image" +  sMetaData?.coverImage);
                 //console.log(result);
 
-                var cImg = placeholderImage;
 
-               
+                var cImg = placeholderImage;
+                if(result.coverImage != null){
+                    cImg = await window.electron.ipcRenderer.invoke(ServicesEnum.utility, {service: IPCMethodAPI.UtilityTwoWayIPC.imgStringToThumbnail, content: [result.coverImage]});
+                    
+                    //console.log('data:' + resultFull.coverImageFormat + ';base64,'+ img);
+                    //img = window.btoa(img);
+                    cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
+
+                    setThumbnailString(cImg);
+                }
+
+                /* old method (without using multithreaded backend)
                 if(result.coverImage != null){
                     cImg = await _arrayBufferToBase64(result.coverImage.data);
                     cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
@@ -66,6 +76,7 @@ export const BottomMusicImageHandler = () => {
                 else{
                     setThumbnailString(placeholderImage);
                 }
+                */
 
                 /* old
                 var cImg = placeholderImage;
@@ -80,7 +91,8 @@ export const BottomMusicImageHandler = () => {
         width="100%"
         height="100%"
         src= {cImg}
-        alt="Song Thumbnail Image"  
+        alt="Song Thumbnail Image"
+        loading="lazy"  
         style={{objectFit: "contain", animation: "fadeIn 0.50s"}}
                 />);
             }
@@ -88,7 +100,7 @@ export const BottomMusicImageHandler = () => {
 
         return () => { //needed to discard old lyrics if the user skips through multiple songs (which may cause multiple lyric requests at once)
             //console.log("DISCARDING IMAGE DATA (no need as this image is outdated), was for: " + currentSong.name);
-            abort = true;
+           // abort = true;
         }
 
         

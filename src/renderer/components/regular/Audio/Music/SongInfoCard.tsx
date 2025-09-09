@@ -55,6 +55,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
   //NOTE THIS SHOULD BE TEMPORARY; PROCESSING IMAGE INTO BASE64 SHOULD BE DONE IN BACKEND HOWEVER BY DOING IN THE FRONTEND I CAN LAZYLY LOAD ALL OTHER FULL METADATA
   //WHILE GIVING TIME FOR COVER IMAGE TO LOAD SEPARETLEY 
 
+  /*
   //https://stackoverflow.com/questions/38432611/converting-arraybuffer-to-string-maximum-call-stack-size-exceeded
   //https://stackoverflow.com/questions/64814478/how-can-a-javascript-async-function-explicitly-yield-control-at-a-specific-point
   async function _arrayBufferToBase64( buffer: any) {
@@ -92,6 +93,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
       setUseProgressIndicator(false);
       return window.btoa( binary );
   }
+  */
 
   useEffect(() => {
 
@@ -103,26 +105,34 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
 
         setFullMetaData(result);
 
+
+        /*
         var cImg = placeholderImage;
         if(result.coverImage != null){
           cImg = await _arrayBufferToBase64(result.coverImage.data);
           cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
         }
+        */
 
-        /* old
+
+        //backend image handling
         var cImg = placeholderImage;
         if(result.coverImage != null){
-          cImg = result.coverImage;
+          setUseProgressIndicator(true);
+          cImg = await window.electron.ipcRenderer.invoke(ServicesEnum.utility, {service: IPCMethodAPI.UtilityTwoWayIPC.imgStringToThumbnail, content: [result.coverImage]});
+          setUseProgressIndicator(false);
+          
+          //console.log('data:' + resultFull.coverImageFormat + ';base64,'+ img);
+          //img = window.btoa(img);
           cImg = 'data:' + result.coverImageFormat + ';base64,'+ cImg;
         }
-        */
-  
-        
+
         setCover(<CardMedia
                     component="img"
                     width="100"
                     height="200"
                     image= {cImg}
+                    loading="lazy" 
                     alt="Song Thumbnail Image"         
                     sx={{objectFit: "contain" , animation: "fadeIn 0.50s" }}
                   />);
@@ -132,7 +142,8 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
 
   React.useEffect(() => {
     if (useProgressIndicator == true){
-      setCover(<CircularProgress key={progressIndicator} variant='determinate' size="10vw" value={progressIndicator*100}/>)
+      //setCover(<CircularProgress key={progressIndicator} variant='determinate' size="10vw" value={progressIndicator*100}/>)
+      setCover(<CircularProgress key={progressIndicator} size="10vw"/>)
     }
 
   }, [useProgressIndicator, progressIndicator]);

@@ -6,6 +6,7 @@ import { Button, ButtonGroup, Chip, createTheme, Divider, FormControl, FormContr
 import { RegularButton } from '../elements/CustomButtons';
 import { ipcRenderer } from 'electron';
 import { IPCMethodAPI, ServicesEnum } from '../../typesIPC';
+import { SongLastPlayedCard } from '../components/regular/Audio/Music/SongLastPlayedCard';
 
 
 export const Layout = () => {
@@ -15,7 +16,15 @@ export const Layout = () => {
     return (
         <div className='page_content_dashboard'>
 
-            <Card className='card_dashboard'> <h2>Music</h2><Divider/>  </Card>
+            <Card className='card_dashboard'> 
+            
+            <h2>Music</h2> 
+            
+            <Divider/>  
+
+            <SongLastPlayedCard/>
+            
+            </Card>
             
             <Card className='card_dashboard'> <h2>Welcome</h2><Divider/> 
             

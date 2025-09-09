@@ -34,8 +34,8 @@ export const SongLastPlayedCard = () => {
 
                 img = await window.electron.ipcRenderer.invoke(ServicesEnum.utility, {service: IPCMethodAPI.UtilityTwoWayIPC.imgStringToThumbnail, content: [resultFull.coverImage]});
                 
-                console.log('data:' + resultFull.coverImageFormat + ';base64,'+ img);
-                img = window.btoa(img);
+                //console.log('data:' + resultFull.coverImageFormat + ';base64,'+ img);
+                //img = window.btoa(img);
                 img = 'data:' + resultFull.coverImageFormat + ';base64,'+ img;
             }
 
@@ -45,6 +45,7 @@ export const SongLastPlayedCard = () => {
                 height="200"
                 image= {img}
                 alt="Song Thumbnail Image"         
+                loading="lazy" 
                 sx={{objectFit: "contain" }}
             />)
         }

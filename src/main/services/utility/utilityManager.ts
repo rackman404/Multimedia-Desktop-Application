@@ -10,7 +10,8 @@ import { promises } from "dns";
 import path from "path";
 
 
-const { parentPort, workerData, Worker  } = require('worker_threads');
+//const { parentPort, workerData, Worker  } = require('worker_threads');
+import { parentPort, workerData, Worker  } from "worker_threads";
 
 
 export class UtilityManager{
@@ -22,8 +23,11 @@ export class UtilityManager{
         this.broker = new UtilityBroker(this);
     }
 
+
+
     // move into separate class if more image related utils needed
     async ImgStringToThumbnail(imgString: any): Promise<any | null>{
+        /* single threaded approach
         var binary = '';
         var bytes = new Uint8Array( imgString.data );
         var len = bytes.byteLength;
@@ -36,33 +40,42 @@ export class UtilityManager{
     
         }
 
-        return binary;
-
-        /*
-        console.log("img string is: " + imgString);
-
-        return new Promise((result, reject) => {
-            var funcPath = path.join(__filename, '../../../src/main/services/utility/arrayBufferToBase64.ts');
-
-            const worker = new Worker(funcPath, {
-            workerData: {data: imgString},
-            });
-
-            worker.on('message', (result: any) => {
-                console.log("Result from worker: " + result);
-                return (result);
-            });
-
-            worker.on('error', reject);
-            worker.on('exit', (code: number) => {
-            if (code !== 0)
-                reject(new Error(`Worker stopped with exit code ${code}`));
-            });
-
-        });
+        return btoa(binary);
         */
+
+        return await (this.#SubFunction(imgString));
     } 
 
+    //multithreaded approach
+    async #SubFunction(imgString: any): Promise<any | null>{
+        return new Promise(function (resolve, reject) {
+
+            if (app.isPackaged == false){
+                var funcPath = path.join(__filename, '../../../src/main/services/utility/arrayBufferToBase64.js');
+            }
+            else{
+                var defaultConfig = JSON.stringify(path.join(__dirname, '../../../resources/assets/temp/arrayBufferToBase64.js') , null, 1); 
+                fs.writeFileSync(CONFIGFILE, defaultConfig); 
+                console.log("Config File Successfully created!");
+                var funcPath = path.join(__dirname, '../../../assets/temp/arrayBufferToBase64.js');
+            }
+            
+
+            const worker = new Worker(funcPath, {
+            workerData: {data: imgString.data},
+            });
+
+            var data = '';
+
+            worker.on('message', (result: any) => {
+                console.log("Result from worker: got ");
+                resolve(result);
+            });
+
+
+            }
+        );
+    }
 
 
     /*

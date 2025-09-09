@@ -1,5 +1,6 @@
 
-const { workerData, parentPort } = require('worker_threads');
+//const { workerData, parentPort } = require('worker_threads');
+import { parentPort, workerData, Worker  } from "worker_threads";
 
 const buffer = workerData.data;
 
@@ -22,5 +23,5 @@ for (var i = 0; i < len; i++) {
 
 var result = btoa(binary);
 
-parentPort.postMessage(count);
-//parentPort.postMessage(result);
+//parentPort.postMessage(count);
+parentPort.postMessage(result);
