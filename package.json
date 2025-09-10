@@ -42,7 +42,7 @@
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:dll",
-    "rebuild": "electron-rebuild --types prod,dev,optional --module-dir release/app -f -w sqlite3",
+    "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "prestart": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true NODE_OPTIONS=\"-r ts-node/register --no-warnings\" webpack --config ./.erb/configs/webpack.config.main.dev.ts",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run prestart && npm run start:renderer",
     "start:main": "concurrently -k -P \"cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --watch --config ./.erb/configs/webpack.config.main.dev.ts\" \"electronmon . -- {@}\" --",
@@ -114,14 +114,12 @@
     "electron-updater": "^6.3.9",
     "howler": "^2.2.4",
     "music-metadata": "^11.2.3",
-    "node-abi": "^4.14.0",
     "puppeteer": "^24.10.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-fast-marquee": "^1.6.5",
     "react-router-dom": "^7.3.0",
     "react-transition-group": "^4.4.5",
-    "sqlite3": "^5.1.7",
     "zustand": "^5.0.5"
   },
   "devDependencies": {
@@ -176,6 +174,7 @@
     "rimraf": "^6.0.1",
     "sass": "^1.86.0",
     "sass-loader": "^16.0.5",
+    "sqlite3": "^5.1.7",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.14",
     "ts-jest": "^29.2.6",
@@ -257,9 +256,7 @@
       "provider": "github",
       "owner": "Jacky Zhang",
       "repo": "MultimediaCenter"
-    },
-    "extraFiles": [
-          ]
+    }
   },
   "devEngines": {
     "runtime": {
