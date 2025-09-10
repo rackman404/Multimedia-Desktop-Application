@@ -6,15 +6,19 @@ import { DiscordManager } from "./discord_service/discordManager";
 import { SettingsManager } from "./settings_service/settingsManager";
 
 import { app, ipcMain } from "electron";
-import { CONFIGDIRECTORY, CONFIGFILE, MISCDATAFILE} from "../main";
+import { CONFIGDIRECTORY, CONFIGFILE, DATABASEFILE, MISCDATAFILE} from "../main";
 import { ServicesEnum } from "../../typesIPC";
 import { UtilityManager } from "./utility/utilityManager";
+
+const sqlite3 = require('sqlite3');
 
 export class ServiceManager {
   discordManager: DiscordManager;
   audioManager: AudioManager;
   settingsManager: SettingsManager;
   utilityManager: UtilityManager;
+
+  database: any;
 
   constructor() {
     /*
@@ -60,13 +64,21 @@ export class ServiceManager {
       console.log("Config File Successfully created!");
     } 
 
-      if (!fs.existsSync(MISCDATAFILE)){
+    if (!fs.existsSync(MISCDATAFILE)){
       console.log("misc data File doesn't exist, creating data file");
 
       var defaultData = JSON.stringify(DefaultMiscData, null, 1); 
       fs.writeFileSync(MISCDATAFILE, defaultData); 
       console.log("Data File Successfully created!");
     } 
+
+    
+    //if (!fs.existsSync(DATABASEFILE)){
+      //console.log("database file does not exist, creating new database file ");
+
+      this.database = new sqlite3.Database(DATABASEFILE); //i believe that the library will attempt to create a new db file it doesn't exist, else will use existing one
+    //} 
+
     
 
     this.discordManager = new DiscordManager();
