@@ -54,9 +54,9 @@ export class UtilityManager{
                 var funcPath = path.join(__filename, '../../../src/main/services/utility/arrayBufferToBase64.js');
             }
             else{
-                var defaultConfig = JSON.stringify(path.join(__dirname, '../../../resources/assets/temp/arrayBufferToBase64.js') , null, 1); 
-                fs.writeFileSync(CONFIGFILE, defaultConfig); 
-                console.log("Config File Successfully created!");
+                //var defaultConfig = JSON.stringify(path.join(__dirname, '../../../resources/assets/temp/arrayBufferToBase64.js') , null, 1); 
+                //fs.writeFileSync(CONFIGFILE, defaultConfig); 
+                //console.log("Config File Successfully created!");
                 var funcPath = path.join(__dirname, '../../../assets/temp/arrayBufferToBase64.js');
             }
             
