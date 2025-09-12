@@ -4,7 +4,7 @@ import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
-import { DeepLStatistics, MiscData, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
+import { DeepLStatistics, DEFAULTSONGMETADATASIMPLE, MiscData, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
 import { CONFIGFILE, MISCDATAFILE, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
 import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
 import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
@@ -218,7 +218,7 @@ export class AudioManager{
     }
 
     //Misc. 
-    async storeLastPlayedSong(song: SongMetaDataSimple): Promise<SongMetaDataSimple | undefined>{ //implement when playlists are implemented
+    async storeLastPlayedSong(song: SongMetaDataSimple): Promise<SongMetaDataSimple | undefined>{
         var miscDataFile = fs.readFileSync(MISCDATAFILE);
         var jsonData = JSON.parse(miscDataFile.toString()) as MiscData;
         
@@ -230,9 +230,15 @@ export class AudioManager{
         return undefined;
     }
 
-    async retrieveLastPlayedSong(): Promise<SongMetaDataSimple | undefined>{ //implement when playlists are implemented
+    async retrieveLastPlayedSong(): Promise<SongMetaDataSimple | undefined>{
         var miscDataFile = fs.readFileSync(MISCDATAFILE);
         var jsonData = JSON.parse(miscDataFile.toString()) as MiscData;
+
+        if (fs.existsSync(jsonData.lastPlayedSong.songRawPath) == false){
+            console.log("(AUDIO MANAGER) LAST PLAYED SONG DOESN'T EXIST");
+            return DEFAULTSONGMETADATASIMPLE;
+            
+        }
 
         return jsonData.lastPlayedSong;
     }

@@ -5,6 +5,11 @@ export namespace IPCMethodAPI{
         network,
         fullscreen,
         exit,
+        visualizer,
+        visualizerRate,
+        deepL,
+        defaultLyricOffset,
+        defaultLyricStepIncrement
     }
 
     export enum SettingsTwoWayIPC {

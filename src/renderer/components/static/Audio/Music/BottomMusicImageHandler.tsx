@@ -61,6 +61,9 @@ export const BottomMusicImageHandler = () => {
 
                     setThumbnailString(cImg);
                 }
+                else{
+                    setThumbnailString(placeholderImage);
+                }
 
                 /* old method (without using multithreaded backend)
                 if(result.coverImage != null){

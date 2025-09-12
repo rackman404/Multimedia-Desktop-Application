@@ -18,17 +18,37 @@ export class SettingsBroker {
 
     switch(arg.service){
       case IPCMethodAPI.SettingsOneWayIPC.network:
-        console.log("recieved from broker (changing network)");
+        console.log("recieved from settings broker (network)");
         this.settingsManager.SetNetwork(arg.content[0]);
         break;
       case IPCMethodAPI.SettingsOneWayIPC.fullscreen:
-        console.log("recieved from broker (changing full screen)");
+        console.log("recieved from settings broker (fullscreen)");
         this.settingsManager.SetFullscreen(arg.content[0]);
         break;
       case IPCMethodAPI.SettingsOneWayIPC.exit:
-        console.log("recieved from broker (exit application)");
+        console.log("recieved from settings broker (exit)");
         this.settingsManager.ExitApplication();
         break;
+      case IPCMethodAPI.SettingsOneWayIPC.visualizer:
+        console.log("recieved from settings broker (visualizer)");
+        this.settingsManager.SetVisualizerState(arg.content[0]);
+        break;
+      case IPCMethodAPI.SettingsOneWayIPC.visualizerRate:
+        console.log("recieved from settings broker (visualizerRate)");
+        this.settingsManager.SetVisualizerRefreshRate(arg.content[0]);
+        break;
+      case IPCMethodAPI.SettingsOneWayIPC.deepL:
+        console.log("recieved from settings broker (deepL)");
+        this.settingsManager.SetDeepLKey(arg.content[0]);
+        break;  
+      case IPCMethodAPI.SettingsOneWayIPC.defaultLyricOffset:
+        console.log("recieved from settings broker (defaultLyricOffset)");
+        this.settingsManager.SetDefaultLyricsOffset(arg.content[0]);
+        break;  
+      case IPCMethodAPI.SettingsOneWayIPC.defaultLyricStepIncrement:
+        console.log("recieved from settings broker (defaultLyricStepIncrement)");
+        this.settingsManager.SetDefaultLyricsStepIncrement(arg.content[0]);
+        break;  
       default:
         console.log("ERROR: SETTINGS BROKER ON (INVALID RESPONSE)");
 

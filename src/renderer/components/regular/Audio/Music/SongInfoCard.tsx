@@ -161,7 +161,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
   
     return (
         <div>
-            <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "60.5vh", maxWidth: "20vw", maxHeight: "60.5vh"}}>
+            <Card  variant='outlined'  className="card_songinfocard" component={Paper} sx={{ height: "48vh", maxWidth: "20vw"}}>
 
               <div className='static_button_songinfocard'>              
                 <Tooltip title="Hide/Show this panel" placement="right">
@@ -215,7 +215,7 @@ export const SongInfoCard = ({sMetaData} : SongInfoProps) => {
                 
                 {/* WORDED METADATA */}
                 <Divider/>
-                <Paper  style={{maxHeight: "32vh", maxWidth:"20vw", overflow: 'auto', scrollbarWidth: 'none'}}>
+                <Paper  style={{maxHeight: "21vh", maxWidth:"20vw", overflow: 'auto', scrollbarWidth: 'none'}}>
 
                   <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>Song Detail<br/></Typography>
                   <div style={{ textAlign: "left", paddingRight: "5px"}}>

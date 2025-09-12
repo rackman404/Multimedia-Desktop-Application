@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { BottomMusicImageHandler } from './BottomMusicImageHandler';
 import { SongFullscreenOverlayLyricsHandler } from './SongFullscreenOverlayLyricsHandler';
 import { SongFullscreenOverlayNextSongHandler } from './SongFullscreenOverlayNextSongHandler';
+import { SongFullscreenOverlayVisualizerHandler } from './SongFullscreenOverlayVisualizerHandler';
 
 type OverlayProps = { //constructor variables
   visible: boolean
@@ -40,6 +41,10 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
 
       <div className='next_song_header'>
         {<SongFullscreenOverlayNextSongHandler/>}
+      </div>
+
+        <div>
+        {<SongFullscreenOverlayVisualizerHandler/>}
       </div>
       
 

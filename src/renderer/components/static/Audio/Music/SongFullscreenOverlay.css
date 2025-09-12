@@ -113,4 +113,22 @@
 
 }
 
+.visualizer_header{
+    position: absolute;
+    display: grid;
+
+    grid-template-columns: 12.5vw 12.5vw;
+    left: 5px;
+    top: 5px;
+
+    height: 10vh;
+
+}
+
+.visualizer_content{
+    width: 12.5vw;
+    
+}
+
+
 

@@ -55,6 +55,26 @@ export const DEFAULTSONGMETADATASIMPLE = {
     songRawPath: ''
 }
 
+export const DEFAULTSONGMETADATA: SongMetaData = {
+    metadataFormat: '',
+    id: 0,
+    name: '',
+    length: 0,
+    artist: [''],
+    album: '',
+    genre: [''],
+    playCount: 0,
+    bitrate: 0,
+    songRawPath: '',
+    coverImage: null,
+    coverImageFormat: "",
+    format: "",
+    fileSize: 0,
+    comment: ""
+}
+
+
+
 export type NyaaWebData = {
     title: string;
     magnet : string;
@@ -103,12 +123,21 @@ export type MusicSettingParameters = {
     DefaultOffstepIncrement: number,
 
     // ---
+
+    //Visualizer
+    visualizerState: boolean
+    visualizerPollingRate: number //in ms
+
+    // ---
 }
 
 export const DefaultMusicSettingParameters: MusicSettingParameters = {
     DeepLKey: " ",
     DefaultLyricOffset: 0,
-    DefaultOffstepIncrement: 0
+    DefaultOffstepIncrement: 0,
+
+    visualizerState: true,
+    visualizerPollingRate: 25
 }
 
 export const DefaultGeneralSettingParameters: GeneralSettingParameters = {

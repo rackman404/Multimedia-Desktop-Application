@@ -99,9 +99,35 @@ export class SettingsManager{
         this.#SaveSettings();
     }
 
+    async SetVisualizerState(state: boolean){
+        this.parameters.MusicSettings.visualizerState = state;
+
+        this.#SaveSettings();
+    }
+
+    async SetVisualizerRefreshRate(num: number){
+        this.parameters.MusicSettings.visualizerPollingRate = num;
+
+        this.#SaveSettings();
+    }
+
+    async SetDefaultLyricsOffset(num: number){
+        this.parameters.MusicSettings.DefaultLyricOffset = num;
+
+        this.#SaveSettings();
+    }
+
+    async SetDefaultLyricsStepIncrement(num: number){
+        this.parameters.MusicSettings.DefaultOffstepIncrement = num;
+
+        this.#SaveSettings();
+    }
 
     async GetParameters(): Promise<SettingParameters>{
-        return this.parameters;
+        var configFile = fs.readFileSync(CONFIGFILE);
+        var jsonConfig = JSON.parse(configFile.toString()) as SettingParameters;
+
+        return jsonConfig;
     }
 
     async ExitApplication(){

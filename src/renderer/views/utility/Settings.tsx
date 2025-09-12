@@ -7,7 +7,7 @@ import { ipcRenderer } from 'electron';
 import { RegularButton } from '../../elements/CustomButtons';
 import { useGlobalSettingsState } from '../../state_stores/GlobalSettingsStateStore';
 import { DeepLStatistics, DefaultSettingParameters, SettingParameters } from '../../../types';
-import { IPCMethodAPI, ServicesEnum } from '../../../typesIPC';
+import { IPCMethodAPI, IPCServicesMessageInterface, ServicesEnum } from '../../../typesIPC';
 
 export const Layout = () => {
     const discordState = useGlobalSettingsState((state) => state.discordRichPresenceState);
@@ -25,6 +25,11 @@ export const Layout = () => {
 
     const [parameters, setParameters] = useState<SettingParameters>();
 
+    const [deepLInputKey, setDeepLInputKey] = useState('');
+    const [visualizerInputRate, setVisualizerInputRate] = useState(0);
+    const [defaultOffstepIncrementInput, setDefaultOffstepIncrementInput] = useState(0);
+    const [defaultLyricOffsetInput, setDefaultLyricOffsetInput] = useState(0);
+
     //on mount and unmount
     useEffect(() => {
 
@@ -40,9 +45,23 @@ export const Layout = () => {
         };
     }, []);
 
+    //set text field values after every refresh
+    useEffect(() => {
+        if (parameters?.MusicSettings.DeepLKey != undefined){
+            setDeepLInputKey(parameters.MusicSettings.DeepLKey);
+        }   
+        if (parameters != undefined){
+            //console.log(parameters.MusicSettings.visualizerPollingRate);
+            setVisualizerInputRate(parameters.MusicSettings.visualizerPollingRate);
+            setDefaultOffstepIncrementInput(parameters.MusicSettings.DefaultLyricOffset);
+            setDefaultLyricOffsetInput(parameters.MusicSettings.DefaultOffstepIncrement);
+        }  
+    }, [parameters]);
+
     //https://dev.to/sergioholgado/how-to-fetch-data-before-rendering-in-react-js-3750 
     const fetchData = async () => {
         setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
+        
     }
     
 
@@ -88,7 +107,34 @@ export const Layout = () => {
             window.electron.ipcRenderer.sendMessage(ServicesEnum.discord, {service: IPCMethodAPI.DiscordOneWayIPC.disableClient, content: [""]});
         }
     }
+
+    async function setVisualizerState(state: boolean){
+        console.log("changing vis state");
+        window.electron.ipcRenderer.sendMessage(ServicesEnum.settings, {service: IPCMethodAPI.SettingsOneWayIPC.visualizer, content: [state]});
+
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
+    }
+
+    async function setVisualizerRefreshRate(){
+        console.log("changing vis state");
+        window.electron.ipcRenderer.sendMessage(ServicesEnum.settings, {service: IPCMethodAPI.SettingsOneWayIPC.visualizerRate, content: [visualizerInputRate]});
+
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
+    }
     
+    async function setDeepLKey(){
+        console.log("setting deepL key");
+        window.electron.ipcRenderer.sendMessage(ServicesEnum.settings, {service: IPCMethodAPI.SettingsOneWayIPC.deepL, content: [deepLInputKey]});
+
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
+        getDeepLStatistics();
+    }
+
+    async function setValue(sEnum: ServicesEnum, args: IPCServicesMessageInterface){
+        window.electron.ipcRenderer.sendMessage(sEnum, args);
+
+        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
+    }
 
     return (
         <div className='page_content_settings'>
@@ -152,11 +198,26 @@ export const Layout = () => {
                                 <Typography noWrap component="div">Set Default Live Lyrics Offset</Typography>
                             </Tooltip>
         
-                            <TextField id="inputfieldoffset" label="Set Offset" variant="standard" sx={{marginLeft: "auto"}} defaultValue={parameters?.MusicSettings.DefaultLyricOffset}/> 
+                            <TextField id="inputfieldoffset" label="Set Offset" variant="standard" sx={{marginLeft: "auto"}} value={defaultLyricOffsetInput} onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                            {
+                                setDefaultLyricOffsetInput(Number(event.target.value));
+                            }}
+                            onKeyDown={(event) => {
+                                //https://stackoverflow.com/questions/71773720/mui-input-field-that-only-accepts-letters-numbers-and-dashes
+                                var regex = /\d/;
+                                var containsNumbers = regex.test(event.key);
+                                if (containsNumbers == false && (event.key == 'Backspace') == false) {
+                                    event.preventDefault();
+                                }
+                            }}
+                            /> 
                             
                             <RegularButton
                             sx={{marginLeft: "auto"}}
-                            onClick={() => discordState === false ? setDiscordState(true) : setDiscordState(false)}> 
+                            onClick={() => setValue(ServicesEnum.settings, {
+                                service: IPCMethodAPI.SettingsOneWayIPC.defaultLyricOffset,
+                                content: [defaultLyricOffsetInput]
+                            })}> 
                                 Submit
                             </RegularButton>  
                         </div>
@@ -166,28 +227,86 @@ export const Layout = () => {
                                 <Typography noWrap component="div">Set Offset Step Increment</Typography>
                             </Tooltip>
         
-                            <TextField id="inputfieldoffset" label="Set Step Increment" variant="standard" sx={{marginLeft: "auto"}} defaultValue={parameters?.MusicSettings.DefaultOffstepIncrement}/> 
+                            <TextField id="inputfieldoffset" label="Set Step Increment" variant="standard" sx={{marginLeft: "auto"}} value={defaultOffstepIncrementInput} onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                            {
+                                setDefaultOffstepIncrementInput(Number(event.target.value));
+                            }}
+                            onKeyDown={(event) => {
+                                //https://stackoverflow.com/questions/71773720/mui-input-field-that-only-accepts-letters-numbers-and-dashes
+                                var regex = /\d/;
+                                var containsNumbers = regex.test(event.key);
+                                if (containsNumbers == false && (event.key == 'Backspace') == false) {
+                                    event.preventDefault();
+                                }
+                            }}/> 
                             
                             <RegularButton
                             sx={{marginLeft: "auto"}}
-                            onClick={() => discordState === false ? (setDiscordState(true), setRichPresence(true)) : (setDiscordState(false), setRichPresence(false))}> 
+                            onClick={() => setValue(ServicesEnum.settings, {
+                                service: IPCMethodAPI.SettingsOneWayIPC.defaultLyricStepIncrement,
+                                content: [defaultOffstepIncrementInput]
+                            })}> 
                                 Submit
                             </RegularButton>  
                         </div>
 
-                        <div className='Set row_settings Key'>
+                        <div className='row_settings'>
                             <Tooltip title="Retrieve your key from the following Url: https://www.deepl.com/en/your-account/keys (requires DeepL Account)">
                                 <Typography noWrap component="div">DeepL Key</Typography>
                             </Tooltip>
         
-                            <TextField id="inputfieldoffset" label="Set Key" variant="standard" sx={{marginLeft: "auto"}} defaultValue={parameters?.MusicSettings.DeepLKey}/> 
+                            <TextField id="inputfieldoffset" label="Set Key" variant="standard" sx={{marginLeft: "auto"}} value={deepLInputKey} onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                            {
+                                setDeepLInputKey(event.target.value);
+                            }}/> 
                             
                             <RegularButton
                             sx={{marginLeft: "auto"}}
-                            onClick={() => discordState === false ? (setDiscordState(true), setRichPresence(true)) : (setDiscordState(false), setRichPresence(false))}> 
+                            onClick={setDeepLKey}> 
                                 Submit
                             </RegularButton>  
                         </div>
+
+                        <div className='row_settings'>
+                            <Tooltip title="Enable visualizer (i.e waveforms)">
+                                <Typography noWrap component="div">Visualizer</Typography>
+                            </Tooltip>
+
+                            <RegularButton className={parameters?.MusicSettings.visualizerState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
+                            sx={{marginLeft: "auto"}}
+                            onClick={() => parameters?.MusicSettings.visualizerState === false ? (setVisualizerState(true)) :  (setVisualizerState(false))}> 
+                                {parameters?.MusicSettings.visualizerState === false ? "Enable" : "Disable"} 
+                            </RegularButton>  
+                        </div>
+
+                        <div className='row_settings'>
+                            <Tooltip title="Set the refresh rate for visualizer components (anywhere between 1-100 ms is reccomended)">
+                                <Typography noWrap component="div">Visualizer Refresh Rate (ms)</Typography>
+                            </Tooltip>
+
+                            <TextField id="inputfieldoffset" label="Set Refresh Rate" variant="standard" sx={{marginLeft: "auto"}} value={visualizerInputRate} onChange={(event: React.ChangeEvent<HTMLInputElement>) => 
+                            {
+                                setVisualizerInputRate(Number(event.target.value));
+                            }}
+                            onKeyDown={(event) => {
+                                //https://stackoverflow.com/questions/71773720/mui-input-field-that-only-accepts-letters-numbers-and-dashes
+                                var regex = /\d/;
+                                var containsNumbers = regex.test(event.key);
+                                if (containsNumbers == false && (event.key == 'Backspace') == false) {
+                                    event.preventDefault();
+                                }
+                            }}
+                            /> 
+                            
+                            <RegularButton
+                            sx={{marginLeft: "auto"}}
+                            onClick={setVisualizerRefreshRate}> 
+                                Submit
+                            </RegularButton>  
+                        </div>
+
+
+
 
                     </div>
 

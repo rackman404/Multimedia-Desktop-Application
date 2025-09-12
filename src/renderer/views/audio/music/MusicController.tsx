@@ -42,6 +42,8 @@ export const Layout = () => {
     const currentlySelectedSongList = useSelectedSongStore((state) => state.currentlySelectedSongList);
     const setCurrentlySelectedSongList = useSelectedSongStore((state) => state.setCurrentlySelectedSongList);
 
+    const setVisualizerNode = useSelectedSongStore((state) => state.setAnalyserNode);
+
     
     useEffect(() => {
 
@@ -79,7 +81,7 @@ export const Layout = () => {
         console.log("unmounted music controller");
         Howler.unload();
         setPlayState(false);
-
+        
         setFullscreenState(false);
         setSelectedPlaySongMetaData(
             {
@@ -153,6 +155,9 @@ export const Layout = () => {
                 if (selectedPlaySongMetaData.songRawPath != ""){
                     var newHowl = new Howl({src: decodeURIComponent(selectedPlaySongMetaData.songRawPath), html5: false});
                     newHowl.play();
+                    var anal = Howler.ctx.createAnalyser();
+                    Howler.masterGain.connect(anal);
+                    setVisualizerNode(anal);
                     setTrackObject(newHowl);
                 }
                 else{
@@ -293,7 +298,12 @@ export const Layout = () => {
         if (selectedPlaySongMetaData.songRawPath != ""){
             setSeek(0);
             console.log(selectedPlaySongMetaData.songRawPath);
-            var newHowl = new Howl({src: (selectedPlaySongMetaData.songRawPath), html5: true});
+            var newHowl = new Howl({src: (selectedPlaySongMetaData.songRawPath), html5: false});
+
+            var anal = Howler.ctx.createAnalyser();
+            Howler.masterGain.connect(anal);
+            setVisualizerNode(anal);
+
             newHowl.play();
             setTrackObject(newHowl);
             setPlayState(true);

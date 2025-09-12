@@ -3,6 +3,7 @@ import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { useEffect, useState } from 'react';
 import { DEFAULTSONGMETADATASIMPLE, SongLyricAPIData, SongMetaDataSimple } from '../../../../../types';
+import { SongVisualizer } from '../../../regular/Audio/Music/SongVisualizer';
 
 
 export const SongFullscreenOverlayNextSongHandler = () => { 
@@ -46,6 +47,8 @@ export const SongFullscreenOverlayNextSongHandler = () => {
         <br/>
        <Typography color="grey"> {nextSong.artist} </Typography>
     </div>
+
+    
     );
 
 

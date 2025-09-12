@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DEFAULTSONGMETADATASIMPLE, SongMetaData, SongMetaDataSimple } from "../../../../../types";
+import { DEFAULTSONGMETADATA, DEFAULTSONGMETADATASIMPLE, SongMetaData, SongMetaDataSimple } from "../../../../../types";
 import { Card, CardMedia, Paper, Typography } from "@mui/material";
 import './SongLastPlayedCard.css';
 import { IPCMethodAPI, ServicesEnum } from "../../../../../typesIPC";
@@ -23,8 +23,13 @@ export const SongLastPlayedCard = () => {
     (async () => {
 
         const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.retrieveLastPlayedSong, content: ['']}) as SongMetaDataSimple;
-        const resultFull = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.getSelectedMetadataFull, content: [result.id, result.songRawPath]}) as SongMetaData;
+        
+        var resultFull = DEFAULTSONGMETADATA;
+        if (result.songRawPath != ""){
+          var resultFull = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.getSelectedMetadataFull, content: [result.id, result.songRawPath]}) as SongMetaData;
+        }
 
+        
         if (result.name != '' || result.length != 0){ //get thumbnail img
 
             var img = placeholderImage;
