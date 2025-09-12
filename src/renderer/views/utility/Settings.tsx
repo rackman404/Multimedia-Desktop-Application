@@ -32,11 +32,6 @@ export const Layout = () => {
 
     //on mount and unmount
     useEffect(() => {
-
-        getDiscordStatus();
-
-        getDeepLStatistics();
-
         fetchData();
 
         //called when the component is unmounted
@@ -61,10 +56,10 @@ export const Layout = () => {
     //https://dev.to/sergioholgado/how-to-fetch-data-before-rendering-in-react-js-3750 
     const fetchData = async () => {
         setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
-        
+        getDeepLStatistics();
+        getDiscordStatus();
     }
     
-
     async function getDiscordStatus(){
         console.log("discord: " + discordState);
         setDiscordState (await window.electron.ipcRenderer.invoke(ServicesEnum.discord, {service: IPCMethodAPI.DiscordTwoWayIPC.clientStatus, content: [""]}));
@@ -72,30 +67,6 @@ export const Layout = () => {
 
     async function getDeepLStatistics(){
         setDeepLStatistics (await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.externalDeepLStats, content: [""]}));
-    }
-
-    async function setNetwork(state: boolean){
-        console.log("changing network connection");
-        if (state == true){
-            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.network, content: ["true"]});
-        }
-        if (state == false){
-            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.network, content: ["false"]});
-        }
-
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
-    }
-
-    async function setFullscreen(state: boolean){
-        console.log("changing fullscreen state");
-        if (state == true){
-            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.fullscreen, content: ["true"]});
-        }
-        if (state == false){
-            const result = await window.electron.ipcRenderer.sendMessage(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.fullscreen, content: ["false"]});
-        }
-
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
     }
 
     function setRichPresence(state: boolean){
@@ -108,32 +79,10 @@ export const Layout = () => {
         }
     }
 
-    async function setVisualizerState(state: boolean){
-        console.log("changing vis state");
-        window.electron.ipcRenderer.sendMessage(ServicesEnum.settings, {service: IPCMethodAPI.SettingsOneWayIPC.visualizer, content: [state]});
-
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
-    }
-
-    async function setVisualizerRefreshRate(){
-        console.log("changing vis state");
-        window.electron.ipcRenderer.sendMessage(ServicesEnum.settings, {service: IPCMethodAPI.SettingsOneWayIPC.visualizerRate, content: [visualizerInputRate]});
-
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
-    }
-    
-    async function setDeepLKey(){
-        console.log("setting deepL key");
-        window.electron.ipcRenderer.sendMessage(ServicesEnum.settings, {service: IPCMethodAPI.SettingsOneWayIPC.deepL, content: [deepLInputKey]});
-
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
-        getDeepLStatistics();
-    }
-
     async function setValue(sEnum: ServicesEnum, args: IPCServicesMessageInterface){
         window.electron.ipcRenderer.sendMessage(sEnum, args);
-
-        setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
+        fetchData();
+        //setParameters(await window.electron.ipcRenderer.invoke(ServicesEnum.settings , {service: IPCMethodAPI.SettingsTwoWayIPC.getParameters, content: [""]}));
     }
 
     return (
@@ -262,7 +211,7 @@ export const Layout = () => {
                             
                             <RegularButton
                             sx={{marginLeft: "auto"}}
-                            onClick={setDeepLKey}> 
+                            onClick={() => setValue(ServicesEnum.settings, {service: IPCMethodAPI.SettingsOneWayIPC.deepL, content: [deepLInputKey]})}> 
                                 Submit
                             </RegularButton>  
                         </div>
@@ -274,7 +223,7 @@ export const Layout = () => {
 
                             <RegularButton className={parameters?.MusicSettings.visualizerState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
                             sx={{marginLeft: "auto"}}
-                            onClick={() => parameters?.MusicSettings.visualizerState === false ? (setVisualizerState(true)) :  (setVisualizerState(false))}> 
+                            onClick={() => setValue(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.visualizer, content: [!parameters?.MusicSettings.visualizerState]})}> 
                                 {parameters?.MusicSettings.visualizerState === false ? "Enable" : "Disable"} 
                             </RegularButton>  
                         </div>
@@ -300,7 +249,7 @@ export const Layout = () => {
                             
                             <RegularButton
                             sx={{marginLeft: "auto"}}
-                            onClick={setVisualizerRefreshRate}> 
+                            onClick={() => setValue(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.visualizerRate, content: [visualizerInputRate]})}> 
                                 Submit
                             </RegularButton>  
                         </div>
@@ -322,7 +271,7 @@ export const Layout = () => {
 
                             <RegularButton className={parameters?.GeneralSettings.networkState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
                             sx={{marginLeft: "auto"}}
-                            onClick={() => parameters?.GeneralSettings.networkState === false ? (setNetwork(true)) :  (setNetwork(false))}> 
+                            onClick={() => setValue(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.network, content: [!parameters?.GeneralSettings.networkState]})}> 
                                 {parameters?.GeneralSettings.networkState === false ? "Enable" : "Disable"} 
                             </RegularButton>  
                         </div>
@@ -336,7 +285,7 @@ export const Layout = () => {
 
                             <RegularButton className={parameters?.GeneralSettings.fullscreenState === false ? 'shaded_label_affimative_settings' : 'shaded_label_negative_settings'}
                             sx={{marginLeft: "auto"}}
-                            onClick={() => parameters?.GeneralSettings.fullscreenState === false ? (setFullscreen(true)) :  (setFullscreen(false))}> 
+                            onClick={() => setValue(ServicesEnum.settings , {service: IPCMethodAPI.SettingsOneWayIPC.fullscreen, content: [parameters?.GeneralSettings.fullscreenState]})}> 
                                 {parameters?.GeneralSettings.fullscreenState === false ? "Windowed" : "Fullscreen"} 
                             </RegularButton>  
                         </div>

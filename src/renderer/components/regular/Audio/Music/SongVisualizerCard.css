@@ -1,10 +1,24 @@
-.visualizer_card_content{
+.visualizer_card{
     background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+    height: 13vh;
 
 
+
+}
+
+.visualizer_card_content{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    
+
+
+}
+
+.visualizer_card_button{
+    top: -12vh;
+    right: 0;
+
 }

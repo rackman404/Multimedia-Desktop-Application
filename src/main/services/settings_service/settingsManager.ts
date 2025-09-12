@@ -51,44 +51,24 @@ export class SettingsManager{
 
 
     //true online, false offline
-    async SetNetwork(state: string){
-        
-
-        var stateBool: boolean;
-        if (state == "true"){
-            stateBool = true;
-            console.log("internet connection altered to online!");
-
-            
-        }
-        else{
-            stateBool = false;
-        }
-
-        this.parameters.GeneralSettings.networkState = stateBool;
+    async SetNetwork(state: boolean){
+        console.log("internet connection altered!");
+        this.parameters.GeneralSettings.networkState = state;
 
         this.mainWindow?.webContents.session.enableNetworkEmulation({
-            offline: stateBool,
+            offline: state,
         });
 
         this.#SaveSettings();
     } 
 
-    async SetFullscreen(state: string){
-        var stateBool: boolean;
-        if (state == "true"){
-            stateBool = true;
-        }
-        else{
-            stateBool = false;
-        }
-
+    async SetFullscreen(state: boolean){
         if (this.mainWindow != undefined){
-            console.log("(SettingsManager.ts) now setting full screen state to " + stateBool);
-            this.windowController.SetFullscreen(stateBool, this.mainWindow);
+            console.log("(SettingsManager.ts) now setting full screen state to " + !state);
+            this.windowController.SetFullscreen(!state, this.mainWindow);
         }
 
-        this.parameters.GeneralSettings.fullscreenState = stateBool;
+        this.parameters.GeneralSettings.fullscreenState = !state;
 
         this.#SaveSettings();
     }

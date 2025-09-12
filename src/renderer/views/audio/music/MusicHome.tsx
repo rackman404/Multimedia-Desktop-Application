@@ -10,6 +10,8 @@ import { RegularButton } from '../../../elements/CustomButtons';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Card, Paper } from '@mui/material';
 import { IPCMethodAPI, ServicesEnum } from '../../../../typesIPC';
+import { SongVisualizer } from '../../../components/regular/Audio/Music/SongVisualizer';
+import { SongVisualizerCard } from '../../../components/regular/Audio/Music/SongVisualizerCard';
 
 export const Layout = () => {
 
@@ -101,7 +103,7 @@ export const Layout = () => {
                 Without the key, multiple _base64 async calls can be loading at once if the selected song was changed rapidly which may cause a
                 larger song thumbnail to load into the wrong selected image */}
                 <SongInfoCard key={selectedInfoCardMetaData.id} sMetaData={selectedInfoCardMetaData} />
-
+                <SongVisualizerCard/>
                 {secondaryCard}
             </div>
             
