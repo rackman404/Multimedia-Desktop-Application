@@ -33,16 +33,16 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#about-the-project">About The Project</a> </li>
+    <li><a href="#about-this-project">About The Project</a> </li>
 	<li><a href="#built-with">Built With</a></li>
-    <li><a href="#getting-started">Getting Started (Development)</a></li>
+    <li><a href="#getting-started-development">Getting Started (Development)</a></li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap (V1.0.0)</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#documentation">Documentation</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#attributions-and-acknowledgements">Attributions and Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -52,7 +52,7 @@
 ![preview](_Documentation/Images/preview_v0_2_11.png)
 <sub>Preview of the music/audio service V0.2.11</sub>
 ### Overview
-This project is a desktop application that is primarily meant to provide a comprehensive music player while also providing support for a planned workflow of (Music Download -> Automatic Metadata Tagging -> Music Folder placement -> Manual Playlist Adding). For a full software overview including a complete list of functional requirements and planned main features, please see the following link to the [Software Requirements Specification document (SRS)](_Documentation/Non_Technical/Software_Requirements_Specification_Document) written for this project. 
+This project is a desktop application that is primarily meant to provide a comprehensive music player while also providing support for a planned workflow of (Music Download -> Automatic Metadata Tagging -> Music Folder placement -> Manual Playlist Adding). For a full software overview including a complete list of functional requirements and planned main features, please see the following link to the [Software Requirements Specification document (SRS)](_Documentation/Non_Technical/Software_Requirements_Specification_Document.md) written for this project. 
 
 Note: This application is **very unoptimized in terms of both performance and software design/architecture**, this was my first time making such a large desktop application and is admittedly not the best work I could have done. This application will occasionally have sections of it refactored to better bring it up to more sensible performance and design considerations. Do also note that <ins>no generative AI (i.e chatGPT, Gemini, etc..) have been used to create, edit, or document this software knowingly (with the sole use of AI in this project being of a external LLM service used to translate lyrics for a feature).</ins>
 
@@ -61,6 +61,7 @@ There are two major motivations for making this project:
 1. Firstly, the previous music software I used (Apple Music) had several issues, one of which was that it **could not play certain music formats** (i.e FLAC). This combined with the fact that it was missing features that more modern music players had such as synced lyric support provided the main motivation for creating this piece of software to serve as a replacement for my own use of Apple Music.
 2. Secondly, previous software that I had written for OOP and high level programming and design courses at TMU (such as [COE 692](https://www.torontomu.ca/calendar/2025-2026/courses/computer-engineering/COE/692/), [COE 691](https://www.torontomu.ca/calendar/2025-2026/courses/computer-engineering/COE/691/) , [CPS 510](https://www.torontomu.ca/calendar/2025-2026/courses/computer-science/CPS/510/)) proved to be both too small in scale and too plain to be used as a software showcase. **this project seeks to demonstrate working knowledge of software design principles learned at TMU**.   
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 # Built With
 NOTE: This section only includes the most important elements used to make this software, For a more detailed record (full list of libraries, frameworks, etc) see the following link:
 
@@ -72,7 +73,7 @@ NOTE: This section only includes the most important elements used to make this s
 	* [![Tech Stack Badge](https://img.shields.io/badge/SQlite_3-grey?style=for-the-badge&logo=sqlite&logoColor=61DAFB)](https://www.npmjs.com/package/sqlite3) - Data Storage
 
 ### Discord Sub Process Tech Stack
-* [![Tech Stack Badge](https://img.shields.io/badge/.net-blue?style=for-the-badge&logo=.net&logoColor=61DAFB)][https://dotnet.microsoft.com/en-us/download] - Framework
+* [![Tech Stack Badge](https://img.shields.io/badge/.net-blue?style=for-the-badge&logo=.net&logoColor=61DAFB)](https://dotnet.microsoft.com/en-us/download) - Framework
 * [![Tech Stack Badge](https://img.shields.io/badge/Discord_Game_SDK_(Csharp)-beige?style=for-the-badge&logo=discord&logoColor=61DAFB)](https://discord.com/developers/docs/developer-tools/game-sdk) - SDK
 ### Optional Binaries (Not Included but used by this software)
 * [![Tech Stack Badge](https://img.shields.io/badge/FFmpeg-20232A?style=for-the-badge&logo=ffmpeg&logoColor=61DAFB)](https://ffmpeg.org) - Audio Manipulation CLI
@@ -138,21 +139,24 @@ For more detailed instructions, see [Documentation (Link to Markdown README in D
 ### How to Run:
 **NOTE**: for the releases generated and released via Github Release, windows binaries are built. If you wish to use this application on Linux or macOS, you should fork this repo and build it yourself (with the necessary code modifications). However, keep in mind that It's unlikely that certain features such as Discord Rich Presence will continue function in Linux or MacOS regardless of this.
 
-Packaged Builds (i.e. Github Releases) (Windows Only):
-	- Download the latest binary releases and unzip somewhere on your PC
-	- Run "MultimediaCenter.exe"
-	- NOTE: You will almost certainly get a "Windows protected your PC" warning. Either press "run anyways", compile it yourself from the source code in this Github Repo, or just don't use this application.
+Packaged Builds (i.e. Github Releases) (Windows Only):  
+- Download the latest binary releases and unzip somewhere on your PC
+- Run "MultimediaCenter.exe"
+- NOTE: You will almost certainly get a "Windows protected your PC" warning. Either press "run anyways", compile it yourself from the source code in this Github Repo, or just don't use this application.
 
 Requirements:
 	Lyric Translation Service:
-		- To access synced lyric translation features, you should follow the following link (https://www.deepl.com/en/signup) and register for a free account
-		- From there, launch the application and head to the settings page and then enter your key generated at the following link (https://www.deepl.com/en/your-account/keys)
-		![[_Documentation/Images/gitdocs/deepLkey.png]]
-		- If the key is valid and DeepL services isn't down at the moment, the connection status should switch to "connected"
-		![[_Documentation/Images/gitdocs/deeplstatus.png]]
+		- To access synced lyric translation features, you should follow the following link (https://www.deepl.com/en/signup) and register for a free account.  
+		- From there, launch the application and head to the settings page and then enter your key generated at the following link (https://www.deepl.com/en/your-account/keys).  
+		![deeplkey](_Documentation/Images/gitdocs/deepLkey.png)   
+		- If the key is valid and DeepL services isn't down at the moment, the connection status should switch to "connected".  
+		![deeplkeystatus](_Documentation/Images/gitdocs/deeplstatus.png)
 	Discord Service:
 		If you intend to have the application connect to Discord to display music activity on your profile, you should have Discord installed and running on your computer before launching the application.	
-# Roadmap (V1.0.0)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+# Roadmap
 
 ### Features
 Points may be added or removed depending on requirement changes.
@@ -201,7 +205,7 @@ Soul Seek (SLSK) (Audio Utils)
 - [ ] SLSK Search
 - [ ] SLSK Download and Seeding
 
-See the [Software Requirements and Specifications Document SRS](_Documentation/Non_Technical/Software_Requirements_Specification_Document) for full list of features and requirements
+See the [Software Requirements and Specifications Document SRS](_Documentation/Non_Technical/Software_Requirements_Specification_Document.md) for full list of features and requirements
 ### Documentation
 Points marked as complete in this section means that it exists in at least a mostly complete form, however they should still be worked on constantly as the application develops.
 
