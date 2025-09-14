@@ -1,12 +1,20 @@
-
+UNFINISHED
 # Overview
 
 
 # Features
+
+### Main Features
+- Full Song List:
+	- g
+- Playlists:
+
+### Secondary Features
 - Lyrics:
 	- Ability to use external (liblrc.net) API to retrieve lyrics
 	- Allow offsetting lyric sync in event of lyric timing mismatch
-	- Option to translate foreign language lyrics into english
+	- Option to translate foreign language lyrics into English
+- Visualizer:
 
 # Composition
 

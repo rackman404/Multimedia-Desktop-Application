@@ -105,7 +105,7 @@ export class ServiceManager {
     var configFile = fs.readFileSync(CONFIGFILE);
     var jsonConfig = JSON.parse(configFile.toString()) as SettingParameters;
 
-    this.settingsManager.SetFullscreen(jsonConfig.GeneralSettings.fullscreenState);
+    this.settingsManager.SetFullscreen(!jsonConfig.GeneralSettings.fullscreenState);
     this.settingsManager.SetNetwork(jsonConfig.GeneralSettings.networkState);
 
     if (jsonConfig.GeneralSettings.discordRichPresenceState == true){

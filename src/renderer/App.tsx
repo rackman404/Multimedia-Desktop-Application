@@ -9,6 +9,8 @@ import Settings from './views/utility/Settings'
 import Help from './views/utility/Help'
 import About from './views/utility/About'
 
+import FFmpeg from './views/audio_utils/AudioUtilFFMpeg'
+
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
 import { TopHeader } from './components/static/TopHeader';
 import { BottomMusicControl } from './components/static/Audio/Music/BottomMusicControl';
@@ -82,6 +84,8 @@ export default function App() {
           <Route path="/audio/music/home" element={<MusicHome/>} />
           <Route path="/audio/music/playlists" element={<MusicPlayLists />} />
         </Route>
+
+        <Route path="/audioutil/ffmpeg" element={<FFmpeg />} />
 
         <Route path="/utility/settings" element={<Settings />} />
         <Route path="/utility/help" element={<Help />} />

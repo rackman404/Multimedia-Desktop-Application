@@ -41,10 +41,17 @@ export class AudioWebLyricReader{
 
                 //code below will fix formatting (i.e remove carriage return), then splits raw synced lyrics into a list of timestamps and corresponding lyrics
                 data['syncedLyrics'] = data['syncedLyrics'].replace(/[\r]/g, ''); //remove carriage return (if any)
+                data['syncedLyrics'] = data['syncedLyrics'].replace(/\n\n+$/, ""); //remove trailing new line (if any)
                 data['syncedLyrics'] = data['syncedLyrics'].replace(/\n+$/, ""); //remove trailing new line (if any)
-                //console.debug("Raw with stripped extras:" + JSON.stringify(data['syncedLyrics']));
+
+                //https://stackoverflow.com/questions/22962220/remove-multiple-line-breaks-n-in-javascript
+                //remove double new lines (lrclib may stack 2 which fucks the formatting) (comment line out if bugs occur)
+                data['syncedLyrics'] = data['syncedLyrics'].replace(/(\r\n|\r|\n){2}/g, '$1').replace(/(\r\n|\r|\n){3,}/g, '$1\n');
+
+                console.debug("Raw with stripped extras:" + JSON.stringify(data['syncedLyrics']));
 
                 var lyrics =  data['syncedLyrics'].split(/\n/);
+                
 
                 //initialize the arrays
                 var prev = -1;

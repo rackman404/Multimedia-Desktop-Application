@@ -31,8 +31,8 @@ export const TopHeader = () => {
 
                         <Card className='card_element'>
                             <Chip className='button_element' label="Audio Utils" variant="filled" sx={{margin: "5px"}} onClick ={() => {} }/>   
-                            <LinkButton className='button_element' disabled component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Audio Edit")}} variant="contained"><Typography fontSize={FONTSCALE} noWrap component="div">FFmpeg</Typography></LinkButton>
-                            <LinkButton className='button_element' disabled component={Link} to={'/settings'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Audio Edit")}} variant="contained"><Typography fontSize={FONTSCALE} noWrap component="div">Soulseek</Typography></LinkButton>
+                            <LinkButton className='button_element' component={Link} to={'/audioutil/ffmpeg'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("FFmpeg")}} variant="contained"><Typography fontSize={FONTSCALE} noWrap component="div">FFmpeg</Typography></LinkButton>
+                            <LinkButton className='button_element' disabled component={Link} to={'/audioutil'} sx={{margin: "5px"}} onClick={(e) => {setCurrentViewText("Soul Seek")}} variant="contained"><Typography fontSize={FONTSCALE} noWrap component="div">SLSK</Typography></LinkButton>
                         </Card>
                         
                         
