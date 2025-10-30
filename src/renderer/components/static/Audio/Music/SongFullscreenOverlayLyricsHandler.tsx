@@ -39,6 +39,9 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
     if (lyricData.statusCode == 400){
       setCurrentLyric("Loading...");  
       setNextLyric([]);
+      setCurrentTranslatedLyricData({} as SongLyricAPIData);
+      setCurrentTranslatedLyric("");
+      setNextTranslatedLyrics([""]);
     }
     else if (lyricData.statusCode == 300){
       setCurrentLyric("SERVER ERROR: Could not connect to LRCLIB server.");  
