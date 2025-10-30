@@ -1,0 +1,31 @@
+.card_songinfohorizontalcard{
+  background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+
+  text-align: left;
+    
+  /* required for button panel to be relative to parent but absolute to itself */
+  position: relative;
+
+  /* scale font based on UI */
+  font-size: 5px;
+  font-size: 0.85vw;
+
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.text_fade_in_card_songinfohorizontalcard{
+    animation: fadeIn 0.50s; 
+}
+
+.card_songinfohorizontalcard_content{
+  margin-top: -2vh;
+  margin-left: -1vw;
+  display: grid;
+  grid-template-columns: 10vw 15vw 15vw;
+}
+
+

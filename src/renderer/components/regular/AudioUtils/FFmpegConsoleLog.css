@@ -1,0 +1,16 @@
+.console_log_card{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+}
+
+.console_log_card_header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.console_log_card_content{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items: left;
+}

@@ -2,7 +2,14 @@
     width:100vw;  
 
 
+}
 
-    display: flex;
-    justify-content: flex-start;
+.content_audioutil_layout{
+    display: grid;
+    grid-template-columns: 40vw 60vw;
+}
+
+.console_buttons_layout_audioutil{
+    display: grid;
+    grid-template-columns: 80% 20%;
 }

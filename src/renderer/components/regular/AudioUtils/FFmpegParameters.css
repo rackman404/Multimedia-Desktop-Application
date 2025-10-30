@@ -1,0 +1,12 @@
+.ffmpeg_parameters_card{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+}
+
+.ffmpeg_parameters_card_content{
+
+    justify-content: center;
+    align-items: center;
+    
+
+
+}

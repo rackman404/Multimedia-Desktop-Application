@@ -36,17 +36,24 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
   useEffect(() => {
     //console.log(lyricData);
-    if (lyricData.lyrics == undefined){
-      setCurrentLyric("No Lyrics / Loading");  
+    if (lyricData.statusCode == 300){
+      setCurrentLyric("SERVER ERROR: Could not connect to LRCLIB server.");  
       setCurrentTranslatedLyric("");
       setNextTranslatedLyrics([""]);
       setNextLyric([""]);  
 
       setPreviousTimestamp(0);
     }
-    else if (lyricData.lyrics != undefined && lyricData.lyrics.length != 0){
-      
+    else if (lyricData.statusCode == 200){
+      setCurrentLyric("Lyric Error: No lyrics found for this song.");  
+      setCurrentTranslatedLyric("");
+      setNextTranslatedLyrics([""]);
+      setNextLyric([""]);  
 
+      setPreviousTimestamp(0);
+    
+    }
+    else if (lyricData.lyrics != undefined && lyricData.lyrics.length != 0){
       if (currentLyric == "If this message doesn't disappear after loading bar disappears it means you're fucked bozo"){
         setCurrentLyric("[Instrumental]");
       }

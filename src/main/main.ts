@@ -40,6 +40,9 @@ export const CONFIGFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY, 
 export const DATABASEFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY, "database.db") : path.join(CONFIGDIRECTORY, "database.db"));
 export const MISCDATAFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY, "misc_data.json") : path.join(CONFIGDIRECTORY, "misc_data.json"));
 
+export const MUSIC_EDIT_DIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "ffmpeg_conversions") : '_sample_development_folder/ffmpeg_conversions');
+export const FFMPEG_FILE_DIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "binary_dependencies/ffmpeg.exe'") : '_sample_development_folder/binary_dependencies/ffmpeg.exe');
+
 export const MINIMUMWINDOWSIZE = {x: 1920/2, y:1080/2};
 
 

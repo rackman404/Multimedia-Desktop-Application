@@ -1,0 +1,10 @@
+.ffmepeg_button_panel{
+    text-align: center;
+}
+
+.ffmepeg_button_panel_content{
+    display: grid;
+
+    grid-template-columns: 100%;
+
+}

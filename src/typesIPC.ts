@@ -36,6 +36,14 @@ export namespace IPCMethodAPI{
         retrieveLastPlayedSong
     }
 
+    export enum AudioEditOneWayIPC {
+
+    }
+
+    export enum AudioEditTwoWayIPC {
+        getSongFiles,
+    }
+
     export enum DiscordOneWayIPC {
         enableClient,
         disableClient,
@@ -63,6 +71,8 @@ export type IPCServicesMessageInterface = {
     IPCMethodAPI.DiscordTwoWayIPC | 
     IPCMethodAPI.AudioOneWayIPC | 
     IPCMethodAPI.AudioTwoWayIPC |
+    IPCMethodAPI.AudioEditOneWayIPC | 
+    IPCMethodAPI.AudioEditTwoWayIPC |
     IPCMethodAPI.UtilityOneWayIPC | 
     IPCMethodAPI.UtilityTwoWayIPC 
 
@@ -83,4 +93,5 @@ export enum ServicesEnum {
     discord = 'discord',
     utility = 'utility',
     ipcExample = 'ipc-example',
+    audioEdit = 'audio-edit'
 }

@@ -31,7 +31,7 @@ export class AudioWebLyricReader{
         var lyricData = {} as SongLyricAPIData;
         
         try{  
-            await axios.get(QUERY_URL + songSearchData.artist[0].replace(/ /g,"+") + TRACK_HEADER + songSearchData.name + DURATION_HEADER + songSearchData.length)
+            await axios.get(QUERY_URL + songSearchData.artist[0].replace(/ /g,"+") + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length)
             // @ts-ignore
             .then(({ data }) => { 
                 lyricData.isInstrumental = data['instrumental'];
@@ -78,43 +78,67 @@ export class AudioWebLyricReader{
                 
             })
         } catch (error: any) {
-            console.error('Error Accessing LrcLib API:', error.message + " Path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+") + TRACK_HEADER + songSearchData.name + DURATION_HEADER + songSearchData.length);
-            console.log("will attempt again with no & marks");
+            console.error('Error Accessing LrcLib API:', error.message + " Path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+") + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length);
+            console.log("will attempt again with no & marks and with spaces");
 
             try{
-            await axios.get(QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"") + TRACK_HEADER + songSearchData.name + DURATION_HEADER + songSearchData.length)
+            await axios.get(QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"") + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length)
             // @ts-ignore
             .then(({ data }) => { 
                 lyricData.isInstrumental = data['instrumental'];
                 lyricData.lyrics = []
                 lyricData.timestamps = []
 
-                //console.debug(lyricData.isInstrumental);
+                if (data['syncedLyrics'] != null){
+                    //console.debug(lyricData.isInstrumental);
+                    var lyrics =  data['syncedLyrics'].split(/\n/);
 
-                var lyrics =  data['syncedLyrics'].split(/\n/);
+                    //initialize the arrays
+                    for (var i = 0; i < lyrics.length; i++){
+                        var separated = lyrics[i].split("] ");
+                    
+                        var timestampConversion = separated[0].replace("[", "").replace(":", ".").split(".");
 
-                //initialize the arrays
-                for (var i = 0; i < lyrics.length; i++){
-                    var separated = lyrics[i].split("] ");
-                
-                    var timestampConversion = separated[0].replace("[", "").replace(":", ".").split(".");
-
-                    //min:sec:millisec
-                    lyricData.timestamps.push(parseFloat(timestampConversion[0]) * 60 + parseFloat(timestampConversion[1]) + parseFloat(timestampConversion[2])/100);
-                    lyricData.lyrics.push(separated[1]);
+                        //min:sec:millisec
+                        lyricData.timestamps.push(parseFloat(timestampConversion[0]) * 60 + parseFloat(timestampConversion[1]) + parseFloat(timestampConversion[2])/100);
+                        lyricData.lyrics.push(separated[1]);
+                    }
                 }
+                
             })
             }
-
             catch (error: any) {
-                console.error('Error Accessing LrcLib API:', error.message + " Path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"") + TRACK_HEADER + songSearchData.name + DURATION_HEADER + songSearchData.length);
+                if (error.status == 404){
+                    console.log(error.status);
+                    console.error('Error Accessing LrcLib API:', error.message + " Path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"") + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length);
+                    lyricData.statusCode = 200;
+                }
+                else{
+                    console.log(error.status);
+                    console.error('final error:', error.message + " Path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"") + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length);
+                    console.error("Server Error Response");
+                    lyricData.statusCode = 300;
+               
+                }
+
+                return lyricData; 
             }
         }
 
         //console.log("table length: " + lyricData.lyrics.length + " " +  lyricData.timestamps.length);
-        console.log("lyrics successfully retrieved at path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"")  + TRACK_HEADER + songSearchData.name + DURATION_HEADER + songSearchData.length)
+        console.log("lyrics successfully retrieved at path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"")  + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length)
         //console.table(lyricData.timestamps);
         //console.table(lyricData.lyrics);
+        if (lyricData.lyrics.length == 0){
+            console.log("null lyric was found");
+            lyricData.statusCode = 200;     
+        }
+        else{
+            lyricData.statusCode = 100;
+        }
+        
+
+        
         return lyricData;
     }
 

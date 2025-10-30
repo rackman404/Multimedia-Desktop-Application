@@ -89,6 +89,13 @@ export type SongLyricAPIData = {
     timestamps: number[]
     lyrics: string[]
     isInstrumental: boolean
+    statusCode: number
+    /*
+        where:
+        100 = success, there are lyrics found
+        200 = failure, server was contacted and returned response but with no lyrics available
+        300 = server failure, server was contacted and did not return a response
+    */
 }
 
 

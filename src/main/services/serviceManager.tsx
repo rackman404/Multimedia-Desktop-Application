@@ -2,6 +2,7 @@ import * as fs from "fs"
 import path from "path";
 import { DefaultMiscData, DefaultSettingParameters, SettingParameters } from "../../types";
 import { AudioManager } from "./audio_service/audioManager";
+import { AudioEditManager } from "./audio_edit_service/audioEditManager";
 import { DiscordManager } from "./discord_service/discordManager";
 import { SettingsManager } from "./settings_service/settingsManager";
 
@@ -17,6 +18,7 @@ export class ServiceManager {
   audioManager: AudioManager;
   settingsManager: SettingsManager;
   utilityManager: UtilityManager;
+  audioEditManager: AudioEditManager;
 
   database: any;
 
@@ -85,6 +87,8 @@ export class ServiceManager {
     this.audioManager = new AudioManager();
     this.settingsManager = new SettingsManager();
     this.utilityManager = new UtilityManager();
+
+    this.audioEditManager = new AudioEditManager(this.audioManager);
 
     this.IPCCalls();
 
@@ -172,7 +176,7 @@ export class ServiceManager {
         this.utilityManager.broker.eventOn(event, arg);
       }
       else{
-        event.reply(ServicesEnum.utility, console.log("Undefined ipc one way from utility discord"));
+        event.reply(ServicesEnum.utility, console.log("Undefined ipc one way from utility"));
       }
 
     });
@@ -180,6 +184,23 @@ export class ServiceManager {
     ipcMain.handle(ServicesEnum.utility, async (event, arg) => {
         if (arg != ""){
           return this.utilityManager.broker.eventHandle(event, arg);
+        }
+      }
+    );
+
+    ipcMain.on(ServicesEnum.audioEdit, async (event, arg) => {
+      if (arg != ""){
+        this.audioEditManager.broker.eventOn(event, arg);
+      }
+      else{
+        event.reply(ServicesEnum.audioEdit, console.log("Undefined ipc one way from audio edit"));
+      }
+
+    });
+
+    ipcMain.handle(ServicesEnum.audioEdit, async (event, arg) => {
+        if (arg != ""){
+          return this.audioEditManager.broker.eventHandle(event, arg);
         }
       }
     );

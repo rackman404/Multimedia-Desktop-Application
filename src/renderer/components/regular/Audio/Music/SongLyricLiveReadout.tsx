@@ -75,8 +75,11 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
 
   useEffect(() => {
-    if (lyricData.lyrics == undefined){
-      setCurrentLyric("Loading (If this doesn't Disappear, API couldn't find lyrics)");  
+    if (lyricData.statusCode == 300){
+      setCurrentLyric("SERVER ERROR: Could not connect to LRCLIB server.");  
+    }
+    else if (lyricData.statusCode == 200){
+      setCurrentLyric("Lyric Error: No lyrics found for this song.");  
     }
     else if (lyricData.lyrics != undefined && lyricData.lyrics.length != 0){
       if (currentLyric == "If this message doesn't disappear after loading bar disappears it means you're fucked bozo"){ //??
