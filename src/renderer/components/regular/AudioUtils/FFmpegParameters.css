@@ -1,5 +1,6 @@
 .ffmpeg_parameters_card{
     background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+    position: relative;
 }
 
 .ffmpeg_parameters_card_content{
@@ -8,5 +9,35 @@
     align-items: center;
     
 
+}
 
+.ffmpeg_parameters_card_grid{
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+}
+
+.ffmpeg_parameters_card_column{
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    
+
+}
+
+.ffmpeg_parameters_card_bottom_row{
+    display: flex;
+    width: 60vw;
+    flex-direction: row;
+    
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+}
+
+.ffmpeg_parameters_card_bottom_row_container{
+    position: absolute;
+    bottom: 0;
 }

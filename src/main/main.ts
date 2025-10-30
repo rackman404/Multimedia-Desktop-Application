@@ -249,6 +249,7 @@ const createWindow = async () => {
   mainWindow.maximize();
 
   serviceManager.settingsManager.SetWindow(mainWindow);
+  serviceManager.audioEditManager.setWindow(mainWindow);
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 

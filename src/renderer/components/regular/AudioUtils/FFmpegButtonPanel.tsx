@@ -10,7 +10,7 @@ export const FFmpegButtonPanel = () => {
             <div className="ffmepeg_button_panel_content">
                 <Button>Convert</Button>
 
-                <Button>Placeholder 1</Button>
+                <Button>Toggle (Place Converted In Music Folder)</Button>
 
                 <Button>Placeholder 2</Button>
 

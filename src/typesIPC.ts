@@ -42,6 +42,10 @@ export namespace IPCMethodAPI{
 
     export enum AudioEditTwoWayIPC {
         getSongFiles,
+        convertSong,
+        refreshSongs,
+
+        requestCoverImageDialog
     }
 
     export enum DiscordOneWayIPC {

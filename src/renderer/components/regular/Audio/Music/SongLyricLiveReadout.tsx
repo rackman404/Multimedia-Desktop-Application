@@ -53,6 +53,10 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
         setCurrentTranslatedLyricData({} as SongLyricAPIData);
 
         setProgressIndicator(<LinearProgress/>)
+        
+        setLyricData({lyrics: [""], timestamps: [0], statusCode: 400} as SongLyricAPIData);
+        currentLyricData({lyrics: [""], timestamps: [0], statusCode: 400} as SongLyricAPIData);
+
         const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.externalLyrics, content: [sMetaData.songRawPath]}) as SongLyricAPIData;
         setLyricData(result);
 
@@ -75,14 +79,17 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
 
   useEffect(() => {
-    if (lyricData.statusCode == 300){
+    if (lyricData.statusCode == 400){
+      setCurrentLyric("Loading...");  
+    }
+    else if (lyricData.statusCode == 300){
       setCurrentLyric("SERVER ERROR: Could not connect to LRCLIB server.");  
     }
     else if (lyricData.statusCode == 200){
       setCurrentLyric("Lyric Error: No lyrics found for this song.");  
     }
     else if (lyricData.lyrics != undefined && lyricData.lyrics.length != 0){
-      if (currentLyric == "If this message doesn't disappear after loading bar disappears it means you're fucked bozo"){ //??
+      if (lyricData.isInstrumental==true){ //??
         setCurrentLyric("[Instrumental]");
       }
       else{
@@ -164,14 +171,14 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
           }
         }
 
-        
+  
       }   
     }
     else if (lyricData.isInstrumental == true){
       setCurrentLyric("Song is marked as instrumental, no lyrics");  
     }
 
-  }, [currentSeek, currentLyric, currentOffset, previousTimestamp]);
+  }, [currentSeek, currentLyric, currentOffset, previousTimestamp, lyricData]);
   
   async function requestTranslation(){
     console.log("attempting lyric translation");

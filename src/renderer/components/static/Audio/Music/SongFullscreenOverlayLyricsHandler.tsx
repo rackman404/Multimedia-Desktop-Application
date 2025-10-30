@@ -36,7 +36,11 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
   useEffect(() => {
     //console.log(lyricData);
-    if (lyricData.statusCode == 300){
+    if (lyricData.statusCode == 400){
+      setCurrentLyric("Loading...");  
+      setNextLyric([]);
+    }
+    else if (lyricData.statusCode == 300){
       setCurrentLyric("SERVER ERROR: Could not connect to LRCLIB server.");  
       setCurrentTranslatedLyric("");
       setNextTranslatedLyrics([""]);

@@ -129,7 +129,7 @@ export class AudioWebLyricReader{
         console.log("lyrics successfully retrieved at path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"")  + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length)
         //console.table(lyricData.timestamps);
         //console.table(lyricData.lyrics);
-        if (lyricData.lyrics.length == 0){
+        if (lyricData.lyrics.length == 0 && lyricData.isInstrumental == false){
             console.log("null lyric was found");
             lyricData.statusCode = 200;     
         }

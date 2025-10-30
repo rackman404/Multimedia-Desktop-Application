@@ -9,7 +9,7 @@ export const FFmpegConsoleLog = () => {
 
             <div className="console_log_card_header">
                 <Typography variant="h5" component="div" style={{textAlign: "left"}}>Console Log</Typography>
-                <Typography component="div" >Status: Idle</Typography>     
+                <Typography component="div" > | Status: Idle</Typography>     
             </div>
 
             <Divider/>

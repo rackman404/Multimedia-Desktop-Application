@@ -35,10 +35,15 @@ export class AudioEditBroker {
     switch(arg.service){
     
       case IPCMethodAPI.AudioEditTwoWayIPC.getSongFiles:
-        console.log("retrieving songs");
+        console.log("retrieving songs from ffmpeg edit folder");
         
         return this.audioEditManager.getSongFiles();
-      break;
+        break;
+        case IPCMethodAPI.AudioEditTwoWayIPC.requestCoverImageDialog:
+        console.log("retrieving cover image from file explorer selection");
+        
+        return this.audioEditManager.requestCoverImageDialog();
+        break;
 
       default:
         console.log("ERROR: AUDIO BROKER (INVALID RESPONSE): " + arg);

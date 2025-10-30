@@ -1,4 +1,4 @@
-import { app } from "electron";
+import { app, BrowserWindow } from "electron";
 import { AudioEditBroker } from "./audioEditIPCBroker";
 import path from "path";
 
@@ -6,6 +6,9 @@ import * as fs from "fs"
 import { DeepLStatistics, DEFAULTSONGMETADATASIMPLE, MiscData, SettingParameters, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
 import { CONFIGFILE, MISCDATAFILE, MUSIC_EDIT_DIRECTORY, FFMPEG_FILE_DIRECTORY } from "../../main";
 import { AudioManager } from "../audio_service/audioManager";
+
+const { dialog } = require('electron')
+
 
 
 type MetaDatas = {
@@ -17,12 +20,19 @@ export class AudioEditManager{
     broker: AudioEditBroker;
     audioManager: AudioManager;
 
+    mainWindow: BrowserWindow | undefined
+
     songs: SongMetaDataSimple[] | undefined
 
 
     constructor(audioM: AudioManager) {
         this.broker = new AudioEditBroker(this);
         this.audioManager = audioM;
+    }
+
+    setWindow(win: BrowserWindow){
+        this.mainWindow = win;
+
     }
     
     async _recursiveSearchSimple(datas: SongMetaDataSimple[], recursedPath: string, recursedID: number): Promise<SongMetaDataSimple[]>{
@@ -78,6 +88,42 @@ export class AudioEditManager{
 
         return this.songs;
 
+    }
+
+    async requestCoverImageDialog(): Promise<String>{
+        var imgPath = "";
+
+        /*
+        dialog.showOpenDialog(this.mainWindow, { properties: ['openFile', 'dontAddToRecent']}).then((result: { canceled: any; filePaths: any; }) => {
+            console.log(result.canceled)
+            console.log(result.filePaths)
+
+            if (result.canceled == true){
+                return imgPath;
+            }
+            else{
+                imgPath = result.filePaths[0];
+                return imgPath;
+            }
+        }).catch((err: any) => {
+            console.log(err)
+        })
+        */
+
+        var paths =  dialog.showOpenDialogSync(this.mainWindow, 
+            { properties: ['openFile', 'dontAddToRecent'], 
+            filters: [
+                { name: 'Images', extensions: ['jpg', 'png'] },
+                { name: 'All Files', extensions: ['*'] }
+            ]},
+        );
+
+        if (paths != undefined){
+            imgPath = paths[0];
+            console.log(paths[0]);
+        }
+
+        return imgPath;
     }
 
 }

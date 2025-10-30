@@ -7,7 +7,7 @@ import { DiscordManager } from "./discord_service/discordManager";
 import { SettingsManager } from "./settings_service/settingsManager";
 
 import { app, ipcMain } from "electron";
-import { CONFIGDIRECTORY, CONFIGFILE, DATABASEFILE, MISCDATAFILE} from "../main";
+import { CONFIGDIRECTORY, CONFIGFILE, DATABASEFILE, MISCDATAFILE, MUSIC_EDIT_DIRECTORY} from "../main";
 import { ServicesEnum } from "../../typesIPC";
 import { UtilityManager } from "./utility/utilityManager";
 
@@ -55,6 +55,11 @@ export class ServiceManager {
 
     if (!fs.existsSync(CONFIGDIRECTORY)){
       fs.mkdirSync(CONFIGDIRECTORY);
+
+    }
+
+    if (!fs.existsSync(MUSIC_EDIT_DIRECTORY)){
+      fs.mkdirSync(MUSIC_EDIT_DIRECTORY);
 
     }
 
