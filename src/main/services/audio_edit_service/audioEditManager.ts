@@ -6,6 +6,8 @@ import * as fs from "fs"
 import { DeepLStatistics, DEFAULTSONGMETADATASIMPLE, MiscData, SettingParameters, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
 import { CONFIGFILE, MISCDATAFILE, MUSIC_EDIT_DIRECTORY, FFMPEG_FILE_DIRECTORY } from "../../main";
 import { AudioManager } from "../audio_service/audioManager";
+import { ChildProcess } from "child_process";
+import { AudioEditFFmpegController } from "./audioEditFFmpegController";
 
 const { dialog } = require('electron')
 
@@ -24,10 +26,14 @@ export class AudioEditManager{
 
     songs: SongMetaDataSimple[] | undefined
 
+    FFmpegController: AudioEditFFmpegController;
+    
 
     constructor(audioM: AudioManager) {
         this.broker = new AudioEditBroker(this);
         this.audioManager = audioM;
+
+        this.FFmpegController = new AudioEditFFmpegController();
     }
 
     setWindow(win: BrowserWindow){

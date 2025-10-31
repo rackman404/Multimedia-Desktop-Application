@@ -127,7 +127,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
         //console.log((closest + " " + (currentSeek+(currentOffset/1000))));
         
-        if (closest < (adjustedSeek) && (previousTimestamp != closest || previousTimestamp == 0)){
+        if ((closest < (adjustedSeek) && (previousTimestamp != closest || previousTimestamp == 0)) || (currentTranslatedLyric == "" && lyricsTranslated == true)){
           setFadeState("fade_in_text");
           
           if (text == "" || text == " "){

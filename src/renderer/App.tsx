@@ -16,6 +16,7 @@ import { TopHeader } from './components/static/TopHeader';
 import { BottomMusicControl } from './components/static/Audio/Music/BottomMusicControl';
 import MusicController from './views/audio/music/MusicController';
 import { useGlobalSettingsState } from './state_stores/GlobalSettingsStateStore';
+import { ServicesEnum } from '../typesIPC';
 
 var theme = createTheme({
   colorSchemes: {
@@ -58,6 +59,20 @@ theme = responsiveFontSizes(theme);
 
 export default function App() {
   const setMouseState = useGlobalSettingsState((state) => state.setIsMouseDown);
+
+    /* ignore, will use this in the future for sending alerts and errors to renderer
+    window.electron.ipcRenderer.on(ServicesEnum.audioEdit, async (event, arg) => {
+      if (arg != ""){
+
+      }
+      else{
+
+      }
+
+      console.log(arg, event);
+
+    });
+    */
 
   document.body.onpointerdown = function() { 
     setMouseState(true);

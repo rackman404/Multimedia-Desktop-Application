@@ -41,7 +41,9 @@ export const DATABASEFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY
 export const MISCDATAFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY, "misc_data.json") : path.join(CONFIGDIRECTORY, "misc_data.json"));
 
 export const MUSIC_EDIT_DIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "ffmpeg_conversions") : '_sample_development_folder/ffmpeg_conversions');
-export const FFMPEG_FILE_DIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "binary_dependencies/ffmpeg.exe'") : '_sample_development_folder/binary_dependencies/ffmpeg.exe');
+export const MUSIC_EDIT_RAW_DIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "ffmpeg_conversions/raw") : '_sample_development_folder/ffmpeg_conversions/raw');
+export const MUSIC_EDIT_PROCESSED_DIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "ffmpeg_conversions/processed") : '_sample_development_folder/ffmpeg_conversions/processed');
+export const FFMPEG_FILE_DIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "binary_dependencies/FFmpeg/ffmpeg.exe'") : '_sample_development_folder/binary_dependencies/FFmpeg/ffmpeg.exe');
 
 export const MINIMUMWINDOWSIZE = {x: 1920/2, y:1080/2};
 
