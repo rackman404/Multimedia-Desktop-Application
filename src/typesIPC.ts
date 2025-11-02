@@ -37,13 +37,13 @@ export namespace IPCMethodAPI{
     }
 
     export enum AudioEditOneWayIPC {
-
+        convertSong,
     }
 
     export enum AudioEditTwoWayIPC {
         getSongFiles,
-        convertSong,
         refreshSongs,
+        getConsoleLog,
 
         requestCoverImageDialog
     }

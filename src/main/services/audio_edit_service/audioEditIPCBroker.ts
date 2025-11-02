@@ -20,7 +20,10 @@ export class AudioEditBroker {
     console.log("handling audio event from broker; arg: " + arg);
 
     switch(arg.service){
-      case IPCMethodAPI.AudioOneWayIPC.storeLastPlayedSong:
+        case IPCMethodAPI.AudioEditOneWayIPC.convertSong:
+          console.log("converting song");
+          
+          this.audioEditManager.convertSong();
         break;
 
       default:
@@ -39,11 +42,19 @@ export class AudioEditBroker {
         
         return this.audioEditManager.getSongFiles();
         break;
-        case IPCMethodAPI.AudioEditTwoWayIPC.requestCoverImageDialog:
+
+      case IPCMethodAPI.AudioEditTwoWayIPC.requestCoverImageDialog:
         console.log("retrieving cover image from file explorer selection");
         
         return this.audioEditManager.requestCoverImageDialog();
         break;
+
+      case IPCMethodAPI.AudioEditTwoWayIPC.getConsoleLog:
+        console.log("retrieving console logs");
+        
+        return this.audioEditManager.getConsoleLog();
+        break;
+
 
       default:
         console.log("ERROR: AUDIO BROKER (INVALID RESPONSE): " + arg);

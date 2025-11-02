@@ -162,6 +162,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
         {translated === false ? <div>
             <div className='lyric_headers'>
               <Typography color="white"> Synced Lyrics  </Typography>
+              <Typography color="white"> Detected Language: {lyricData.language}  </Typography>
             </div>
             <br/>
             <Divider/> 
@@ -185,6 +186,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
         <div>
             <div className='lyric_headers'>
               <RegularButton variant='outlined' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography> </RegularButton>
+              <RegularButton variant='outlined' disabled  onClick={() => (null)}><Typography fontSize={"0.75em"}  noWrap component="div"> Convert To Romanji </Typography> </RegularButton>
             </div>
             <br/>
             <Divider/> 

@@ -5,12 +5,19 @@
 .console_log_card_header{
     display: flex;
     justify-content: space-between;
+
+    text-align: center;
+    align-items: center;
+
 }
 
 .console_log_card_content{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: left;
-    align-items: left;
+    overflow:hidden;
+    height: 80%;
+    
+}
+
+.console_log_card_content_row{
+    display: grid;
+    grid-auto-columns: 9% 90%;
 }

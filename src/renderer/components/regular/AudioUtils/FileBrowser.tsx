@@ -57,7 +57,7 @@ export const FileBrowser = ({rows, rawRows, selectedSongFunction}: FileBrowserTa
                 outline: 'none',
                 },
 
-                }}  slots={{ footer: Footer }}/>
+                }}  slots={{ footer: Footer }} disableRowSelectionOnClick={true} />
 
                 
             </div>

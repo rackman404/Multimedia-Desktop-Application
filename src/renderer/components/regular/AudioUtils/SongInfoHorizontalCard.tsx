@@ -82,7 +82,7 @@ export const SongInfoHorizontalCard = ({sMetaDataFull} : SongInfoHorizontalProps
   
     return (
         <div>
-            <Card  variant='outlined'  className="card_songinfohorizontalcard" component={Paper} sx={{ height: "48vh", maxWidth: "40vw"}}>
+            <Card  variant='outlined'  className="card_songinfohorizontalcard" component={Paper} sx={{ height: "19.5vh", maxWidth: "40vw"}}>
 
 
               <CardContent className='card_songinfohorizontalcard_content'>

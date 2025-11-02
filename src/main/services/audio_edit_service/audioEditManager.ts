@@ -8,6 +8,7 @@ import { CONFIGFILE, MISCDATAFILE, MUSIC_EDIT_DIRECTORY, FFMPEG_FILE_DIRECTORY }
 import { AudioManager } from "../audio_service/audioManager";
 import { ChildProcess } from "child_process";
 import { AudioEditFFmpegController } from "./audioEditFFmpegController";
+import { ConsoleLog } from "../../../typesAudioEdit";
 
 const { dialog } = require('electron')
 
@@ -38,6 +39,7 @@ export class AudioEditManager{
 
     setWindow(win: BrowserWindow){
         this.mainWindow = win;
+        this.FFmpegController.setWindow(win);
 
     }
     
@@ -130,6 +132,18 @@ export class AudioEditManager{
         }
 
         return imgPath;
+    }
+
+    async getConsoleLog(): Promise<ConsoleLog[]>{
+        var data = [] as ConsoleLog[];
+        data = this.FFmpegController.getConsoleLogs();
+
+        return data;
+    }
+
+    async convertSong(){
+        this.FFmpegController.convertFile();
+
     }
 
 }
