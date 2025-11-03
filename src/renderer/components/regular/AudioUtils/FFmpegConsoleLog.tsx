@@ -1,9 +1,9 @@
 import { Button, Card, darken, Divider, lighten, styled, Theme, Typography } from "@mui/material";
 
 import './FFmpegConsoleLog.css';
-import { IPCMethodAPI, ServicesEnum } from "../../../../typesIPC";
+import { IPCMethodAPI, IPCReturnMethodAPI, IPCServicesMessageReturnInterface, ServicesEnum } from "../../../../typesIPC";
 import { useEffect, useState } from "react";
-import { ConsoleLog } from "../../../../typesAudioEdit";
+import { ConsoleLog, ConsoleOutputType } from "../../../../typesAudioEdit";
 import { DataGrid, GridCellCoordinates, gridClasses, GridColDef, gridExpandedRowCountSelector, gridExpandedSortedRowIdsSelector, useGridApiRef } from "@mui/x-data-grid";
 import { grey, red } from "@mui/material/colors";
 
@@ -20,9 +20,14 @@ export const FFmpegConsoleLog = () => {
 
     //Main to Renderer update
     window.electron.ipcRenderer.on(ServicesEnum.audioEdit, (value) => {
-        console.log("RECIEVING DATA")
-        setLogs(value as ConsoleLog[]);
-        apiRef.current?.scrollToIndexes({rowIndex: logs.length, colIndex: 1});
+        var content = value as IPCServicesMessageReturnInterface;
+        
+        //console.log(content);
+        if (content.service == IPCReturnMethodAPI.AudioReturnIPC.returnConsoleLog){
+            console.log("RECIEVING DATA")
+            setLogs(content.content[0] as ConsoleLog[]);
+            apiRef.current?.scrollToIndexes({rowIndex: logs.length, colIndex: 1});
+        }
     })
 
     /*
@@ -69,16 +74,20 @@ export const FFmpegConsoleLog = () => {
                 <Typography variant="h5" component="div" style={{textAlign: "left"}}>Console Log</Typography>
                 <div className="console_log_card_header">
 
-                    <Typography component="div" >Status: Idle</Typography>   
+                    <Typography component="div" >Status: {logs[logs.length-1]?.outputType === ConsoleOutputType.stdout ? "Running" : "Idle"}</Typography>   
      
-                    <Button>
+                    <Button disabled>
                         Clear Logs
                     </Button>
-                    <Button>
-                        Extended Logs
+                    <Button disabled>
+                        Full Logs
                     </Button>
-                    <Button>
-                        Current File Logs
+                    <Button disabled>
+                        Current Log
+                    </Button>
+
+                    <Button disabled>
+                        Auto Scroll
                     </Button>
                     
                 </div>  
@@ -88,28 +97,34 @@ export const FFmpegConsoleLog = () => {
             
             <div className='console_log_card_content' > 
                  <DataGrid  apiRef={apiRef} rows={logs} columns={columns} sx={{
-                                /* https://github.com/mui/mui-x/issues/8104 */
-                                height: '15.75vh',
-                                [`& .${gridClasses.columnHeader}, & .${gridClasses.cell}`]: {
-                                outline: 'transparent',
-                                },
-                                [`& .${gridClasses.columnHeader}:focus-within, & .${gridClasses.cell}:focus-within`]: {
-                                outline: 'none',
-                                },
-                                ".done": {
-                                    bgcolor: "blue",
-                                    "&:hover": {
-                                    bgcolor: "darkblue",
-                                },
-                                ".stdout": {
-                                    bgcolor: "darkgrey",
-                                    "&:hover": {
-                                    bgcolor: "darkgrey",
-                                }}
-                                
-                                ,}
+                    /* https://github.com/mui/mui-x/issues/8104 */
+                    height: '15.75vh',
+                    [`& .${gridClasses.columnHeader}, & .${gridClasses.cell}`]: {
+                    outline: 'transparent',
+                    },
+                    [`& .${gridClasses.columnHeader}:focus-within, & .${gridClasses.cell}:focus-within`]: {
+                    outline: 'none',
+                    },
+                    ".done": {
+                        bgcolor: "blue",
+                        "&:hover": {
+                        bgcolor: "darkblue",
+                    }},
+                    ".error": {
+                        bgcolor: "red",
+                        "&:hover": {
+                        bgcolor: "red",
+                    }},
+                    ".stdout": {
+                        bgcolor: "grey",
+                        "&:hover": {
+                        bgcolor: "grey",
+                    }
+                    ,
+                    borderRadius: 0
+                    }
                 }}
-                getRowClassName={(params) => {return params.row.outputType === 2 ? "done" : "stdout"}} 
+                getRowClassName={(params) => {return params.row.outputType === 0 ? "stdout" : params.row.outputType === 2 ? "done" : "error"}} 
                 disableRowSelectionOnClick={true} hideFooter columnHeaderHeight={24} rowHeight={24} />
 
                 {/* logs?.map((logRow, index) => (

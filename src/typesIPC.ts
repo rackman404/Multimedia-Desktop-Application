@@ -1,5 +1,12 @@
 //file for defined ipc method invocation types/enums (instead of using strings)
 
+export namespace IPCReturnMethodAPI{
+    export enum AudioReturnIPC {
+        returnConsoleLog,
+        returnSongList
+    }
+}
+
 export namespace IPCMethodAPI{
     export enum SettingsOneWayIPC {
         network,
@@ -25,6 +32,7 @@ export namespace IPCMethodAPI{
         getAllMetadataSimple,
         getSelectedMetadataFull,
         externalLyrics,
+        externalLyricsFromMetadata, //should only be used to verify lyrics from modified metadata in Audio Edit
         externalTranslatedLyrics,
         externalDeepLStats,
 
@@ -83,12 +91,12 @@ export type IPCServicesMessageInterface = {
     content: any[] //the content to send to method
 }
 
-/*
+
 export type IPCServicesMessageReturnInterface = {
-    code: any
+    service: IPCReturnMethodAPI.AudioReturnIPC
+
     content: any[] //the content to send to method
 }
-*/
 
 
 export enum ServicesEnum {

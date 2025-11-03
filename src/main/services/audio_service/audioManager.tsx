@@ -167,6 +167,18 @@ export class AudioManager{
         return lyrics;
     }
 
+    async getExternalLyricsFromMetadata(metadata: SongMetaDataSimple): Promise<SongLyricAPIData | undefined>{
+        var lyrics: SongLyricAPIData
+        if (metadata != null){
+            lyrics = await this.audioLyrics.requestLyricData(metadata);
+        }
+        else{
+            return undefined;
+        }
+
+        return lyrics;
+    }
+
     
     async getExternalTranslatedLyrics(songData: any): Promise<SongLyricAPIData | undefined>{
         var lyrics: SongLyricAPIData

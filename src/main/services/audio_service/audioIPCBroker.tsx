@@ -68,6 +68,13 @@ export class AudioBroker {
 
         break;
 
+      case IPCMethodAPI.AudioTwoWayIPC.externalLyricsFromMetadata:
+        console.log("getting lyrics From Metadata");
+        
+        return this.audioManager.getExternalLyricsFromMetadata(arg.content[0]);
+
+        break;
+
       case IPCMethodAPI.AudioTwoWayIPC.externalTranslatedLyrics:
         console.log("getting translated lyrics");
           

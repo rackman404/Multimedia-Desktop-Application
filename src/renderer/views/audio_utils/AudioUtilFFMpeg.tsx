@@ -4,7 +4,7 @@ import './../../App.css';
 
 import { FileBrowser } from '../../components/regular/AudioUtils/FileBrowser';
 import { DEFAULTSONGMETADATA, DEFAULTSONGMETADATASIMPLE, SongMetaData, SongMetaDataSimple } from '../../../types';
-import { ServicesEnum, IPCMethodAPI } from '../../../typesIPC';
+import { ServicesEnum, IPCMethodAPI, IPCServicesMessageReturnInterface, IPCReturnMethodAPI } from '../../../typesIPC';
 import { FFmpegConsoleLog } from '../../components/regular/AudioUtils/FFmpegConsoleLog';
 import { SongInfoHorizontalCard } from '../../components/regular/AudioUtils/SongInfoHorizontalCard';
 import { FFmpegParameters } from '../../components/regular/AudioUtils/FFmpegParameters';
@@ -23,17 +23,26 @@ export const Layout = () => {
   }
 
   async function refreshSongs(){
-    //PLACEHOLDER
+    const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audioEdit, {service: IPCMethodAPI.AudioEditTwoWayIPC.getSongFiles, content: []});
+    var dat = JSON.parse(JSON.stringify(result)); // we must do this to deep copy a new array as otherwise this component would not update
+    setSongList(dat);
   }
 
+  //Main to Renderer update
+  window.electron.ipcRenderer.on(ServicesEnum.audioEdit, (value) => {
+      var content = value as IPCServicesMessageReturnInterface;
+
+      if (content.service == IPCReturnMethodAPI.AudioReturnIPC.returnSongList){
+        console.log("PROCESS FINISHED, REFRESHING SONG LIST");
+        refreshSongs();
+      }
+  })
 
   useEffect(() => {//initial load
   
       (async () => {
           console.log("LOADING MUSIC DATA");
-          const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audioEdit, {service: IPCMethodAPI.AudioEditTwoWayIPC.getSongFiles, content: []});
-          //setMetaData(result);         
-          setSongList(result);
+          refreshSongs();
       })();
       
   }, []); 
@@ -48,7 +57,7 @@ export const Layout = () => {
             </div>
 
             <div >
-              <FFmpegParameters/>
+              <FFmpegParameters sMetaDataFull={selectedSong}/>
               <div className='console_buttons_layout_audioutil'>
                 <FFmpegConsoleLog/>
                 <FFmpegButtonPanel/>

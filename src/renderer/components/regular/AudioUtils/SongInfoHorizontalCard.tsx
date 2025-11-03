@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import placeholderImage from '../../../../../assets/music_no_thumbnail.png';
-import { DEFAULTSONGMETADATA, SongMetaData, SongMetaDataSimple } from '../../../../types';
+import { DEFAULTSONGMETADATA, SongLyricAPIData, SongMetaData, SongMetaDataSimple } from '../../../../types';
 import { fmtMSS } from '../../../Common';
 import { RegularButton } from '../../../elements/CustomButtons';
 import { IPCMethodAPI, ServicesEnum } from '../../../../typesIPC';
@@ -28,13 +28,14 @@ export const SongInfoHorizontalCard = ({sMetaDataFull} : SongInfoHorizontalProps
   const [progressIndicator, setProgressIndicator] = useState(0);
   const [useProgressIndicator, setUseProgressIndicator] = useState(false);
 
+  const [LRClibValid, isLRClibValid] = useState<boolean>(false);
+  
+
 
   useEffect(() => {
 
     (async () => {
       if (sMetaDataFull.songRawPath != ""){
-        
-
 
         //backend image handling
         var cImg = placeholderImage;
@@ -76,13 +77,31 @@ export const SongInfoHorizontalCard = ({sMetaDataFull} : SongInfoHorizontalProps
     //called when the component is unmounted
     return () => {
       setCover(<div/>);
+      
     };
   }, []);
 
+  useEffect(() => {
+    if (sMetaDataFull.songRawPath != ""){
+      checkLRClibValidity();
+    }
+  }, [sMetaDataFull]);
+
+    async function checkLRClibValidity(){
+        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio, {service: IPCMethodAPI.AudioTwoWayIPC.externalLyrics, content: [sMetaDataFull.songRawPath]}) as SongLyricAPIData;
+        
+        if (result.statusCode == 100){
+          isLRClibValid(true);
+        }
+        else{
+          isLRClibValid(false);
+        }
+        
+    }
   
     return (
         <div>
-            <Card  variant='outlined'  className="card_songinfohorizontalcard" component={Paper} sx={{ height: "19.5vh", maxWidth: "40vw"}}>
+            <Card  variant='outlined'  className="card_songinfohorizontalcard" component={Paper} sx={{ height: "19.5vh", maxWidth: "40vw", borderRadius: 0}} >
 
 
               <CardContent className='card_songinfohorizontalcard_content'>
@@ -93,9 +112,6 @@ export const SongInfoHorizontalCard = ({sMetaDataFull} : SongInfoHorizontalProps
                 </Paper>            
                 
                 {/* WORDED METADATA */}
-
-
-
                   <div style={{ textAlign: "left", paddingRight: "5px"}}>
                     <Typography variant="body2" component="div" >Name: {sMetaDataFull?.name}</Typography>
                     <Typography variant="body2" ><div className='text_fade_in_songinfohorizontalcard'>Genre: {sMetaDataFull?.genre} <br/></div> </Typography>
@@ -109,6 +125,8 @@ export const SongInfoHorizontalCard = ({sMetaDataFull} : SongInfoHorizontalProps
                     <Typography variant="body2" ><div className='text_fade_in_songinfohorizontalcard'>Format: {sMetaDataFull?.format}</div></Typography>
                     <Typography variant="body2" ><div className='text_fade_in_songinfohorizontalcard'>Embedded Comment: {sMetaDataFull?.comment}</div></Typography>
                     <Typography variant="body2" ><div className='text_fade_in_songinfohorizontalcard'>File Location: {sMetaDataFull?.songRawPath}</div></Typography>
+                    <Divider/>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfohorizontalcard'>Is LibLRC Valid: {LRClibValid.toString()} </div></Typography>
                   </div>       
               </CardContent>
             </Card>

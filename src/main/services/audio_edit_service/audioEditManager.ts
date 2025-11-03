@@ -8,7 +8,8 @@ import { CONFIGFILE, MISCDATAFILE, MUSIC_EDIT_DIRECTORY, FFMPEG_FILE_DIRECTORY }
 import { AudioManager } from "../audio_service/audioManager";
 import { ChildProcess } from "child_process";
 import { AudioEditFFmpegController } from "./audioEditFFmpegController";
-import { ConsoleLog } from "../../../typesAudioEdit";
+import { ConsoleLog, ConversionData } from "../../../typesAudioEdit";
+import { IPCReturnMethodAPI, IPCServicesMessageReturnInterface, ServicesEnum } from "../../../typesIPC";
 
 const { dialog } = require('electron')
 
@@ -141,8 +142,9 @@ export class AudioEditManager{
         return data;
     }
 
-    async convertSong(){
-        this.FFmpegController.convertFile();
+    async convertSong(data: ConversionData){
+        this.FFmpegController.convertFile(data);
+
 
     }
 

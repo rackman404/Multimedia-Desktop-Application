@@ -23,7 +23,7 @@ export class AudioEditBroker {
         case IPCMethodAPI.AudioEditOneWayIPC.convertSong:
           console.log("converting song");
           
-          this.audioEditManager.convertSong();
+          this.audioEditManager.convertSong(arg.content[0]);
         break;
 
       default:

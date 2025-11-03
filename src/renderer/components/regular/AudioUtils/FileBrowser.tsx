@@ -9,6 +9,10 @@ import { SongTableTopBar } from "../Audio/Music/SongTableTopBar";
 import { DataGrid, GridRowsProp, GridColDef, gridClasses, useGridApiContext, GridEventListener, useGridEvent, GridFooter } from '@mui/x-data-grid';
 import { FFmpegConsoleLog } from "./FFmpegConsoleLog";
 
+import './FileBrowser.css';
+import { IPCReturnMethodAPI, IPCServicesMessageReturnInterface, ServicesEnum } from "../../../../typesIPC";
+import { ConsoleLog } from "../../../../typesAudioEdit";
+
 type FileBrowserTableProps = { //constructor variables
     rows: GridRowsProp
     rawRows: SongMetaDataSimple[]
@@ -45,22 +49,21 @@ export const FileBrowser = ({rows, rawRows, selectedSongFunction}: FileBrowserTa
 
 
     return(
-        <div>
-            <div >
-                <DataGrid rows={rows} columns={columns} sx={{
-                /* https://github.com/mui/mui-x/issues/8104 */
-                height: '73vh',
-                [`& .${gridClasses.columnHeader}, & .${gridClasses.cell}`]: {
-                outline: 'transparent',
-                },
-                [`& .${gridClasses.columnHeader}:focus-within, & .${gridClasses.cell}:focus-within`]: {
-                outline: 'none',
-                },
+        <div className="file_browser">
+            <DataGrid rows={rows} columns={columns} sx={{
+            /* https://github.com/mui/mui-x/issues/8104 */
+            height: '73vh',
+            [`& .${gridClasses.columnHeader}, & .${gridClasses.cell}`]: {
+            outline: 'transparent',
+            },
+            [`& .${gridClasses.columnHeader}:focus-within, & .${gridClasses.cell}:focus-within`]: {
+            outline: 'none',
+            },
+            borderRadius: 0
 
-                }}  slots={{ footer: Footer }} disableRowSelectionOnClick={true} />
+            }}  slots={{ footer: Footer }} disableRowSelectionOnClick={true}  />
 
-                
-            </div>
+            
         </div>
     );
 

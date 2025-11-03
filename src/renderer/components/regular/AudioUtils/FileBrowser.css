@@ -1,0 +1,7 @@
+.file_browser{
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+    position: relative;
+
+    scrollbar-color: rgb(255, 255, 255) #000000;
+    scroll-behavior: smooth;
+}
