@@ -54,10 +54,24 @@ export const FFmpegParameters = ({sMetaDataFull} : FFmpegParametersProps) => {
     }
 
     async function checkLRClibValidity(){
-        var testData = {} as SongMetaDataSimple;
+        var testData = {artist: [] as string[]} as SongMetaDataSimple;
 
-        testData.name = localParameters.songName;
-        testData.artist = localParameters.songArtist;
+        if (localParameters.songName != ""){
+            testData.name = localParameters.songName;
+        }
+        else{
+           testData.name = sMetaDataFull.name; 
+        }
+
+        if (localParameters.songArtist[0] != undefined && localParameters.songArtist[0] != ""){
+            console.log(localParameters.songArtist[0] + "1 ");
+            testData.artist[0] = localParameters.songArtist[0];
+        }
+        else{
+            console.log(sMetaDataFull.artist[0]);
+           testData.artist[0] = sMetaDataFull.artist[0]; 
+        }
+        
         testData.length = sMetaDataFull.length;
 
         setLRCButtonState(true);
@@ -88,9 +102,11 @@ export const FFmpegParameters = ({sMetaDataFull} : FFmpegParametersProps) => {
     return(
         <Card className='ffmpeg_parameters_card' variant='outlined' sx={{height: '73vh', borderRadius: 0 }}  >
             <Typography variant="h4" component="div" style={{textAlign: "center"}}>Parameters</Typography>
-            <div style={{textAlign: "center"}}>Note: Empty field will mean this field won't be changed for the given song</div>
+            <div style={{textAlign: "center"}}>Selected Song: {sMetaDataFull.songRawPath}</div>
+            
             <Divider orientation="horizontal" sx={{ borderBottomWidth: 4 , marginBottom: "5px"}}/>
             <div className="ffmpeg_parameters_card_content" >
+                <div style={{textAlign: "center"}}>Note: Empty field will mean this field won't be changed for the given song</div>
 
                 
                 {/*

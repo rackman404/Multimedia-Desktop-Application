@@ -135,6 +135,8 @@ export class AudioEditFFmpegController{
             inputArgs.push("author=" + data.songArtist[0] );
             inputArgs.push("-metadata");
             inputArgs.push("album_artist=" + data.songArtist[0] );
+            inputArgs.push("-metadata");
+            inputArgs.push("artist=" + data.songArtist[0] ); //contributing artist
         }
         if (data.songGenre[0] != undefined){
             inputArgs.push("-metadata");
