@@ -2,6 +2,7 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { ServicesEnum } from '../typesIPC';
+import { off } from 'process';
 
 //export type Channels = 'ipc-example' | 'audio' | 'discord' | 'settings';
 export type Channels = ServicesEnum;
@@ -38,6 +39,13 @@ const electronHandler = {
     },
     invoke(channel: Channels, ...args: any[]) {
       return ipcRenderer.invoke(channel, ...args);
+    },
+
+    off(channel: Channels, listener: (event: IpcRendererEvent, ...args: any[]) => void){
+      ipcRenderer.removeListener(channel, listener)
+    },
+    removeAllListeners(channel: Channels){
+      ipcRenderer.removeAllListeners(channel);
     },
   },
   

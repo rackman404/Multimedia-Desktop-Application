@@ -36,7 +36,7 @@ export const FFmpegParameters = ({sMetaDataFull} : FFmpegParametersProps) => {
     const [localParameters, setLocalParameters] = useState<ConversionData>(DEFAULT_CONVERSION_DATA);
     const [LRClibValid, isLRClibValid] = useState<boolean | undefined>(undefined);
 
-    const[LRCButtonState, setLRCButtonState] = useState<boolean>(false);
+    const [LRCButtonState, setLRCButtonState] = useState<boolean>(false);
 
     async function onCoverImageSelect(){
         console.log("Requesting image from backend");
@@ -64,11 +64,11 @@ export const FFmpegParameters = ({sMetaDataFull} : FFmpegParametersProps) => {
         }
 
         if (localParameters.songArtist[0] != undefined && localParameters.songArtist[0] != ""){
-            console.log(localParameters.songArtist[0] + "1 ");
+            //console.log(localParameters.songArtist[0] + "1 ");
             testData.artist[0] = localParameters.songArtist[0];
         }
         else{
-            console.log(sMetaDataFull.artist[0]);
+            //console.log(sMetaDataFull.artist[0]);
            testData.artist[0] = sMetaDataFull.artist[0]; 
         }
         

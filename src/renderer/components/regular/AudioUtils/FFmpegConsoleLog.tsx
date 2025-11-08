@@ -7,6 +7,7 @@ import { ConsoleLog, ConsoleOutputType } from "../../../../typesAudioEdit";
 import { DataGrid, GridCellCoordinates, gridClasses, GridColDef, gridExpandedRowCountSelector, gridExpandedSortedRowIdsSelector, useGridApiRef } from "@mui/x-data-grid";
 import { grey, red } from "@mui/material/colors";
 
+
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'line', width: 25 },
   { field: 'outputType', headerName: 'type', width: 25 },
@@ -18,55 +19,43 @@ export const FFmpegConsoleLog = () => {
   
     const apiRef = useGridApiRef();
 
-    //Main to Renderer update
-    window.electron.ipcRenderer.on(ServicesEnum.audioEdit, (value) => {
+    /*
+    const [listener, SetListener] = useState<any>(listenerFunc);
+
+    async function listenerFunc(){
+        //Main to Renderer update
+        window.electron.ipcRenderer.on(ServicesEnum.audioEdit, (value) => {
+            var content = value as IPCServicesMessageReturnInterface;
+            
+            //console.log(content);
+            if (content.service == IPCReturnMethodAPI.AudioReturnIPC.returnConsoleLog){
+                console.log("RECIEVING DATA")
+                setLogs(content.content[0] as ConsoleLog[]);
+                apiRef.current?.scrollToIndexes({rowIndex: logs.length, colIndex: 1});
+            }
+        })
+    }
+    */
+    
+    const listenerFunc = (value: any) => {
         var content = value as IPCServicesMessageReturnInterface;
-        
+            
         //console.log(content);
         if (content.service == IPCReturnMethodAPI.AudioReturnIPC.returnConsoleLog){
             console.log("RECIEVING DATA")
             setLogs(content.content[0] as ConsoleLog[]);
             apiRef.current?.scrollToIndexes({rowIndex: logs.length, colIndex: 1});
         }
-    })
+      };
+    
+    useEffect(() => {//initial load
+        const onEventHandler = window.electron.ipcRenderer.on(ServicesEnum.audioEdit, listenerFunc);
 
-    /*
-    async function RequestConsoleLogs(){
-        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audioEdit, {service: IPCMethodAPI.AudioEditTwoWayIPC.getConsoleLog, content: [true]});  
-        
-        
-        console.log(prevLogs.length + " " + logs.length);
-        try{    
-            if (prevLogs.length != logs.length){
-                apiRef.current?.scrollToIndexes({rowIndex: logs.length-1, colIndex: 1});
-            }
+        return () => {//for removing event listener
+            if (onEventHandler) onEventHandler();
         }
-        catch{
-            console.log("err");
-        }
-
-        
-
-        
-
-        setPrevLogs(logs);
-        setLogs(result);
-    }
-    */
-
-    /*
-    useEffect(() => {
-        const interval = setInterval(() => {
-            RequestConsoleLogs();
-            console.log(logs); 
-        }, 1000);
-
-        return () => clearInterval(interval); 
+            
     }, []); 
-    */
- 
-
-
 
     return(
         <Card className='console_log_card' variant='outlined' sx={{height: '19.5vh'}}>          

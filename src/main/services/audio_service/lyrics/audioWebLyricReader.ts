@@ -157,8 +157,8 @@ export class AudioWebLyricReader{
                 lyricData.language = "N/A";
             }
         }
-        console.log(lyricData.lyrics.toString().replace(/,/g,"."));
-        console.log("LYRIC LANGUAGE: " + this.lngDetector.detect(lyricData.lyrics.toString().replace(/,/g,". ")));
+        //console.log(lyricData.lyrics.toString().replace(/,/g,"."));
+        //console.log("LYRIC LANGUAGE: " + this.lngDetector.detect(lyricData.lyrics.toString().replace(/,/g,". ")));
         
         return lyricData;
     }

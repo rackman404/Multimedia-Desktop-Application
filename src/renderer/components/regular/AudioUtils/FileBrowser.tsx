@@ -52,7 +52,7 @@ export const FileBrowser = ({rows, rawRows, selectedSongFunction}: FileBrowserTa
         <div className="file_browser">
             <DataGrid rows={rows} columns={columns} sx={{
             /* https://github.com/mui/mui-x/issues/8104 */
-            height: '73vh',
+            height: '36.5vh',
             [`& .${gridClasses.columnHeader}, & .${gridClasses.cell}`]: {
             outline: 'transparent',
             },

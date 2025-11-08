@@ -4,7 +4,7 @@ import path from "path";
 
 import * as fs from "fs" 
 import { DeepLStatistics, DEFAULTSONGMETADATASIMPLE, MiscData, SettingParameters, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
-import { CONFIGFILE, MISCDATAFILE, MUSIC_EDIT_DIRECTORY, FFMPEG_FILE_DIRECTORY } from "../../main";
+import { CONFIGFILE, MISCDATAFILE, MUSIC_EDIT_DIRECTORY, FFMPEG_FILE_DIRECTORY, MUSIC_EDIT_RAW_DIRECTORY, MUSIC_EDIT_PROCESSED_DIRECTORY } from "../../main";
 import { AudioManager } from "../audio_service/audioManager";
 import { ChildProcess } from "child_process";
 import { AudioEditFFmpegController } from "./audioEditFFmpegController";
@@ -15,10 +15,6 @@ const { dialog } = require('electron')
 
 
 
-type MetaDatas = {
-    full: SongMetaData[],
-    simple: SongMetaDataSimple[]
-}
 
 export class AudioEditManager{
     broker: AudioEditBroker;
@@ -26,7 +22,7 @@ export class AudioEditManager{
 
     mainWindow: BrowserWindow | undefined
 
-    songs: SongMetaDataSimple[] | undefined
+    //songs: SongMetaDataSimple[][] | undefined
 
     FFmpegController: AudioEditFFmpegController;
     
@@ -61,7 +57,7 @@ export class AudioEditManager{
                 }
             } 
             catch (error) {
-                console.debug("ERROR IN RECURSIVE METADATA SEARCH" + error);
+                console.debug("ERROR IN RECURSIVE METADATA SEARCH " + error);
             }
 
             try{
@@ -90,12 +86,19 @@ export class AudioEditManager{
         return datas;
     }
     
-    async getSongFiles(): Promise<SongMetaDataSimple[]>{
-        this.songs = [] as SongMetaDataSimple[];
+    async getSongFiles(): Promise<SongMetaDataSimple[][]>{
+        var songs = [[], []] as SongMetaDataSimple[][]; //0 raw, 1 processed
+        
+        
+        songs[0] = await this._recursiveSearchSimple(songs[0], MUSIC_EDIT_RAW_DIRECTORY, 0);
+        songs[1] = await this._recursiveSearchSimple(songs[1], MUSIC_EDIT_PROCESSED_DIRECTORY, 0);
 
-        this.songs = await this._recursiveSearchSimple(this.songs, MUSIC_EDIT_DIRECTORY, 0);
+        for (var i = 0; songs[1].length > i; i++){
+            console.log(songs[1][i].id);
+        }
+        
 
-        return this.songs;
+        return songs;
 
     }
 
