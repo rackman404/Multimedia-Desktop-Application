@@ -93,9 +93,6 @@ export class AudioEditManager{
         songs[0] = await this._recursiveSearchSimple(songs[0], MUSIC_EDIT_RAW_DIRECTORY, 0);
         songs[1] = await this._recursiveSearchSimple(songs[1], MUSIC_EDIT_PROCESSED_DIRECTORY, 0);
 
-        for (var i = 0; songs[1].length > i; i++){
-            console.log(songs[1][i].id);
-        }
         
 
         return songs;

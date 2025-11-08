@@ -17,14 +17,30 @@ type FileBrowserTableProps = { //constructor variables
     rows: GridRowsProp
     rawRows: SongMetaDataSimple[]
     selectedSongFunction : (data:SongMetaDataSimple) => void
+
+    showDuplicate: boolean
+};
+
+export type FileSongMetaDataSimple = { //constructor variables
+    id: number
+    name: string
+    songRawPath: string
+    duplicated: boolean
 };
 
 const columns: GridColDef[] = [
-  { field: 'name', headerName: 'Song Name', width: 200 },
-  { field: 'songRawPath', headerName: 'Song Path', width: 500 },
+    { field: 'name', headerName: 'Song Name', width: 150 },
+    { field: 'songRawPath', headerName: 'Song Path', width: 500 },
 ];
 
-export const FileBrowser = ({rows, rawRows, selectedSongFunction}: FileBrowserTableProps) => { 
+const columnsExtended: GridColDef[] = [
+    { field: 'duplicated', headerName: 'Converted', width: 1 }, 
+    { field: 'name', headerName: 'Song Name', width: 150 },
+    { field: 'songRawPath', headerName: 'Song Path', width: 500 },
+];
+
+export const FileBrowser = ({rows, rawRows, showDuplicate, selectedSongFunction}: FileBrowserTableProps) => { 
+
 
     function Footer() {
         const [message, setMessage] = useState('');
@@ -40,7 +56,7 @@ export const FileBrowser = ({rows, rawRows, selectedSongFunction}: FileBrowserTa
 
         return (
             <Fragment>
-                <GridFooter />
+                <GridFooter/>
                 {message && <Alert severity="info">{message}</Alert>}
             </Fragment>
         );
@@ -50,7 +66,7 @@ export const FileBrowser = ({rows, rawRows, selectedSongFunction}: FileBrowserTa
 
     return(
         <div className="file_browser">
-            <DataGrid rows={rows} columns={columns} sx={{
+            <DataGrid rows={rows} columns={showDuplicate === true ? columnsExtended : columns} sx={{
             /* https://github.com/mui/mui-x/issues/8104 */
             height: '36.5vh',
             [`& .${gridClasses.columnHeader}, & .${gridClasses.cell}`]: {
@@ -59,9 +75,15 @@ export const FileBrowser = ({rows, rawRows, selectedSongFunction}: FileBrowserTa
             [`& .${gridClasses.columnHeader}:focus-within, & .${gridClasses.cell}:focus-within`]: {
             outline: 'none',
             },
+            ".duplicated": {
+                    bgcolor: "green",
+                    "&:hover": {
+                    bgcolor: "darkgreen",
+                }},
             borderRadius: 0
 
-            }}  slots={{ footer: Footer }} disableRowSelectionOnClick={true}  />
+            }} getRowClassName={(params) => {return params.row.duplicated === true ? "duplicated" : "normal"}} 
+            slots={{ footer: Footer }} disableRowSelectionOnClick={true} columnHeaderHeight={24} rowHeight={24} />
 
             
         </div>
