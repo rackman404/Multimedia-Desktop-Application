@@ -9,6 +9,7 @@ import { CONFIGFILE, MISCDATAFILE, PRODUCTIONMUSICFILEDIRECTORY } from "../../ma
 import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
 import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
 import { AudioSearch } from "./filters/audioSearch";
+import { AudioPhoneticsChinese } from "./phonetics/audioPhoneticsChinese";
 
 type MetaDatas = {
     full: SongMetaData[],
@@ -21,6 +22,7 @@ export class AudioManager{
     audioLyrics: AudioWebLyricReader;
     audioTranslator: AudioDeepLTranslator;
     audioSearch: AudioSearch;
+    audioPhoneticsChinese: AudioPhoneticsChinese
 
     fileMusicPath: string;
 
@@ -39,6 +41,7 @@ export class AudioManager{
         this.audioLyrics = new AudioWebLyricReader();
         this.audioTranslator = new AudioDeepLTranslator();
         this.audioSearch = new AudioSearch();
+        this.audioPhoneticsChinese = new AudioPhoneticsChinese();
 
         if (app.isPackaged == false){ //developmental file path
             this.fileMusicPath = __dirname;
@@ -253,6 +256,12 @@ export class AudioManager{
         }
 
         return jsonData.lastPlayedSong;
+    }
+
+    async PhoneticsParse(lyrics: SongLyricAPIData, jyutping: boolean): Promise<SongLyricAPIData | undefined>{
+        var phonetics = this.audioPhoneticsChinese.requestPhonetics(lyrics, jyutping);
+
+        return phonetics;
     }
 
 

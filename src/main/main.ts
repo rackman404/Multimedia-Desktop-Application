@@ -34,6 +34,8 @@ export const BINARYDEPENDENCYDIRECTORY = path.join(__dirname, '../../../../' + "
 //export const DEVELOPMENTCONFIGDIRECTORY = '_sample_development_folder/sample_config';
 //export const DEVELOPMENTCONFIGFILE = path.join(DEVELOPMENTCONFIGDIRECTORY, "config.json");
 
+export const RESOURCESDIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "app_resources") : '_sample_development_folder/app_resources');
+
 export const CONFIGDIRECTORY = (app.isPackaged === true ? path.join(__dirname, '../../../../' + "config") : '_sample_development_folder/sample_config');
 export const CONFIGFILE = (app.isPackaged === true ? path.join(CONFIGDIRECTORY, "config.json") : path.join(CONFIGDIRECTORY, "config.json"));
 

@@ -31,6 +31,8 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
   //FOR USE BY BOTH THIS AND OVERLAY
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const setCurrentTranslatedLyricData = useSelectedSongStore((state) => state.setCurrentTranslatedLyricData);
+  const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
+  const setCurrentPhoneticsLyricData = useSelectedSongStore((state) => state.setCurrentPhoneticLyricData);
 
   const currentOffset = useSelectedSongStore((state) => state.lyricOffset);
   const setCurrentOffset = useSelectedSongStore((state) => state.setLyricOffset);
@@ -51,6 +53,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
 
         currentLyricData({} as SongLyricAPIData);
         setCurrentTranslatedLyricData({} as SongLyricAPIData);
+        setCurrentPhoneticsLyricData({} as SongLyricAPIData)
 
         setProgressIndicator(<LinearProgress/>)
         

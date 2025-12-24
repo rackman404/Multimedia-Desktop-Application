@@ -109,6 +109,13 @@ export class AudioBroker {
 
       break;
 
+      case IPCMethodAPI.AudioTwoWayIPC.phoneticsParse:
+        console.log("retrieving phonetics translation");
+          
+        return this.audioManager.PhoneticsParse(arg.content[0], arg.content[1]);
+
+      break;
+
       default:
         console.log("ERROR: AUDIO BROKER (INVALID RESPONSE): " + arg);
 

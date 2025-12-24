@@ -127,6 +127,7 @@ export const SongInfoHorizontalCard = ({sMetaDataFull} : SongInfoHorizontalProps
                     <Typography variant="body2" ><div className='text_fade_in_songinfohorizontalcard'>File Location: {sMetaDataFull?.songRawPath}</div></Typography>
                     <Divider/>
                     <Typography variant="body2" ><div className='text_fade_in_songinfohorizontalcard'>Is LibLRC Valid: {LRClibValid.toString()} </div></Typography>
+                    <Typography variant="body2" ><div className='text_fade_in_songinfohorizontalcard'>Open In File Explorer: <Button disabled>Open</Button> </div></Typography>
                   </div>       
               </CardContent>
             </Card>

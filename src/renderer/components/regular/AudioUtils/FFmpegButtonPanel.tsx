@@ -13,11 +13,11 @@ export const FFmpegButtonPanel = () => {
         <Card variant='outlined' sx={{height: '20vh'}}>
 
             <div className="ffmepeg_button_panel_content">
-                
-
-                <Button disabled>Toggle (Place Converted In Music Folder)</Button>
-
                 <Button disabled>Toggle (Disable Overwrite)</Button>
+
+                <Button disabled>Send Converted To Designated Folder</Button>
+
+                <Button disabled>Refresh Files</Button>
 
             </div>
             

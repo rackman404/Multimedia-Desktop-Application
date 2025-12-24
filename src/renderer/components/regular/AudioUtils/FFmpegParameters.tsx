@@ -326,6 +326,7 @@ export const FFmpegParameters = ({sMetaDataFull} : FFmpegParametersProps) => {
                 <div className="ffmpeg_parameters_card_bottom_row">
 
 <                   Button onClick={() => StartConversion()}>Convert</Button>
+                    <Button disabled>Copy To Converted</Button>
                     <Button disabled>Prefill from Web Scrapers</Button>
                     <Button onClick={() => resetAll()}>Clear All</Button>
                     <Button disabled={LRCButtonState} onClick={() => checkLRClibValidity()}>Check LRClib Validity</Button>

@@ -1,4 +1,4 @@
-import {Button, Card, CircularProgress, Divider, Typography } from '@mui/material';
+import {Button, Card, CircularProgress, Divider, ToggleButton, Typography } from '@mui/material';
 import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { SongLyricAPIData } from '../../../../../types';
 import { RegularButton } from '../../../../elements/CustomButtons';
 import { IPCMethodAPI, ServicesEnum } from '../../../../../typesIPC';
 
+import CheckIcon from '@mui/icons-material/Check';
 
 type SongFullscreenOverlayLyricsHandlerProps = { //constructor variables
   translated: boolean
@@ -21,6 +22,9 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
   const [currentTranslatedLyric, setCurrentTranslatedLyric] = useState("");
   const [nextTranslatedLyrics, setNextTranslatedLyrics] = useState([] as string[]);
 
+  const [currentPhoneticsLyric, setCurrentPhoneticsLyric] = useState("");
+  const [NextPhoneticsLyric, setNextPhoneticsLyrics] = useState([] as string[]);
+
   const currentSeek = useSelectedSongStore((state) => state.currentSeek);
   
   const [previousTimestamp, setPreviousTimestamp] = useState(0);
@@ -31,6 +35,11 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const setCurrentTranslatedLyricData = useSelectedSongStore((state) => state.setCurrentTranslatedLyricData);
+
+  const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
+  const setCurrentPhoneticsLyricData = useSelectedSongStore((state) => state.setCurrentPhoneticLyricData);
+
+  const [usePhonetics, setUsePhonetics] = useState(false);
   
   const lyricData = useSelectedSongStore((state) => state.currentLyricData);
 
@@ -83,10 +92,16 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
           var translatedText = currentTranslatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)];
           lyricsTranslated = true;
         }
+        var phoneticsParsed = false;
+        phoneticsText = "";
+        if (currentPhoneticsLyricData.lyrics != undefined){
+          var phoneticsText = currentPhoneticsLyricData.lyrics[lyricData.timestamps.indexOf(closest)];
+          phoneticsParsed = true;
+        }
 
         //console.log((closest + " " + (currentSeek+(currentOffset/1000))));
 
-        if ((closest < (adjustedSeek) && (previousTimestamp != closest || previousTimestamp == 0)) || currentLyric == "Loading..." || (currentTranslatedLyric == "" && lyricsTranslated == true)){
+        if ((closest < (adjustedSeek) && (previousTimestamp != closest || previousTimestamp == 0)) || currentLyric == "Loading..." || (currentTranslatedLyric == "" && lyricsTranslated == true) || (currentPhoneticsLyric == "" && phoneticsParsed == true)){
           setFadeState("fade_in_text");
           
           if (text == "" || text == " "){
@@ -94,20 +109,29 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
             if (lyricsTranslated == true ){
               setCurrentTranslatedLyric("[Instrumental]");  
             }
+            if (phoneticsParsed == true ){
+              setCurrentPhoneticsLyric("[Instrumental]");  
+            }
           }
           else{
             setCurrentLyric(text);  
 
             setCurrentTranslatedLyric(translatedText);
+
+            setCurrentPhoneticsLyric(phoneticsText);
           }
           
           var nextLyricsArray = [] as string[];
           var nextTranslatedLyricsArray = [] as string[];
+          var nextPhoneticsLyricsArray = [] as string[];
           for (var i = 1; i < LYRICS_DISPLAYED_AT_ONCE + 1; i++){
             if (lyricData.lyrics[lyricData.timestamps.indexOf(closest)+i] == "" || lyricData.lyrics[lyricData.timestamps.indexOf(closest)+i] == " "){
               nextLyricsArray[i] = "[Instrumental]";
                 if (lyricsTranslated == true){
                   nextTranslatedLyricsArray[i] = "[Instrumental]";  
+                }
+                if (phoneticsParsed == true){
+                  nextPhoneticsLyricsArray[i] = "[Instrumental]";  
                 }
               }
 
@@ -116,6 +140,9 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
                   if (lyricsTranslated == true){
                     nextTranslatedLyricsArray[i] = currentTranslatedLyricData.lyrics[lyricData.timestamps.indexOf(closest)+i];  
                   }
+                  if (phoneticsParsed == true){
+                    nextPhoneticsLyricsArray[i] = currentPhoneticsLyricData.lyrics[lyricData.timestamps.indexOf(closest)+i];  
+                  }
               }  
 
               setPreviousTimestamp(closest);
@@ -123,6 +150,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
           setNextLyric(nextLyricsArray);
           setNextTranslatedLyrics(nextTranslatedLyricsArray);  
+          setNextPhoneticsLyrics(nextPhoneticsLyricsArray);  
 
             
             //console.log((lyricData.timestamps[lyricData.timestamps.indexOf(closest) + 1]) - currentSeek);
@@ -156,6 +184,17 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
       }
   }
 
+  async function requestPhonetics(){
+      console.log("attempting phonetics parsing");
+      if (lyricData.lyrics == undefined){ //need to add a modal here to notify user that translation cannot work
+        console.log("lyric data is undefined!, cannot add phonetics data");
+      }
+      else{
+        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.phoneticsParse, content: [lyricData, true]}) as SongLyricAPIData;
+        setCurrentPhoneticsLyricData(result);
+      }
+  }
+
 
   return (
     <div className='containers'>
@@ -186,25 +225,47 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
         <div>
             <div className='lyric_headers'>
               <RegularButton variant='outlined' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography> </RegularButton>
-              <RegularButton variant='outlined' disabled  onClick={() => (null)}><Typography fontSize={"0.75em"}  noWrap component="div"> Convert To Romanji </Typography> </RegularButton>
+              
+              <ToggleButton className='overlay_button_element' sx={{fontSize: '0.5vw'}}
+                value="check"
+                selected={usePhonetics}
+                onChange={() => setUsePhonetics((usePhonetics) => !usePhonetics)}
+                >
+                Use Phonetics
+              </ToggleButton>
+
+              <RegularButton variant='outlined'  onClick={() => (requestPhonetics())}><Typography fontSize={"0.75em"}  noWrap component="div"> Convert Phonetics </Typography> </RegularButton>
             </div>
             <br/>
             <Divider/> 
 
             <br/>
-            <Typography color="white"  className={fadeState} style={{fontStyle: 'oblique'}}> {currentTranslatedLyric} </Typography>
+            <Typography color="white"  className={fadeState} style={{fontStyle: 'oblique'}}> {usePhonetics === false ? currentTranslatedLyric : currentPhoneticsLyric} </Typography>
             <br/>
-            {nextTranslatedLyrics.map((lyric) => 
+            {usePhonetics === false ? nextTranslatedLyrics.map((lyric) => 
 
             <div>
 
-            <br/>
-            <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
-            <br/>
+              <br/>
+              <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
+              <br/>
 
             </div>
             
-            )}
+            ) : 
+            
+            NextPhoneticsLyric.map((lyric) => 
+
+            <div>
+
+              <br/>
+              <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
+              <br/>
+
+            </div>
+            
+            )
+            }
         </div>
 
         }

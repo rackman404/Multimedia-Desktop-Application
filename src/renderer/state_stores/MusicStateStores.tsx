@@ -54,6 +54,9 @@ interface ISelectedSongState {
   currentTranslatedLyricData: SongLyricAPIData
   setCurrentTranslatedLyricData: (currentTranslatedLyricData: SongLyricAPIData) => void
 
+  currentPhoneticLyricData: SongLyricAPIData
+  setCurrentPhoneticLyricData: (currentPhoneticLyricData: SongLyricAPIData) => void
+
   analyserNode: AnalyserNode | null
   setAnalyserNode: (analyserNode: AnalyserNode) => void
 }
@@ -110,16 +113,29 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
   currentLyricData: {
     timestamps: [],
     lyrics: [],
-    isInstrumental: false
+    isInstrumental: false,
+    statusCode: 0,
+    language: ''
   }, 
   setCurrentLyricData: (newCurrentLyricData) =>set((state) => ({ currentLyricData: newCurrentLyricData })),
   
   currentTranslatedLyricData: {
     timestamps: [],
     lyrics: [],
-    isInstrumental: false
+    isInstrumental: false,
+    statusCode: 0,
+    language: ''
   }, 
   setCurrentTranslatedLyricData: (newCurrentTranslatedLyricData) =>set((state) => ({ currentTranslatedLyricData: newCurrentTranslatedLyricData })),
+
+  currentPhoneticLyricData: {
+    timestamps: [],
+    lyrics: [],
+    isInstrumental: false,
+    statusCode: 0,
+    language: ''
+  }, 
+  setCurrentPhoneticLyricData: (newCurrentPhoneticLyricData) =>set((state) => ({ currentPhoneticLyricData: newCurrentPhoneticLyricData })),
 
   analyserNode: null, 
   setAnalyserNode: (newAnalyserNode) =>set((state) => ({ analyserNode: newAnalyserNode })),
