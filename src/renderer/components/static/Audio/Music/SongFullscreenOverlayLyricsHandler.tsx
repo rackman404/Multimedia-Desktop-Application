@@ -1,4 +1,4 @@
-import {Button, Card, CircularProgress, Divider, ToggleButton, Typography } from '@mui/material';
+import {Button, Card, CircularProgress, Divider, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, Typography } from '@mui/material';
 import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import { RegularButton } from '../../../../elements/CustomButtons';
 import { IPCMethodAPI, ServicesEnum } from '../../../../../typesIPC';
 
 import CheckIcon from '@mui/icons-material/Check';
+import { seteuid } from 'process';
 
 type SongFullscreenOverlayLyricsHandlerProps = { //constructor variables
   translated: boolean
@@ -205,27 +206,78 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
             </div>
             <br/>
             <Divider/> 
-            <br/>
-            <Typography color="white" className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </Typography>
-            <br/>
-            {nextLyrics.map((lyric) => 
 
-            <div>
+            <div className='lyric_text_container'>
 
-            <br/>
-            <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
-            <br/>
+              <Typography color="white" className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </Typography>
+              <br/>
+              {nextLyrics.map((lyric) => 
+
+              <div>
+
+              <br/>
+              <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
+              <br/>
+
+              </div>
+              
+              )}
+
+
 
             </div>
-            
-            )}
+
+            <div className='lyric_text_container_bottom'>
+              <Divider/> 
+            </div>
+
         </div>
         :
 
         <div>
             <div className='lyric_headers'>
-              <RegularButton variant='outlined' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography> </RegularButton>
+              <RegularButton variant='outlined' sx={{height: "2.5vh"}}  onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography> </RegularButton>
               
+              <FormControl>
+                <RadioGroup
+                  aria-labelledby="lyric-addon-radio-buttons-group-label"
+                  defaultValue={usePhonetics}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      if ((event.target as HTMLInputElement).value == "false"){
+                        setUsePhonetics(false);
+                      }
+                      else if ((event.target as HTMLInputElement).value == "true"){
+                        setUsePhonetics(true);
+                      }
+                    }
+                  }
+                  name="radio-buttons-group"
+                  row
+                  sx={{overflow: "hidden", color: "white", textOverflow: "ellipsis"}}
+                >
+                  <FormControlLabel labelPlacement='top' value="translation" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Translation </Typography>} />
+                  <FormControlLabel disabled labelPlacement='top' value="both" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Both </Typography>} />
+                  <FormControlLabel labelPlacement='top' value="phonetics" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Phonetic </Typography>} />
+                </RadioGroup>
+              </FormControl>
+
+              {/*
+              <ToggleButton disabled className='overlay_button_element' sx={{fontSize: '0.5vw'}}
+                value="check"
+                selected={usePhonetics}
+                onChange={() => setUsePhonetics((usePhonetics) => !usePhonetics)}
+                >
+                Use Translation
+              </ToggleButton>
+
+              <ToggleButton disabled className='overlay_button_element' sx={{fontSize: '0.5vw'}}
+                value="check"
+                selected={usePhonetics}
+                onChange={() => setUsePhonetics((usePhonetics) => !usePhonetics)}
+                >
+                Use Both
+              </ToggleButton>
+
               <ToggleButton className='overlay_button_element' sx={{fontSize: '0.5vw'}}
                 value="check"
                 selected={usePhonetics}
@@ -233,39 +285,48 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
                 >
                 Use Phonetics
               </ToggleButton>
+              */}
 
-              <RegularButton variant='outlined'  onClick={() => (requestPhonetics())}><Typography fontSize={"0.75em"}  noWrap component="div"> Convert Phonetics </Typography> </RegularButton>
+              <RegularButton variant='outlined' sx={{height: "2.5vh"}} onClick={() => (requestPhonetics())}> <Typography fontSize={"0.75em"}  noWrap component="div"> Convert Phonetics </Typography> </RegularButton>
             </div>
             <br/>
             <Divider/> 
 
-            <br/>
-            <Typography color="white"  className={fadeState} style={{fontStyle: 'oblique'}}> {usePhonetics === false ? currentTranslatedLyric : currentPhoneticsLyric} </Typography>
-            <br/>
-            {usePhonetics === false ? nextTranslatedLyrics.map((lyric) => 
+            <div className='lyric_text_container'>
 
-            <div>
-
+              <Typography color="white"  className={fadeState} style={{fontStyle: 'oblique'}}> {usePhonetics === false ? currentTranslatedLyric : currentPhoneticsLyric} </Typography>
               <br/>
-              <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
-              <br/>
+              {usePhonetics === false ? nextTranslatedLyrics.map((lyric) => 
 
-            </div>
-            
-            ) : 
-            
-            NextPhoneticsLyric.map((lyric) => 
+              <div>
 
-            <div>
+                <br/>
+                <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
+                <br/>
 
-              <br/>
-              <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
-              <br/>
+              </div>
+              
+              ) : 
+              
+              NextPhoneticsLyric.map((lyric) => 
 
-            </div>
-            
-            )
-            }
+                <div>
+
+                  <br/>
+                  <Typography color="white" className={fadeState} style={{color:"grey"}}> {lyric} </Typography>
+                  <br/>
+
+                </div>
+                
+                )
+              }
+
+
+
+          </div>
+          <div className='lyric_text_container_bottom'>
+            <Divider/> 
+          </div>
         </div>
 
         }

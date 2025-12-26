@@ -6,6 +6,8 @@ import { BottomMusicImageHandler } from './BottomMusicImageHandler';
 import { SongFullscreenOverlayLyricsHandler } from './SongFullscreenOverlayLyricsHandler';
 import { SongFullscreenOverlayNextSongHandler } from './SongFullscreenOverlayNextSongHandler';
 import { SongFullscreenOverlayVisualizerHandler } from './SongFullscreenOverlayVisualizerHandler';
+import { checkTextOverflow } from '../../../../../utils';
+import Marquee from 'react-fast-marquee';
 
 type OverlayProps = { //constructor variables
   visible: boolean
@@ -18,6 +20,34 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   const thumbnailString = useSelectedSongStore((state) => state.thumbnailString);
 
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
+
+  const [nameElement, setNameElement] = useState<HTMLDivElement | null>();
+  const [nameMarqueeState, setNameMarqueeState] = useState(false);
+    
+  //check for overflow and set a marquee if it does
+  useEffect(() => {
+
+      if (nameElement != null){
+        console.log("CHECKING NAME FOR MAIN");
+          setNameMarqueeState(checkTextOverflow(nameElement));
+      }
+      
+
+  }, [currentSong]);
+
+  //on mount and unmount
+  useEffect(() => {
+
+
+
+      //called when the component is unmounted
+      return () => {
+          setNameElement(null);
+      };
+
+
+  }, []);
+
   //on mount and unmount
   useEffect(() => {
     
@@ -33,7 +63,14 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   return (
     <div className={firstLoad === false ? (visible === false ? 'song_fullscreen_overlay_container_hidden' : 'song_fullscreen_overlay_container') : 'song_fullscreen_overlay_container_hidden_first_load'}>
       <div className='song_fullscreen_content_top_header'>
-        <Typography color="white" variant="h3" component="div"> {currentSong?.name}</Typography>
+        <Typography color="white" variant="h4" component="div">
+          <div ref={(el) => {setNameElement(el)}} id = "name" className='top_header_text'>
+          {nameMarqueeState === true ? 
+          <Marquee speed={25} delay={1}>{<div> {currentSong?.name} {" "} | </div>}</Marquee>
+          : currentSong?.name}
+          </div>
+        </Typography>
+        
         <Typography color="white" variant="h5" component="div"> {currentSong.artist?.map((artist, index) => ( index === 0 ? artist : " and " + artist))}</Typography>
         {/*<Typography color="white" variant="h5" component="div"> {currentSong?.album === "N/A" ? "" : (currentSong?.album === currentSong?.name ? "Single" : currentSong?.album)}</Typography>*/}
         <Typography color="white" variant="h5" component="div"> {currentSong?.album === "N/A" ? "" : currentSong?.album}</Typography>
@@ -56,11 +93,10 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
           {<SongFullscreenOverlayLyricsHandler translated={false} key={currentSong.id}/>}
         </div>
 
-        <div className='img_frame' >
+        <div className={thumbnailString === "" ?  'img_frame_loading' : 'img_frame' } >
           {/* <BottomMusicImageHandler key={currentSong.id}/> */}
 
-          { 
-            <div>
+
               {thumbnailString === "" ? 
                 <CircularProgress style={{width:"100%", height:"100%"}}/> 
                 : 
@@ -69,12 +105,11 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
                   height="100%"
                   src= {thumbnailString}
                   alt="Song Thumbnail Image"  
-                  style={{objectFit: "contain", animation: "fadeIn 0.50s"}}
+                  style={{objectFit: "fill", animation: "fadeIn 0.50s"}}
                 />
               }
     
-            </div>
-          }
+
 
         </div>
 

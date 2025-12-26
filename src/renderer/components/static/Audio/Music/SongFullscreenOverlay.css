@@ -59,6 +59,21 @@
     flex-direction: column;
     justify-content: center;
     height: 15vh;
+    width: 25vw;
+    
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.top_header_text{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    
+
+    width: 25vw;
+
+    
 }
 
 .song_fullscreen_content_main{
@@ -67,25 +82,56 @@
 
     grid-auto-flow: column;
 
-    height: 90vh;
+    height: 67vh;
 
     grid-auto-columns: 30vw 38vw 30vw;
     
     margin-left: 1vw;
     margin-right: 1vw;
+
+    /*
+    border-style: solid;
+    border-color: red;
+    */
 }
 
 .img_frame{
-    display:block;
+    display:flex;
 
     background: linear-gradient(to bottom,rgba(22, 22, 22, 0),rgba(49, 49, 49, 0));
 
-    width:75%;
+    /*width:75%;
+    */
+
+    height: 55vh;
+    max-width: 90%;
 
     margin-left: auto;
     margin-right: auto;
 
-    margin-top: -28vh;
+    margin-bottom: auto;
+
+    border: #2b2b2b;
+    border-style: outset;
+
+    align-self: center;
+}
+
+.img_frame_loading{
+    display:flex;
+
+    background: linear-gradient(to bottom,rgba(22, 22, 22, 0),rgba(49, 49, 49, 0));
+
+    /*width:75%;
+    */
+
+
+    width: 25vw;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-bottom: auto;
 
     border: #2b2b2b;
     border-style: outset;
@@ -104,6 +150,27 @@
     bottom: 0;
     justify-content: space-between;
     display: flex;
+    align-items: center;
+
+    height: 4vh; /*overall height of lyric container (ensures left and right half headers have same height (matters since right side uses other components))*/
+
+    
+}
+
+.lyric_text_container{
+    height: 55vh; /*height of the actual text container*/
+    
+    position: relative;
+
+    /*
+    border-style: solid;
+    border-color: red;
+    */
+    overflow: hidden;
+}
+
+.lyric_text_container_bottom{
+    width: 100%;
 }
 
 .next_song_header{
@@ -111,8 +178,19 @@
     right: 10px;
     top: 10px;
 
-
+    width: 8vw;
 }
+
+.next_song_header_text{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+    width: 8vw;
+    
+}
+
+
 
 .visualizer_header{
     position: absolute;
