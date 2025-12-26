@@ -59,7 +59,7 @@
     flex-direction: column;
     justify-content: center;
     height: 15vh;
-    width: 25vw;
+    width: 35vw;
     
     margin-left: auto;
     margin-right: auto;
@@ -71,7 +71,7 @@
     text-overflow:ellipsis;
     
 
-    width: 25vw;
+    width: 35vw;
 
     
 }
@@ -89,6 +89,51 @@
     margin-left: 1vw;
     margin-right: 1vw;
 
+    
+
+    
+}
+
+.song_fullscreen_content_main_bottom_card{
+    margin-left: auto;
+    margin-right: auto;
+
+    height: 3vh;
+    width: 50%;
+
+    background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
+
+    display: flex;
+    justify-content: space-between;
+
+}
+
+/*
+.song_fullscreen_content_main_bottom_card_row{
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;  
+    justify-content: space-between;
+
+    column-gap: 10vw;  
+    margin-bottom: 1vh;  
+
+    margin-left: 5vw;
+    margin-right: 5vw;
+
+}
+*/
+
+.song_fullscreen_content_main_center_container{
+    height: 67vh;
+    display: flex;
+    align-items: flex-end;
+
+    flex-flow: column;
+
+    text-align: center;
+
     /*
     border-style: solid;
     border-color: red;
@@ -104,7 +149,7 @@
     */
 
     height: 55vh;
-    max-width: 90%;
+    max-width: 80%;
 
     margin-left: auto;
     margin-right: auto;
@@ -157,6 +202,13 @@
     
 }
 
+.lyric_headers_radio{
+
+
+    width: auto;
+
+}
+
 .lyric_text_container{
     height: 55vh; /*height of the actual text container*/
     
@@ -166,7 +218,9 @@
     border-style: solid;
     border-color: red;
     */
-    overflow: hidden;
+
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .lyric_text_container_bottom{
@@ -181,16 +235,21 @@
     width: 8vw;
 }
 
+.accordion_settings_header{
+    position: absolute;
+    right: 10vw;
+    top: 0;
+
+    width: 20vw;
+}
+
 .next_song_header_text{
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
 
-    width: 8vw;
-    
+    width: 8vw; 
 }
-
-
 
 .visualizer_header{
     position: absolute;

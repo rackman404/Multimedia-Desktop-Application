@@ -32,6 +32,7 @@ export namespace IPCMethodAPI{
         getAllMetadataSimple,
         getSelectedMetadataFull,
         externalLyrics,
+        phoneticsParse,
         externalLyricsFromMetadata, //should only be used to verify lyrics from modified metadata in Audio Edit
         externalTranslatedLyrics,
         externalDeepLStats,

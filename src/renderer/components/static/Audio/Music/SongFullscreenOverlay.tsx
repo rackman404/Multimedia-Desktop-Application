@@ -1,4 +1,4 @@
-import {Button, Card, CircularProgress, Typography } from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Button, Card, CircularProgress, Typography } from '@mui/material';
 import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,12 @@ import { SongFullscreenOverlayNextSongHandler } from './SongFullscreenOverlayNex
 import { SongFullscreenOverlayVisualizerHandler } from './SongFullscreenOverlayVisualizerHandler';
 import { checkTextOverflow } from '../../../../../utils';
 import Marquee from 'react-fast-marquee';
+
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
+
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 type OverlayProps = { //constructor variables
   visible: boolean
@@ -23,6 +29,9 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
 
   const [nameElement, setNameElement] = useState<HTMLDivElement | null>();
   const [nameMarqueeState, setNameMarqueeState] = useState(false);
+
+  const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
+  const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
     
   //check for overflow and set a marquee if it does
   useEffect(() => {
@@ -80,9 +89,28 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
         {<SongFullscreenOverlayNextSongHandler/>}
       </div>
 
-        <div>
+      <div>
         {<SongFullscreenOverlayVisualizerHandler/>}
       </div>
+
+      {/*
+      <div className='accordion_settings_header'>
+        <Accordion >
+          <AccordionSummary
+            expandIcon={<ArrowDownwardIcon />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+            >
+            <Typography component="span">Settings</Typography>
+          </AccordionSummary>
+          
+          <AccordionDetails>
+
+          </AccordionDetails>
+        </Accordion>
+      </div>
+      */}
+      
       
 
       <div className='song_fullscreen_content_main'>
@@ -92,8 +120,9 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
         <div>
           {<SongFullscreenOverlayLyricsHandler translated={false} key={currentSong.id}/>}
         </div>
-
-        <div className={thumbnailString === "" ?  'img_frame_loading' : 'img_frame' } >
+        
+        <div className='song_fullscreen_content_main_center_container'>
+          <div className={thumbnailString === "" ?  'img_frame_loading' : 'img_frame' } >
           {/* <BottomMusicImageHandler key={currentSong.id}/> */}
 
 
@@ -105,13 +134,23 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
                   height="100%"
                   src= {thumbnailString}
                   alt="Song Thumbnail Image"  
-                  style={{objectFit: "fill", animation: "fadeIn 0.50s"}}
+                  style={{objectFit: "cover", animation: "fadeIn 0.50s"}}
                 />
               }
     
 
 
+          </div>
+
+          <Card variant='outlined' className='song_fullscreen_content_main_bottom_card'>
+            <div>Translated: {currentTranslatedLyricData.lyrics === undefined ? <IndeterminateCheckBoxOutlinedIcon/> : <CheckBoxIcon/>} </div>
+            <div>Status</div>
+            <div>Romanization: {currentPhoneticsLyricData.lyrics === undefined ? <IndeterminateCheckBoxOutlinedIcon/> : <CheckBoxIcon/>} </div>
+          </Card>
+
+
         </div>
+        
 
         <div >
           {<SongFullscreenOverlayLyricsHandler translated={true} key={currentSong.id}/>}

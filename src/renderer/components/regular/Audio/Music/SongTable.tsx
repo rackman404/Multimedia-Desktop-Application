@@ -157,7 +157,9 @@ export const SongTable = ({sMetaData, selectedPlayDataFunction, selectedInfoCard
     if (sMetaData != null){ //songs are now loaded
       setDisabled(false);
       setSelectedButtonList(new Array(sMetaData?.length).fill(false));
-      setColumnOn(new Array(ColumnEnumArray?.length).fill(true));
+      var colStates = new Array(ColumnEnumArray?.length).fill(true);
+      colStates[0] = false;
+      setColumnOn(colStates);
     }
   }, [sMetaData]);   
 

@@ -1,4 +1,4 @@
-import {Button, Card, CircularProgress, Divider, FormControl, FormControlLabel, Radio, RadioGroup, ToggleButton, Typography } from '@mui/material';
+import {Button, Card, CircularProgress, Divider, FormControl, FormControlLabel, Radio, RadioGroup, Stack, ToggleButton, Typography } from '@mui/material';
 import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { useEffect, useState } from 'react';
@@ -15,7 +15,7 @@ type SongFullscreenOverlayLyricsHandlerProps = { //constructor variables
 };
 
 export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenOverlayLyricsHandlerProps) => { 
-  const LYRICS_DISPLAYED_AT_ONCE = 10;
+  const LYRICS_DISPLAYED_AT_ONCE = 15;
 
   const [currentLyric, setCurrentLyric] = useState("");
   const [nextLyrics, setNextLyric] = useState([] as string[]);
@@ -238,28 +238,28 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
             <div className='lyric_headers'>
               <RegularButton variant='outlined' sx={{height: "2.5vh"}}  onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography> </RegularButton>
               
-              <FormControl>
+              <Stack direction="row">
                 <RadioGroup
                   aria-labelledby="lyric-addon-radio-buttons-group-label"
-                  defaultValue={usePhonetics}
+                  defaultValue="translation"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      if ((event.target as HTMLInputElement).value == "false"){
+                      if ((event.target as HTMLInputElement).value == "translation"){
                         setUsePhonetics(false);
                       }
-                      else if ((event.target as HTMLInputElement).value == "true"){
+                      else if ((event.target as HTMLInputElement).value == "phonetics"){
                         setUsePhonetics(true);
                       }
                     }
                   }
                   name="radio-buttons-group"
-                  row
-                  sx={{overflow: "hidden", color: "white", textOverflow: "ellipsis"}}
+
+                   sx={{ height: "5vh", width: "auto", color: "white", textOverflow: "ellipsis"}}
                 >
-                  <FormControlLabel labelPlacement='top' value="translation" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Translation </Typography>} />
-                  <FormControlLabel disabled labelPlacement='top' value="both" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Both </Typography>} />
-                  <FormControlLabel labelPlacement='top' value="phonetics" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Phonetic </Typography>} />
+                  <FormControlLabel className='lyric_headers_radio' labelPlacement='top' value="translation" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Translation </Typography>} />
+                  <FormControlLabel className='lyric_headers_radio' disabled labelPlacement='top' value="both" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Both </Typography>} />
+                  <FormControlLabel className='lyric_headers_radio' labelPlacement='top' value="phonetics" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Romanization  </Typography>} />
                 </RadioGroup>
-              </FormControl>
+              </Stack>
 
               {/*
               <ToggleButton disabled className='overlay_button_element' sx={{fontSize: '0.5vw'}}
@@ -287,7 +287,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
               </ToggleButton>
               */}
 
-              <RegularButton variant='outlined' sx={{height: "2.5vh"}} onClick={() => (requestPhonetics())}> <Typography fontSize={"0.75em"}  noWrap component="div"> Convert Phonetics </Typography> </RegularButton>
+              <RegularButton variant='outlined' sx={{height: "2.5vh"}} onClick={() => (requestPhonetics())}> <Typography fontSize={"0.75em"}  noWrap component="div"> Romanization </Typography> </RegularButton>
             </div>
             <br/>
             <Divider/> 
