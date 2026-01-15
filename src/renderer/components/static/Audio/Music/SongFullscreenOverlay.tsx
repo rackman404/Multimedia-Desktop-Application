@@ -93,7 +93,7 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
         {<SongFullscreenOverlayVisualizerHandler/>}
       </div>
 
-      {/*
+      
       <div className='accordion_settings_header'>
         <Accordion >
           <AccordionSummary
@@ -105,11 +105,12 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
           </AccordionSummary>
           
           <AccordionDetails>
-
+            <Typography color="white"> Chinese Romanization Preference:</Typography>
+            <Typography color="white"> Manual Override:</Typography>
           </AccordionDetails>
         </Accordion>
       </div>
-      */}
+      
       
       
 
@@ -145,7 +146,7 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
           <Card variant='outlined' className='song_fullscreen_content_main_bottom_card'>
             <div>Translated: {currentTranslatedLyricData.lyrics === undefined ? <IndeterminateCheckBoxOutlinedIcon/> : <CheckBoxIcon/>} </div>
             <div>Status</div>
-            <div>Romanization: {currentPhoneticsLyricData.lyrics === undefined ? <IndeterminateCheckBoxOutlinedIcon/> : <CheckBoxIcon/>} </div>
+            <div>Romanized: {currentPhoneticsLyricData.lyrics === undefined ? <IndeterminateCheckBoxOutlinedIcon/> : <CheckBoxIcon/>} </div>
           </Card>
 
 

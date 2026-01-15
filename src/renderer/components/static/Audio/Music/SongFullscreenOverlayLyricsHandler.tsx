@@ -40,9 +40,80 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
   const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
   const setCurrentPhoneticsLyricData = useSelectedSongStore((state) => state.setCurrentPhoneticLyricData);
 
-  const [usePhonetics, setUsePhonetics] = useState(false);
+  const [usePhonetics, setUsePhonetics] = useState(0);
+
+
+  
+  const [canUseBoth, setCanUseBoth] = useState(false);
   
   const lyricData = useSelectedSongStore((state) => state.currentLyricData);
+
+  useEffect(() => {
+    if (currentTranslatedLyricData.lyrics != undefined && currentPhoneticsLyricData.lyrics != undefined && canUseBoth != true){
+      setCanUseBoth(true);
+    }
+    else if (canUseBoth != false){ //useboth condidition just in case we making unneeded updates to component
+      setCanUseBoth(false);
+    };
+  
+  }, [currentTranslatedLyricData, currentPhoneticsLyricData]);
+
+  function renderMainSwitch() {
+    switch(usePhonetics) {
+      case 0: //translation
+        return (nextTranslatedLyrics.map((lyric) => 
+
+              <div>
+
+                <br/>
+                <Typography color="white" style={{color:"grey"}}> {lyric} </Typography>
+                <br/>
+
+              </div>
+              
+              )  
+              
+            );
+      case 1: //phonetics
+        return ( NextPhoneticsLyric.map((lyric) => 
+
+                <div>
+
+                  <br/>
+                  <Typography color="white" style={{color:"grey"}}> {lyric} </Typography>
+                  <br/>
+
+                </div>
+                
+                ));
+      case 2: //both
+        return (nextTranslatedLyrics.map((lyric, index) => 
+
+              <div>
+                <br/>
+                <Typography color="white" style={{color:"grey"}}> {lyric} </Typography>
+                <br/>
+                <Typography color="white" style={{color:"yellow"}}> {NextPhoneticsLyric[index]} </Typography>
+                <br/>
+              </div>
+              
+              )  
+              
+            );
+    }
+  }
+
+  function renderFirstSwitch() {
+    switch(usePhonetics) {
+      case 0: //translation
+        return (currentTranslatedLyric);
+      case 1: //phonetics
+        return (currentPhoneticsLyric);
+      case 2: //both
+        return (<div style={{display:"inline"}}> {currentTranslatedLyric} <br/> <Typography color="yellow">{currentPhoneticsLyric}</Typography> </div>); //inline to prevent addition line break after div end
+    }
+  }
+
 
   useEffect(() => {
     //console.log(lyricData);
@@ -51,6 +122,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
       setNextLyric([]);
       setCurrentTranslatedLyricData({} as SongLyricAPIData);
       setCurrentTranslatedLyric("");
+      setCurrentPhoneticsLyricData({} as SongLyricAPIData);
       setNextTranslatedLyrics([""]);
     }
     else if (lyricData.statusCode == 300){
@@ -244,10 +316,13 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
                   defaultValue="translation"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                       if ((event.target as HTMLInputElement).value == "translation"){
-                        setUsePhonetics(false);
+                        setUsePhonetics(0);
                       }
                       else if ((event.target as HTMLInputElement).value == "phonetics"){
-                        setUsePhonetics(true);
+                        setUsePhonetics(1);
+                      }
+                      else if ((event.target as HTMLInputElement).value == "both"){
+                        setUsePhonetics(2);
                       }
                     }
                   }
@@ -256,36 +331,10 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
                    sx={{ height: "5vh", width: "auto", color: "white", textOverflow: "ellipsis"}}
                 >
                   <FormControlLabel className='lyric_headers_radio' labelPlacement='top' value="translation" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Translation </Typography>} />
-                  <FormControlLabel className='lyric_headers_radio' disabled labelPlacement='top' value="both" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Both </Typography>} />
-                  <FormControlLabel className='lyric_headers_radio' labelPlacement='top' value="phonetics" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Romanization  </Typography>} />
+                  <FormControlLabel className='lyric_headers_radio' disabled = {canUseBoth === true ? false : true /*we note we flip the boolean cause we disable instead of enable*/} labelPlacement='top' value="both" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Both </Typography>} />
+                  <FormControlLabel className='lyric_headers_radio' labelPlacement='top' value="phonetics" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Romanize  </Typography>} />
                 </RadioGroup>
               </Stack>
-
-              {/*
-              <ToggleButton disabled className='overlay_button_element' sx={{fontSize: '0.5vw'}}
-                value="check"
-                selected={usePhonetics}
-                onChange={() => setUsePhonetics((usePhonetics) => !usePhonetics)}
-                >
-                Use Translation
-              </ToggleButton>
-
-              <ToggleButton disabled className='overlay_button_element' sx={{fontSize: '0.5vw'}}
-                value="check"
-                selected={usePhonetics}
-                onChange={() => setUsePhonetics((usePhonetics) => !usePhonetics)}
-                >
-                Use Both
-              </ToggleButton>
-
-              <ToggleButton className='overlay_button_element' sx={{fontSize: '0.5vw'}}
-                value="check"
-                selected={usePhonetics}
-                onChange={() => setUsePhonetics((usePhonetics) => !usePhonetics)}
-                >
-                Use Phonetics
-              </ToggleButton>
-              */}
 
               <RegularButton variant='outlined' sx={{height: "2.5vh"}} onClick={() => (requestPhonetics())}> <Typography fontSize={"0.75em"}  noWrap component="div"> Romanization </Typography> </RegularButton>
             </div>
@@ -294,9 +343,11 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
             <div className='lyric_text_container'>
 
-              <Typography color="white"  className={fadeState} style={{fontStyle: 'oblique'}}> {usePhonetics === false ? currentTranslatedLyric : currentPhoneticsLyric} </Typography>
+              <Typography color="white"  className={fadeState} style={{fontStyle: 'oblique'}}> {renderFirstSwitch() /*usePhonetics === 0 ? currentTranslatedLyric : currentPhoneticsLyric*/} </Typography>
               <br/>
-              {usePhonetics === false ? nextTranslatedLyrics.map((lyric) => 
+                
+              {renderMainSwitch()}
+              {/*usePhonetics === false ? nextTranslatedLyrics.map((lyric) => 
 
               <div>
 
@@ -319,7 +370,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
                 </div>
                 
                 )
-              }
+              */}
 
 
 
