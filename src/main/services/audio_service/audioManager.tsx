@@ -6,10 +6,11 @@ import { AudioMetadataReader } from "./audioMetadataReader";
 import * as fs from "fs" 
 import { DeepLStatistics, DEFAULTSONGMETADATASIMPLE, MiscData, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
 import { CONFIGFILE, MISCDATAFILE, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
-import { AudioWebLyricReader } from "./lyrics/audioWebLyricReader";
+import { AudioWebLyricReader } from "./lyrics/reader/audioWebLyricReader";
 import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
 import { AudioSearch } from "./filters/audioSearch";
 import { AudioPhonetics } from "./phonetics/audioPhonetics";
+import { AudioLyricReaderManager } from "./lyrics/reader/audioLyricReaderManager";
 
 type MetaDatas = {
     full: SongMetaData[],
@@ -19,7 +20,7 @@ type MetaDatas = {
 export class AudioManager{
     broker: AudioBroker;
     audioMetadata: AudioMetadataReader;
-    audioLyrics: AudioWebLyricReader;
+    audioLyrics: AudioLyricReaderManager;
     audioTranslator: AudioDeepLTranslator;
     audioSearch: AudioSearch;
     audioPhonetics: AudioPhonetics
@@ -38,7 +39,7 @@ export class AudioManager{
     constructor() {
         this.broker = new AudioBroker(this);
         this.audioMetadata = new AudioMetadataReader();
-        this.audioLyrics = new AudioWebLyricReader();
+        this.audioLyrics = new AudioLyricReaderManager();
         this.audioTranslator = new AudioDeepLTranslator();
         this.audioSearch = new AudioSearch();
         this.audioPhonetics = new AudioPhonetics();
@@ -161,7 +162,7 @@ export class AudioManager{
 
         songData = await this.audioMetadata.readMetaDataSimple(-1, song_path);
         if (songData != null){
-            lyrics = await this.audioLyrics.requestLyricData(songData);
+            lyrics = await this.audioLyrics.requestLyrics(songData);
         }
         else{
             return undefined;
@@ -173,7 +174,7 @@ export class AudioManager{
     async getExternalLyricsFromMetadata(metadata: SongMetaDataSimple): Promise<SongLyricAPIData | undefined>{
         var lyrics: SongLyricAPIData
         if (metadata != null){
-            lyrics = await this.audioLyrics.requestLyricData(metadata);
+            lyrics = await this.audioLyrics.requestLyrics(metadata);
         }
         else{
             return undefined;

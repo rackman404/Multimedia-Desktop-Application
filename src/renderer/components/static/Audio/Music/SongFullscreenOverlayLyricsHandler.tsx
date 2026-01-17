@@ -42,8 +42,6 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
   const [usePhonetics, setUsePhonetics] = useState(0);
 
-
-  
   const [canUseBoth, setCanUseBoth] = useState(false);
   
   const lyricData = useSelectedSongStore((state) => state.currentLyricData);
@@ -124,6 +122,10 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
       setCurrentTranslatedLyric("");
       setCurrentPhoneticsLyricData({} as SongLyricAPIData);
       setNextTranslatedLyrics([""]);
+
+
+
+
     }
     else if (lyricData.statusCode == 300){
       setCurrentLyric("SERVER ERROR: Could not connect to LRCLIB server.");  
@@ -273,7 +275,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
     <div className='containers'>
         {translated === false ? <div>
             <div className='lyric_headers'>
-              <Typography color="white"> Synced Lyrics  </Typography>
+              <Typography color="white"> Synced Lyrics {lyricData.statusCode === 400 ? <Typography color= "grey"> Loading </Typography>: <Typography color={lyricData.local === false ? "green" : "yellow"}> ({lyricData.local === false ? "Extracted Online" : "Extracted Locally"})  </Typography> }  </Typography>
               <Typography color="white"> Detected Language: {lyricData.language}  </Typography>
             </div>
             <br/>
@@ -283,7 +285,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
               <Typography color="white" className={fadeState} style={{fontStyle: 'oblique'}}> {currentLyric} </Typography>
               <br/>
-              {nextLyrics.map((lyric) => 
+              {nextLyrics.map((lyric) =>  
 
               <div>
 

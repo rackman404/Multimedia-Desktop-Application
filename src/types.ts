@@ -95,6 +95,7 @@ export type SongLyricAPIData = {
         300 = server failure, server was contacted and did not return a response
     */
    language: string
+   local: boolean
 }
 
 

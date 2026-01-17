@@ -1,4 +1,5 @@
-import { SongLyricAPIData, SongMetaDataSimple } from "../../../../types";
+import { SongLyricAPIData, SongMetaDataSimple } from "../../../../../types";
+import { AudioLocalLyricReader } from "./audioLocalLyricReader";
 
 const axios = require('axios'); 
 const LanguageDetect = require('languagedetect');
@@ -12,7 +13,6 @@ const DURATION_HEADER = '&duration=';
 export class AudioWebLyricReader{
 
     lngDetector: any
-
     constructor() {
 
         this.lngDetector = new LanguageDetect();
@@ -160,6 +160,7 @@ export class AudioWebLyricReader{
         //console.log(lyricData.lyrics.toString().replace(/,/g,"."));
         //console.log("LYRIC LANGUAGE: " + this.lngDetector.detect(lyricData.lyrics.toString().replace(/,/g,". ")));
         
+        lyricData.local = false;
         return lyricData;
     }
 
