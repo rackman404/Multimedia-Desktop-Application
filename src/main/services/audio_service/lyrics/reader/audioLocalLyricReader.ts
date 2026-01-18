@@ -40,10 +40,22 @@ export class AudioLocalLyricReader{
 
             var prev = -1;
             for (var i = 0; i < rawArray.length - 1; i++){
-                if (rawArray[i] != ""){ //in case file starts with new lines
+                if (rawArray[i] == "" || rawArray[i] == "\n" || rawArray[i] == " " || rawArray[i] == "\r"){ //in case file starts with new lines or just has empty lines in general (shit ass way of doing it though ngl)
+                    console.log("discarding empty lyric line");
+                }
+                else{
                     var separated = rawArray[i].split("]");
     
                     var rawTimestampConversion = separated[0].replace("[", "").replace(":", ".").split(".");
+                    //in case miliseconds are not in 2 digits
+                    
+                    if (rawTimestampConversion[2] != undefined){
+                        if (rawTimestampConversion[2].length >= 3){
+                            var temp = rawTimestampConversion[2];
+                            rawTimestampConversion[2] = temp[2][0] + temp[2][1];
+                        }
+                    }
+
                     var timestampConversion = (parseFloat(rawTimestampConversion[0]) * 60 + parseFloat(rawTimestampConversion[1]) + parseFloat(rawTimestampConversion[2])/100);
                     //console.debug(prev + " "+ timestampConversion);
 
@@ -60,11 +72,11 @@ export class AudioLocalLyricReader{
                 }
             }
 
-            /*
+            
             for (var i = 0; i < lyricData.lyrics.length; i++){
                 console.log(lyricData.timestamps[i] +  "::" + lyricData.lyrics[i]);
             }
-            */
+            
 
             lyricData.statusCode = 100;
 

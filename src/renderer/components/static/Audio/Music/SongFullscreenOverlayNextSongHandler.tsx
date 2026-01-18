@@ -75,7 +75,7 @@ export const SongFullscreenOverlayNextSongHandler = () => {
           </div>
         </Typography>
 
-        <Typography color="grey"> {nextSong.artist} </Typography>
+        <Typography color="grey" className='next_song_header_text'> {nextSong.artist} </Typography>
       
       {/*
        <Typography color="white"> {nextSong.name} </Typography>

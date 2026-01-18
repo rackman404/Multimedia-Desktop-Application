@@ -1,4 +1,4 @@
-import {Accordion, AccordionDetails, AccordionSummary, Button, Card, CircularProgress, Typography } from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Button, Card, CircularProgress, ToggleButton, Typography } from '@mui/material';
 import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { useEffect, useState } from 'react';
@@ -9,11 +9,14 @@ import { SongFullscreenOverlayVisualizerHandler } from './SongFullscreenOverlayV
 import { checkTextOverflow } from '../../../../../utils';
 import Marquee from 'react-fast-marquee';
 
+import placeholderImage from '../../../../../../assets//gray.png';
+
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import CheckIcon from '@mui/icons-material/Check';
 
 type OverlayProps = { //constructor variables
   visible: boolean
@@ -29,6 +32,8 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
 
   const [nameElement, setNameElement] = useState<HTMLDivElement | null>();
   const [nameMarqueeState, setNameMarqueeState] = useState(false);
+
+  const [showFullImage, setShowFullImage] = useState(false);
 
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
@@ -71,6 +76,18 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
 
   return (
     <div className={firstLoad === false ? (visible === false ? 'song_fullscreen_overlay_container_hidden' : 'song_fullscreen_overlay_container') : 'song_fullscreen_overlay_container_hidden_first_load'}>
+      <div className= "song_fullscreen_full_image">
+        { showFullImage === true ? <img
+            width="100%"
+            height="100%"
+            src= {thumbnailString === "" ? placeholderImage : thumbnailString}
+            alt="Song Thumbnail Image"  
+            style={{objectFit: "fill", animation: "fadeIn 0.50s"}}
+          />
+          : <div/>
+        }
+      </div>
+      
       <div className='song_fullscreen_content_top_header'>
         <Typography color="white" variant="h4" component="div">
           <div ref={(el) => {setNameElement(el)}} id = "name" className='top_header_text'>
@@ -106,7 +123,17 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
           
           <AccordionDetails>
             <Typography color="white"> Chinese Romanization Preference:</Typography>
+            <br/>
             <Typography color="white"> Manual Override:</Typography>
+            <br/>
+            <Typography color="white"> Fit Cover to Back: </Typography> 
+            <ToggleButton
+              value="check"
+              selected={showFullImage}
+              onChange={() => setShowFullImage((prevSelected) => !prevSelected)}
+            >
+            <CheckIcon />
+            </ToggleButton>
           </AccordionDetails>
         </Accordion>
       </div>
@@ -115,8 +142,6 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
       
 
       <div className='song_fullscreen_content_main'>
-
-
 
         <div>
           {<SongFullscreenOverlayLyricsHandler translated={false} key={currentSong.id}/>}
