@@ -259,11 +259,20 @@ export class AudioManager{
         return jsonData.lastPlayedSong;
     }
 
-    async PhoneticsParse(lyrics: SongLyricAPIData, jyutping: boolean): Promise<SongLyricAPIData | undefined>{
-        var phonetics = this.audioPhonetics.requestPhonetics(lyrics, jyutping);
+    async PhoneticsParse(lyrics: SongLyricAPIData): Promise<SongLyricAPIData | undefined>{
+        var phonetics = this.audioPhonetics.requestPhonetics(lyrics);
 
         return phonetics;
     }
 
+    async PhoneticsSetJyutping(jyutping: boolean){
+        this.audioPhonetics.setJyutping(jyutping);
+    }
+
+    async PhoneticsGetJyutping(){
+        var phonetics = this.audioPhonetics.getJyutping();
+
+        return phonetics;
+    }
 
 }

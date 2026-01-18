@@ -33,7 +33,7 @@ export const SongLyricCard = ({sMetaData}: SongLyricProps) => {
       return "From Metadata";
     }
     else{
-      return <div>From External API <br/> (lrclib.net) </div>;
+      return <div> Synced Lyrics </div>;
     }
   }
 

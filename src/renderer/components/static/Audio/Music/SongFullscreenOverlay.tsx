@@ -17,6 +17,7 @@ import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/Indeterminate
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CheckIcon from '@mui/icons-material/Check';
+import { IPCMethodAPI, ServicesEnum } from '../../../../../typesIPC';
 
 type OverlayProps = { //constructor variables
   visible: boolean
@@ -34,13 +35,13 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   const [nameMarqueeState, setNameMarqueeState] = useState(false);
 
   const [showFullImage, setShowFullImage] = useState(false);
+  const [useJyutping, setJyutping] = useState(false);
 
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
     
   //check for overflow and set a marquee if it does
   useEffect(() => {
-
       if (nameElement != null){
         console.log("CHECKING NAME FOR MAIN");
           setNameMarqueeState(checkTextOverflow(nameElement));
@@ -52,8 +53,6 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   //on mount and unmount
   useEffect(() => {
 
-
-
       //called when the component is unmounted
       return () => {
           setNameElement(null);
@@ -64,15 +63,26 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
 
   //on mount and unmount
   useEffect(() => {
-    
     if (visible == true){
       setFirstLoad(false);
     }
     
-
   }, [visible]);
 
+  //on mount and unmount
+  useEffect(() => {
+    const setInitialState = async () => {
+        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.getJyutping, content: []}) as boolean;
+        setJyutping(result);
+    }
+    setInitialState()
+  }, []);
 
+  //on jyutping change
+  useEffect(() => {
+    window.electron.ipcRenderer.sendMessage(ServicesEnum.audio,  {service: IPCMethodAPI.AudioOneWayIPC.setJyutping, content: [useJyutping]});
+    
+  }, [useJyutping]);
 
   return (
     <div className={firstLoad === false ? (visible === false ? 'song_fullscreen_overlay_container_hidden' : 'song_fullscreen_overlay_container') : 'song_fullscreen_overlay_container_hidden_first_load'}>
@@ -122,18 +132,21 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
           </AccordionSummary>
           
           <AccordionDetails>
-            <Typography color="white"> Chinese Romanization Preference:</Typography>
+            <Typography color="white"> Chinese (Use Jyutping?): <ToggleButton
+              value="check"
+              selected={useJyutping}
+              onChange={() => setJyutping((prevSelected) => !prevSelected)}
+            ></ToggleButton></Typography>
             <br/>
             <Typography color="white"> Manual Override:</Typography>
             <br/>
-            <Typography color="white"> Fit Cover to Back: </Typography> 
-            <ToggleButton
+            <Typography color="white"> Fit Cover to Back: <ToggleButton
               value="check"
               selected={showFullImage}
               onChange={() => setShowFullImage((prevSelected) => !prevSelected)}
             >
-            <CheckIcon />
-            </ToggleButton>
+            </ToggleButton> </Typography> 
+
           </AccordionDetails>
         </Accordion>
       </div>

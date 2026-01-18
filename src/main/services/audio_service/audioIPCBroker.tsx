@@ -23,6 +23,12 @@ export class AudioBroker {
         this.audioManager.storeLastPlayedSong(arg.content[0] as SongMetaDataSimple);
         break;
 
+        
+      case IPCMethodAPI.AudioOneWayIPC.setJyutping:
+        console.log("setting jyutping");
+        this.audioManager.PhoneticsSetJyutping(arg.content[0] as boolean);
+      break;
+
       default:
         console.log("ERROR: AUDIO BROKER (INVALID RESPONSE)");
 
@@ -112,9 +118,18 @@ export class AudioBroker {
       case IPCMethodAPI.AudioTwoWayIPC.phoneticsParse:
         console.log("retrieving phonetics translation");
           
-        return this.audioManager.PhoneticsParse(arg.content[0], arg.content[1]);
+        return this.audioManager.PhoneticsParse(arg.content[0]);
 
       break;
+
+      
+      case IPCMethodAPI.AudioTwoWayIPC.getJyutping:
+        console.log("retrieving phonetics translation");
+          
+        return this.audioManager.PhoneticsGetJyutping();
+
+      break;
+
 
       default:
         console.log("ERROR: AUDIO BROKER (INVALID RESPONSE): " + arg);
