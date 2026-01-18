@@ -1,8 +1,8 @@
-import { SongLyricAPIData, SongMetaDataSimple } from "../../../../../types";
+import { SongLyricAPIData, SongMetaDataSimple, SupportedRomanizationOptions } from "../../../../../types";
 import { AudioLocalLyricReader } from "./audioLocalLyricReader";
 
 const axios = require('axios'); 
-const LanguageDetect = require('languagedetect');
+
 
 const THROTTLE_TIMER = 2;
 const QUERY_URL = 'https://lrclib.net/api/get?artist_name=';
@@ -12,10 +12,10 @@ const DURATION_HEADER = '&duration=';
 
 export class AudioWebLyricReader{
 
-    lngDetector: any
+    
     constructor() {
 
-        this.lngDetector = new LanguageDetect();
+        
 
         /*
         this.requestLyricData({
@@ -118,14 +118,14 @@ export class AudioWebLyricReader{
                     console.log(error.status);
                     console.error('Error Accessing LrcLib API:', error.message + " Path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"") + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length);
                     lyricData.statusCode = 200;
-                    lyricData.language = "N/A";
+                    lyricData.language = SupportedRomanizationOptions.Indeterminate;
                 }
                 else{
                     console.log(error.status);
                     console.error('final error:', error.message + " Path: " + QUERY_URL + songSearchData.artist[0].replace(/ /g,"+").replace(/&/g,"") + TRACK_HEADER + songSearchData.name.replace(/ /g,"+") + DURATION_HEADER + songSearchData.length);
                     console.error("Server Error Response");
                     lyricData.statusCode = 300;
-                    lyricData.language = "N/A";
+                    lyricData.language = SupportedRomanizationOptions.Indeterminate;
                 }
 
                 return lyricData; 
@@ -139,23 +139,10 @@ export class AudioWebLyricReader{
         if (lyricData.lyrics.length == 0 && lyricData.isInstrumental == false){
             console.log("null lyric was found");
             lyricData.statusCode = 200;  
-            lyricData.language = "N/A"; 
+            lyricData.language = SupportedRomanizationOptions.Indeterminate; 
         }
         else{
             lyricData.statusCode = 100;
-
-            if (lyricData.isInstrumental == false){
-                try{
-                    lyricData.language = this.lngDetector.detect(lyricData.lyrics.toString().replace(/,/g,""))[0][0];
-                }
-                catch{
-                    lyricData.language = "N/A";
-                }
-                
-            }
-            else{
-                lyricData.language = "N/A";
-            }
         }
         //console.log(lyricData.lyrics.toString().replace(/,/g,"."));
         //console.log("LYRIC LANGUAGE: " + this.lngDetector.detect(lyricData.lyrics.toString().replace(/,/g,". ")));

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { ActiveSongListState, SongLyricAPIData, SongMetaData, SongMetaDataSimple } from '../../types'
+import { ActiveSongListState, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SupportedRomanizationOptions } from '../../types'
 
 import placeholderImage from '../../../assets/music_no_thumbnail.png';
 
@@ -72,7 +72,8 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
     genre: [],
     playCount: 0,
     bitrate: 0,
-    songRawPath: ''
+    songRawPath: '',
+    comments: ''
   },
   setSelectedPlaySongMetaData: (newSelectedPlaySongMetaData) =>set((state) => ({ selectedPlaySongMetaData: newSelectedPlaySongMetaData })),
   playState: false, 
@@ -115,7 +116,9 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
     lyrics: [],
     isInstrumental: false,
     statusCode: 0,
-    language: ''
+    language: SupportedRomanizationOptions.Indeterminate,
+    local: false,
+    romanization: undefined
   }, 
   setCurrentLyricData: (newCurrentLyricData) =>set((state) => ({ currentLyricData: newCurrentLyricData })),
   
@@ -124,7 +127,9 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
     lyrics: [],
     isInstrumental: false,
     statusCode: 0,
-    language: ''
+    language: SupportedRomanizationOptions.Indeterminate,
+    local: false,
+    romanization: undefined
   }, 
   setCurrentTranslatedLyricData: (newCurrentTranslatedLyricData) =>set((state) => ({ currentTranslatedLyricData: newCurrentTranslatedLyricData })),
 
@@ -133,7 +138,9 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
     lyrics: [],
     isInstrumental: false,
     statusCode: 0,
-    language: ''
+    language: SupportedRomanizationOptions.Indeterminate,
+    local: false,
+    romanization: undefined
   }, 
   setCurrentPhoneticLyricData: (newCurrentPhoneticLyricData) =>set((state) => ({ currentPhoneticLyricData: newCurrentPhoneticLyricData })),
 

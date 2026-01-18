@@ -12,13 +12,18 @@ type SongConversion = {
     needToBeConvertedToMP3: boolean
 }
 
-export class AudioEdditLibraryConverter {
+export class AudioEditLibraryConverter {
   constructor() {
 
   }
 
-  async GetListOfSongs(){
+  async ConvertSongs(songList: SongMetaDataSimple){
     var conversion = {} as SongConversion[];
+
+    for (var i = 0; i < songList.length; i++){
+      //songList[i]
+    }
+
   }
   
 }

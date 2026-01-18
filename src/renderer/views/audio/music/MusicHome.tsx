@@ -28,7 +28,8 @@ export const Layout = () => {
         playCount: 0,
         bitrate: 0,
         songRawPath: '',
-        album: ''
+        album: '',
+        comments: ''
     });
 
     const metaData = useSelectedSongStore((state) => state.allSongMetaData);

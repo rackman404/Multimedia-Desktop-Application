@@ -4,7 +4,7 @@ import path from "path";
 import { AudioMetadataReader } from "./audioMetadataReader";
 
 import * as fs from "fs" 
-import { DeepLStatistics, DEFAULTSONGMETADATASIMPLE, MiscData, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SongSearchTypeState } from "../../../types";
+import { DeepLStatistics, DEFAULTSONGMETADATASIMPLE, MiscData, SettingParameters, SongLyricAPIData, SongMetaData, SongMetaDataSimple, SongSearchTypeState, SupportedRomanizationOptions } from "../../../types";
 import { CONFIGFILE, MISCDATAFILE, PRODUCTIONMUSICFILEDIRECTORY } from "../../main";
 import { AudioWebLyricReader } from "./lyrics/reader/audioWebLyricReader";
 import { AudioDeepLTranslator } from "./lyrics/audioDeepLTranslator";
@@ -147,7 +147,7 @@ export class AudioManager{
     }
     */
 
-    async getSpecifiedSongDataFull(id: number, song_path: string): Promise<SongMetaDataSimple | undefined>{
+    async getSpecifiedSongDataFull(id: number, song_path: string): Promise<SongMetaData | undefined>{
         //var songsPath = fs.readdirSync(this.fileMusicPath); //remove?
         var songDataFull: SongMetaData;
 
@@ -259,14 +259,14 @@ export class AudioManager{
         return jsonData.lastPlayedSong;
     }
 
-    async PhoneticsParse(lyrics: SongLyricAPIData): Promise<SongLyricAPIData | undefined>{
-        var phonetics = this.audioPhonetics.requestPhonetics(lyrics);
+    async PhoneticsParse(lyrics: SongLyricAPIData, songData: SongMetaDataSimple): Promise<SongLyricAPIData | undefined>{
+        var phonetics = this.audioPhonetics.requestPhonetics(lyrics, songData);
 
         return phonetics;
     }
 
-    async PhoneticsSetJyutping(jyutping: boolean){
-        this.audioPhonetics.setJyutping(jyutping);
+    async PhoneticsSetJyutping(Romanization: SupportedRomanizationOptions){
+        this.audioPhonetics.setJyutping(Romanization);
     }
 
     async PhoneticsGetJyutping(){
@@ -275,4 +275,13 @@ export class AudioManager{
         return phonetics;
     }
 
+    async PhoneticsSetForcedRomanizationOverride(RomanizationOveride: boolean){
+        this.audioPhonetics.setForcedRomanizationOverride(RomanizationOveride);
+    }
+
+    async PhoneticsGetForcedRomanizationOverride(){
+        var phonetics = this.audioPhonetics.getForcedRomanizationOverride();
+
+        return phonetics;
+    }
 }

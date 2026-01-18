@@ -26,7 +26,8 @@ export namespace IPCMethodAPI{
     export enum AudioOneWayIPC {
         //misc
         storeLastPlayedSong,
-        setJyutping
+        setJyutping,
+        setForcedRomanizationOverride
     }
 
     export enum AudioTwoWayIPC {
@@ -46,7 +47,8 @@ export namespace IPCMethodAPI{
         retrieveLastPlayedSong,
         
         //phonetics
-        getJyutping
+        getJyutping,
+        getForcedRomanizationOverride
     }
 
     export enum AudioEditOneWayIPC {

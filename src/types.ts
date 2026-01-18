@@ -37,6 +37,8 @@ export type SongMetaDataSimple = {
     playCount: number,
     bitrate: number, //in kbps (-1 if no bitrate can be provided)
 
+    comments: string,
+
     //misc data
     songRawPath: string,
 }
@@ -52,8 +54,9 @@ export const DEFAULTSONGMETADATASIMPLE = {
     genre: [''],
     playCount: 0,
     bitrate: 0,
-    songRawPath: ''
-}
+    songRawPath: '',
+    comments: ''
+} as SongMetaDataSimple
 
 export const DEFAULTSONGMETADATA: SongMetaData = {
     metadataFormat: '',
@@ -95,6 +98,7 @@ export type SongLyricAPIData = {
         300 = server failure, server was contacted and did not return a response
     */
    language: string
+   romanization: SupportedRomanizationOptions | undefined
    local: boolean
 }
 
@@ -228,3 +232,8 @@ export const SongSearchTypeStateMap: Record<SongSearchTypeState, string> = {
 };
 */
 // ---
+
+
+export enum SupportedRomanizationOptions{
+    Jyutping = "cantonese", Pinyin = "mandarin", Indeterminate = ""
+}

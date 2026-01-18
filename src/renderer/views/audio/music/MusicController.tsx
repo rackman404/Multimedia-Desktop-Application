@@ -94,7 +94,8 @@ export const Layout = () => {
                 genre: [],
                 playCount: 0,
                 bitrate: 0,
-                songRawPath: ''
+                songRawPath: '',
+                comments: '',
             }
         );
     };

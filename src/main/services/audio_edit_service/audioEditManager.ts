@@ -10,6 +10,7 @@ import { ChildProcess } from "child_process";
 import { AudioEditFFmpegController } from "./audioEditFFmpegController";
 import { ConsoleLog, ConversionData } from "../../../typesAudioEdit";
 import { IPCReturnMethodAPI, IPCServicesMessageReturnInterface, ServicesEnum } from "../../../typesIPC";
+import { AudioEditLibraryConverter } from "./audioEditLibraryConverter";
 
 const { dialog } = require('electron')
 
@@ -19,8 +20,10 @@ const { dialog } = require('electron')
 export class AudioEditManager{
     broker: AudioEditBroker;
     audioManager: AudioManager;
+    
+    audioEditLibraryConverter: AudioEditLibraryConverter;
 
-    mainWindow: BrowserWindow | undefined
+    mainWindow: BrowserWindow | undefined;
 
     //songs: SongMetaDataSimple[][] | undefined
 
@@ -30,6 +33,7 @@ export class AudioEditManager{
     constructor(audioM: AudioManager) {
         this.broker = new AudioEditBroker(this);
         this.audioManager = audioM;
+        this.audioEditLibraryConverter = new AudioEditLibraryConverter;
 
         this.FFmpegController = new AudioEditFFmpegController();
     }
@@ -146,6 +150,10 @@ export class AudioEditManager{
         this.FFmpegController.convertFile(data);
 
 
+    }
+
+    async libraryConversion(){
+        var songs = await this.audioManager.getAllSongDataSimple(false);
     }
 
 }

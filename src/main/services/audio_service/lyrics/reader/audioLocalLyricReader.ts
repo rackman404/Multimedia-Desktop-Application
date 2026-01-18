@@ -1,5 +1,5 @@
 import path from "path";
-import { SongLyricAPIData, SongMetaDataSimple } from "../../../../../types";
+import { SongLyricAPIData, SongMetaDataSimple, SupportedRomanizationOptions } from "../../../../../types";
 import * as fs from "fs" 
 
 export class AudioLocalLyricReader{
@@ -25,7 +25,7 @@ export class AudioLocalLyricReader{
         var lyricData = {} as SongLyricAPIData;
         lyricData.isInstrumental = false;
         lyricData.local = true;
-        lyricData.language = "N/A";
+        lyricData.language = SupportedRomanizationOptions.Indeterminate;
 
         var lrcPath = songSearchData.songRawPath.replace(/\.[^/.]+$/, '') + ".lrc";
         if (fs.existsSync(lrcPath)) { //check if lrcfile exists

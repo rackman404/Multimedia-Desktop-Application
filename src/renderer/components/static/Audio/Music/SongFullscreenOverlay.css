@@ -116,32 +116,25 @@
     margin-left: auto;
     margin-right: auto;
 
-    height: 3vh;
+    height: 10vh;
     width: 50%;
 
     background: linear-gradient(to right bottom,rgb(3, 3, 3),rgb(49, 49, 49));
 
-    display: flex;
+
     justify-content: space-between;
 
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    
+
+
+    
 }
 
-/*
-.song_fullscreen_content_main_bottom_card_row{
-    display: flex;
-    flex-direction: row;
 
-    align-items: center;  
-    justify-content: space-between;
 
-    column-gap: 10vw;  
-    margin-bottom: 1vh;  
-
-    margin-left: 5vw;
-    margin-right: 5vw;
-
-}
-*/
 
 .song_fullscreen_content_main_center_container{
     height: 67vh;

@@ -1,4 +1,4 @@
-import {Accordion, AccordionDetails, AccordionSummary, Button, Card, CircularProgress, ToggleButton, Typography } from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Button, Card, CircularProgress, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, ToggleButton, Typography } from '@mui/material';
 import './SongFullscreenOverlay.css';
 import { useSelectedSongStore } from '../../../../state_stores/MusicStateStores';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CheckIcon from '@mui/icons-material/Check';
 import { IPCMethodAPI, ServicesEnum } from '../../../../../typesIPC';
+import { SupportedRomanizationOptions } from '../../../../../types';
 
 type OverlayProps = { //constructor variables
   visible: boolean
@@ -35,7 +36,8 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   const [nameMarqueeState, setNameMarqueeState] = useState(false);
 
   const [showFullImage, setShowFullImage] = useState(false);
-  const [useJyutping, setJyutping] = useState(false);
+  const [useJyutping, setJyutping] = useState(SupportedRomanizationOptions.Jyutping);
+  const [useForcedRomanizationOverride, setForcedRomanizationOverride] = useState(false);
 
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
@@ -72,8 +74,11 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   //on mount and unmount
   useEffect(() => {
     const setInitialState = async () => {
-        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.getJyutping, content: []}) as boolean;
+        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.getJyutping, content: []}) as SupportedRomanizationOptions;
         setJyutping(result);
+
+        const resultForced = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.getForcedRomanizationOverride, content: []}) as boolean;
+        setForcedRomanizationOverride(resultForced);
     }
     setInitialState()
   }, []);
@@ -81,8 +86,25 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   //on jyutping change
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage(ServicesEnum.audio,  {service: IPCMethodAPI.AudioOneWayIPC.setJyutping, content: [useJyutping]});
-    
   }, [useJyutping]);
+
+  //on forced override change
+  useEffect(() => {
+    window.electron.ipcRenderer.sendMessage(ServicesEnum.audio,  {service: IPCMethodAPI.AudioOneWayIPC.setForcedRomanizationOverride, content: [useForcedRomanizationOverride]});
+  }, [useForcedRomanizationOverride]);
+
+  const handleRomanizationChange = (event: SelectChangeEvent) => {
+    var option = SupportedRomanizationOptions.Indeterminate;
+    switch(event.target.value as string){
+      case "cantonese":
+        option = SupportedRomanizationOptions.Jyutping;
+        break;
+      case "mandarin":
+        option = SupportedRomanizationOptions.Pinyin;
+        break;
+    }
+    setJyutping(option);
+  };
 
   return (
     <div className={firstLoad === false ? (visible === false ? 'song_fullscreen_overlay_container_hidden' : 'song_fullscreen_overlay_container') : 'song_fullscreen_overlay_container_hidden_first_load'}>
@@ -132,13 +154,30 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
           </AccordionSummary>
           
           <AccordionDetails>
-            <Typography color="white"> Chinese (Use Jyutping?): <ToggleButton
-              value="check"
-              selected={useJyutping}
-              onChange={() => setJyutping((prevSelected) => !prevSelected)}
-            ></ToggleButton></Typography>
+            <Typography color="white"> Override Option: </Typography>
+
+            <FormControl fullWidth >
+                <Select
+                  MenuProps={{ //it will be behind everything without this https://stackoverflow.com/questions/56831215/customize-the-z-index-of-the-react-material-ui-select-backdrop 
+                      style: {zIndex: 35000}
+                  }}
+                  labelId="roman-label"
+                  id="roman-select"
+                  value={useJyutping}
+                  label="Romanization"
+                  onChange={handleRomanizationChange}
+                >
+                  <MenuItem value={SupportedRomanizationOptions.Jyutping}>Jyutping</MenuItem>
+                  <MenuItem value={SupportedRomanizationOptions.Pinyin}>Pinyin</MenuItem>
+                </Select>
+              </FormControl>
             <br/>
-            <Typography color="white"> Manual Override:</Typography>
+            <Typography color="white"> Manual Override: <ToggleButton
+              value="check"
+              selected={useForcedRomanizationOverride}
+              onChange={() => setForcedRomanizationOverride((prevSelected) => !prevSelected)}
+            >
+            </ToggleButton></Typography>
             <br/>
             <Typography color="white"> Fit Cover to Back: <ToggleButton
               value="check"
@@ -146,7 +185,7 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
               onChange={() => setShowFullImage((prevSelected) => !prevSelected)}
             >
             </ToggleButton> </Typography> 
-
+ 
           </AccordionDetails>
         </Accordion>
       </div>
@@ -182,9 +221,11 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
           </div>
 
           <Card variant='outlined' className='song_fullscreen_content_main_bottom_card'>
+            
             <div>Translated: {currentTranslatedLyricData.lyrics === undefined ? <IndeterminateCheckBoxOutlinedIcon/> : <CheckBoxIcon/>} </div>
-            <div>Status</div>
             <div>Romanized: {currentPhoneticsLyricData.lyrics === undefined ? <IndeterminateCheckBoxOutlinedIcon/> : <CheckBoxIcon/>} </div>
+
+            <div> Romanization Type: </div><div>{currentPhoneticsLyricData.romanization === undefined ?  <div> N/A </div> : <Typography color="white"> ({currentPhoneticsLyricData.romanization}) </Typography> } </div>
           </Card>
 
 

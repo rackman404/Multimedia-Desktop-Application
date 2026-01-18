@@ -4,7 +4,8 @@ import { AudioManager } from "./audioManager";
 
 import {Howl, Howler} from 'howler';
 import { IPCMethodAPI, IPCServicesMessageInterface } from "../../../typesIPC";
-import { SongMetaDataSimple } from "../../../types";
+import { SongLyricAPIData, SongMetaDataSimple, SupportedRomanizationOptions } from "../../../types";
+
 
 
 export class AudioBroker {
@@ -23,10 +24,12 @@ export class AudioBroker {
         this.audioManager.storeLastPlayedSong(arg.content[0] as SongMetaDataSimple);
         break;
 
-        
       case IPCMethodAPI.AudioOneWayIPC.setJyutping:
-        console.log("setting jyutping");
-        this.audioManager.PhoneticsSetJyutping(arg.content[0] as boolean);
+        console.log("setting romanization as: " + arg.content[0] as SupportedRomanizationOptions);
+        this.audioManager.PhoneticsSetJyutping(arg.content[0] as SupportedRomanizationOptions);
+      case IPCMethodAPI.AudioOneWayIPC.setForcedRomanizationOverride:
+        console.log("setting romanization override");
+        this.audioManager.PhoneticsSetForcedRomanizationOverride(arg.content[0] as boolean);
       break;
 
       default:
@@ -118,7 +121,7 @@ export class AudioBroker {
       case IPCMethodAPI.AudioTwoWayIPC.phoneticsParse:
         console.log("retrieving phonetics translation");
           
-        return this.audioManager.PhoneticsParse(arg.content[0]);
+        return this.audioManager.PhoneticsParse(arg.content[0] as SongLyricAPIData, arg.content[1] as SongMetaDataSimple);
 
       break;
 
@@ -127,6 +130,13 @@ export class AudioBroker {
         console.log("retrieving phonetics translation");
           
         return this.audioManager.PhoneticsGetJyutping();
+
+      break;
+
+      case IPCMethodAPI.AudioTwoWayIPC.getForcedRomanizationOverride:
+        console.log("retrieving phonetics translation");
+          
+        return this.audioManager.PhoneticsGetForcedRomanizationOverride();
 
       break;
 

@@ -104,18 +104,7 @@ export const SongTableTopBar = ({scrollToElementInTableRef, currentSongIDRef, in
 
         setSearchButtonState(true);
 
-        setSelectedPlayMetaData({
-            metadataFormat: "",
-            id: 0,
-            name: "",
-            length: 0,
-            artist: [],
-            album: "",
-            genre: [],
-            playCount: 0,
-            bitrate: 0,
-            songRawPath: ""
-        });
+        setSelectedPlayMetaData(DEFAULTSONGMETADATASIMPLE);
     }
 
     return (

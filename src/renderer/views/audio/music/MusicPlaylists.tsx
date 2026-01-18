@@ -19,7 +19,8 @@ export const Layout = () => {
           playCount: 0,
           bitrate: 0,
           songRawPath: '',
-          album: ''
+          album: '',
+          comments: ''
       });
   
     const selectedPlayMetaData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);

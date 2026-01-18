@@ -37,6 +37,9 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const setCurrentTranslatedLyricData = useSelectedSongStore((state) => state.setCurrentTranslatedLyricData);
 
+  const currentSongData = useSelectedSongStore((state) => state.selectedPlaySongMetaData);
+
+
   const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
   const setCurrentPhoneticsLyricData = useSelectedSongStore((state) => state.setCurrentPhoneticLyricData);
 
@@ -55,6 +58,12 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
     };
   
   }, [currentTranslatedLyricData, currentPhoneticsLyricData]);
+
+
+  useEffect(() => {
+    console.log("COMMENT IS: " + currentSongData.comments);
+  
+  }, [currentSongData]);
 
   function renderMainSwitch() {
     switch(usePhonetics) {
@@ -265,7 +274,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
         console.log("lyric data is undefined!, cannot add phonetics data");
       }
       else{
-        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.phoneticsParse, content: [lyricData, true]}) as SongLyricAPIData;
+        const result = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.phoneticsParse, content: [lyricData, currentSongData]}) as SongLyricAPIData;
         setCurrentPhoneticsLyricData(result);
       }
   }
@@ -276,7 +285,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
         {translated === false ? <div>
             <div className='lyric_headers'>
               <Typography color="white"> Synced Lyrics {lyricData.statusCode === 400 ? <Typography color= "grey"> Loading </Typography> : (lyricData.statusCode === 100 ? <Typography color={lyricData.local === false ? "green" : "yellow"}> ({lyricData.local === false ? "Extracted Online" : "Extracted Locally" })  </Typography> : <Typography color="red"> (No Lyrics Found) </Typography>) }  </Typography>
-              <Typography color="white"> Detected Language: {lyricData.language}  </Typography>
+              <Typography color="white"> Detected Language: {lyricData.language} </Typography>
             </div>
             <br/>
             <Divider/> 

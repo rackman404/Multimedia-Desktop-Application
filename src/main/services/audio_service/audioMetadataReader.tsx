@@ -107,8 +107,10 @@ export class AudioMetadataReader{
         sMetadata.genre = metadata.common.genre ?? ["N/A"];
         sMetadata.album = metadata.common.album ?? "N/A";
 
+        console.log("sMetadata.comment");
         if (metadata.common.comment?.length != undefined){
             sMetadata.comment = metadata.common.comment[0].text ?? "";
+            
         }
         else{
             sMetadata.comment = "";
@@ -267,10 +269,21 @@ export class AudioMetadataReader{
             sMetadata.genre = metadata.common.genre ?? ["N/A"];
             sMetadata.album = metadata.common.album ?? "N/A";
 
+            //console.log("sMetadata.comment");
+            if (metadata.common.comment?.length != undefined){
+                sMetadata.comments = metadata.common.comment[0].text ?? "";
+                
+            }
+            else{
+                sMetadata.comments = "";
+            }
+
         } catch (error: any) {
             console.error('Error parsing metadata:', error.message);
             return null;
         }
+
+        
 
         return sMetadata;   
     }

@@ -1,19 +1,25 @@
 import path from "path";
-import { SongLyricAPIData, SongMetaDataSimple } from "../../../../types";
+import { SongLyricAPIData, SongMetaDataSimple, SupportedRomanizationOptions } from "../../../../types";
 
 import { RESOURCESDIRECTORY } from "../../../main"; 
 
 import * as fs from "fs" 
 
+
+
+
 export class AudioPhonetics{
 
-    jyutPingDict: string | undefined //Cantonese phonetics/romanization
-    pinyingDict: string | undefined //Mandarin phonetics/romanization
+    jyutPingDict: string | undefined; //Cantonese phonetics/romanization
+    pinyingDict: string | undefined; //Mandarin phonetics/romanization
 
-    useJyutping: boolean
+    forcedOveride: boolean;
+    forcedOverideOption: SupportedRomanizationOptions;
 
     constructor() {
-        this.useJyutping = true;
+
+        this.forcedOveride = false;
+        this.forcedOverideOption = SupportedRomanizationOptions.Jyutping;
 
         if (fs.existsSync(path.join( RESOURCESDIRECTORY , 'cccanto-webdist.txt'))){
             console.log("JYUTPING Dict file DOES exists");
@@ -35,35 +41,84 @@ export class AudioPhonetics{
         ////var test = {lyrics:["如 ", "有", "對"]} as SongLyricAPIData;
         //var phoneTest = this.requestPhonetics(test, true);
     }
- 
-    async requestPhonetics(lyricData: SongLyricAPIData): Promise<SongLyricAPIData>{
+    
+    /**
+     * 1. determine romanization option
+     *  1.a if forced overide is enabled, ignore automatic romanization detection, else
+     *  1.b find automatic romanization detection using embedded song comments
+     * 2. perform romanization (assuming dict exists)
+     */
+    async requestPhonetics(lyricData: SongLyricAPIData, songData: SongMetaDataSimple): Promise<SongLyricAPIData>{
         var phonetics = {lyrics: [] as string[]} as SongLyricAPIData;
         //var count = 0; 
 
-        console.log("READING JYUTPING");
+        var romanizationOption = this.forcedOverideOption;
+        if (this.forcedOveride == false){
+            romanizationOption = this._determineRomanization(songData.comments);
 
-        if (this.useJyutping == true){
-           phonetics = await this._requestFullJyutping (lyricData);
+            if (romanizationOption == SupportedRomanizationOptions.Indeterminate){ //default to forced option if cannot find
+                console.log("COULD NOT FIND ROMANIZATION SPECIFICATION IN COMMENTS");
+                romanizationOption = this.forcedOverideOption;
+            }
         }
 
-        else if (this.useJyutping == false){
+        console.log("PERFORMING ROMANISATION: " + romanizationOption);
+
+        if (romanizationOption == SupportedRomanizationOptions.Jyutping){
+           phonetics = await this._requestFullJyutping (lyricData);
+           phonetics.romanization = SupportedRomanizationOptions.Jyutping;
+           phonetics.language = "Cantonese";
+        }
+
+        else if (romanizationOption == SupportedRomanizationOptions.Pinyin){
            phonetics = await this._requestFullPinyin (lyricData);
+           phonetics.romanization = SupportedRomanizationOptions.Pinyin;
+           phonetics.language = "Mandarin";
         }
 
         console.log("LINE COUNT: " + phonetics.lyrics.length);
         for (var i = 0; i < phonetics.lyrics.length; i++){ //for each character in lyric line
-            console.log("reading line " + i + " as: " + phonetics.lyrics[i]);
+            //console.log("reading line " + i + " as: " + phonetics.lyrics[i]);
         }
 
         return phonetics;
     }
 
-    async setJyutping(useJyutping: boolean){
-        this.useJyutping = useJyutping;
+    async setJyutping(romanization: SupportedRomanizationOptions){ //cannot be bothered to rename this shit
+        this.forcedOverideOption = romanization;
     }
 
     async getJyutping(){
-        return this.useJyutping;
+        return this.forcedOverideOption;
+    }
+
+    async setForcedRomanizationOverride(romanizationOverride: boolean){ //cannot be bothered to rename this shit
+        this.forcedOveride = romanizationOverride;
+    }
+
+    async getForcedRomanizationOverride(){
+        return this.forcedOveride;
+    }
+
+    _determineRomanization(commentString : string): SupportedRomanizationOptions{
+        if (commentString != undefined){
+            console.log("Determining Romanization: " + commentString);
+
+            //ultra dog shit if else chain
+            if (commentString.includes(SupportedRomanizationOptions.Jyutping)){
+                console.log("Cantonese Detected");
+                return SupportedRomanizationOptions.Jyutping;
+            }
+            else if (commentString.includes(SupportedRomanizationOptions.Pinyin)){
+                console.log("Mandarin Detected");
+                return SupportedRomanizationOptions.Pinyin;
+            }
+        }
+        else{
+            console.log("No Comment String: " + commentString);
+        }
+
+        return SupportedRomanizationOptions.Indeterminate;
     }
 
     async _requestFullJyutping(lyricData: SongLyricAPIData): Promise<SongLyricAPIData>{
@@ -111,12 +166,12 @@ export class AudioPhonetics{
 
                                 index++;
                             }
-                            console.log(dataLine);
+                            //console.log(dataLine);
 
                             var regExp = /\{([^)]+)\}/;
                             var jyutpingRead = regExp.exec(dataLine);
 
-                            console.log(jyutpingRead?.at(1));
+                            //console.log(jyutpingRead?.at(1));
 
                             tempPhoneticLine += jyutpingRead?.at(1) + " ";
                         }
@@ -132,7 +187,7 @@ export class AudioPhonetics{
                     tempPhoneticLine += tempCharList[j];  
                 }
             }
-            console.log(tempPhoneticLine);
+            //console.log(tempPhoneticLine);
             phonetics.lyrics.push(tempPhoneticLine);
             
             await new Promise((resolve) => setTimeout(resolve)); //more or less yielding back to the main control flow every so often similar to C# and Java so app doesn't hang 
@@ -154,7 +209,7 @@ export class AudioPhonetics{
 
             var tempCharList = lyricData.lyrics[i].split("");   
             var tempPhoneticLine = "";
-                
+                 
             for (var j = 0; j < tempCharList.length; j++){ //for each character in lyric line
                 
                 if (/[\u3400-\u9FBF]/.test( tempCharList[j] )){ //if a chinese character
@@ -179,12 +234,12 @@ export class AudioPhonetics{
 
                             index++;
                         }
-                        console.log(dataLine);
+                        //console.log(dataLine);
 
                         var regExp = /\[([^)]+)\]/;
                         var jyutpingRead = regExp.exec(dataLine);
 
-                        console.log(jyutpingRead?.at(1));
+                        //console.log(jyutpingRead?.at(1));
 
                         tempPhoneticLine += jyutpingRead?.at(1) + " ";
                         
@@ -200,7 +255,7 @@ export class AudioPhonetics{
                     tempPhoneticLine += tempCharList[j];  
                 }
             }
-            console.log(tempPhoneticLine);
+            //console.log(tempPhoneticLine);
             phonetics.lyrics.push(tempPhoneticLine);
             
             await new Promise((resolve) => setTimeout(resolve)); //more or less yielding back to the main control flow every so often similar to C# and Java so app doesn't hang 
@@ -225,7 +280,7 @@ export class AudioPhonetics{
 
                 index++;
             }
-            console.log("PINYIN: " + dataLine);
+            //console.log("PINYIN: " + dataLine);
 
             var regExp = /\[([^)]+)\]/;
             var jyutpingRead = regExp.exec(dataLine);
