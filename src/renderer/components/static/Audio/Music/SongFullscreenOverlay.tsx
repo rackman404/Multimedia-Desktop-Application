@@ -118,6 +118,9 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
       case "mandarin":
         option = SupportedRomanizationOptions.Pinyin;
         break;
+      case "hokkien":
+        option = SupportedRomanizationOptions.Hokkien;
+        break;
     }
     setJyutping(option);
   };
@@ -183,8 +186,9 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
                   label="Romanization"
                   onChange={handleRomanizationChange}
                 >
-                  <MenuItem value={SupportedRomanizationOptions.Jyutping}>Jyutping</MenuItem>
-                  <MenuItem value={SupportedRomanizationOptions.Pinyin}>Pinyin</MenuItem>
+                  <MenuItem value={SupportedRomanizationOptions.Jyutping}>Chinese: Jyutping</MenuItem>
+                  <MenuItem value={SupportedRomanizationOptions.Pinyin}>Chinese: Pinyin</MenuItem>
+                  <MenuItem value={SupportedRomanizationOptions.Hokkien}>Chinese: Hokkien (Embree)</MenuItem>
                 </Select>
               </FormControl>
             <br/>

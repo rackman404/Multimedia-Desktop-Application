@@ -43,7 +43,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
   const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
   const setCurrentPhoneticsLyricData = useSelectedSongStore((state) => state.setCurrentPhoneticLyricData);
 
-  const [usePhonetics, setUsePhonetics] = useState(0);
+  const [usePhonetics, setUsePhonetics] = useState("translated");
 
   const [canUseBoth, setCanUseBoth] = useState(false);
   
@@ -64,8 +64,12 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
       if (lyricData.statusCode == 100 && (lyricData.lyrics != undefined) && autoTranslateAndRomanize == true && translated == true){// check for translated too since this component is used twice (this use effect wouldd otherwise do this action twice)
         console.log(lyricData.lyrics);
         console.log("AUTO TRANSLATING AND ROMANIZING");
+        
         requestTranslation();
         requestPhonetics();
+        setUsePhonetics("both");
+
+
       }
       else{ //also refresh phonetics data
         setNextPhoneticsLyrics([] as string[]);
@@ -83,7 +87,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
   function renderMainSwitch() {
     switch(usePhonetics) {
-      case 0: //translation
+      case "translated": //translation
         return (nextTranslatedLyrics.map((lyric) => 
 
               <div>
@@ -97,7 +101,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
               )  
               
             );
-      case 1: //phonetics
+      case "phonetics": //phonetics
         return ( NextPhoneticsLyric.map((lyric) => 
 
                 <div>
@@ -109,7 +113,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
                 </div>
                 
                 ));
-      case 2: //both
+      case "both": //both
         return (nextTranslatedLyrics.map((lyric, index) => 
 
               <div>
@@ -128,11 +132,11 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
   function renderFirstSwitch() {
     switch(usePhonetics) {
-      case 0: //translation
+      case "translated": //translation
         return (currentTranslatedLyric);
-      case 1: //phonetics
+      case "phonetics": //phonetics
         return (currentPhoneticsLyric);
-      case 2: //both
+      case "both": //both
         return (<div style={{display:"inline"}}> {currentTranslatedLyric} <br/> <Typography color="yellow">{currentPhoneticsLyric}</Typography> </div>); //inline to prevent addition line break after div end
     }
   }
@@ -340,19 +344,19 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
               <Stack direction="row">
                 <RadioGroup
                   aria-labelledby="lyric-addon-radio-buttons-group-label"
-                  defaultValue="translation"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                       if ((event.target as HTMLInputElement).value == "translation"){
-                        setUsePhonetics(0);
+                        setUsePhonetics("translation");
                       }
                       else if ((event.target as HTMLInputElement).value == "phonetics"){
-                        setUsePhonetics(1);
+                        setUsePhonetics("phonetics");
                       }
                       else if ((event.target as HTMLInputElement).value == "both"){
-                        setUsePhonetics(2);
+                        setUsePhonetics("both");
                       }
                     }
                   }
+                  value={usePhonetics}
                   name="radio-buttons-group"
 
                    sx={{ height: "5vh", width: "auto", color: "white", textOverflow: "ellipsis"}}
