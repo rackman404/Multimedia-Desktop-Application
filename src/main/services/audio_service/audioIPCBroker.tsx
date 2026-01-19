@@ -28,10 +28,15 @@ export class AudioBroker {
         console.log("setting romanization as: " + arg.content[0] as SupportedRomanizationOptions);
         this.audioManager.PhoneticsSetJyutping(arg.content[0] as SupportedRomanizationOptions);
         break;
-        
+
       case IPCMethodAPI.AudioOneWayIPC.setForcedRomanizationOverride:
         console.log("setting romanization override");
         this.audioManager.PhoneticsSetForcedRomanizationOverride(arg.content[0] as boolean);
+      break;
+
+      case IPCMethodAPI.AudioOneWayIPC.setAllowedSubstitution:
+        console.log("setting allowed substitution");
+        this.audioManager.PhoneticsSetAllowedSubstitution(arg.content[0] as boolean);
       break;
 
       default:
@@ -139,6 +144,13 @@ export class AudioBroker {
         console.log("retrieving phonetics translation");
           
         return this.audioManager.PhoneticsGetForcedRomanizationOverride();
+
+      break;
+
+      case IPCMethodAPI.AudioTwoWayIPC.getAllowedSubstitution:
+        console.log("retrieving phonetics translation");
+          
+        return this.audioManager.PhoneticsGetAllowedSubstitution();
 
       break;
 

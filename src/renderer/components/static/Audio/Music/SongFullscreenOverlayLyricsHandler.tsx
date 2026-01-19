@@ -319,7 +319,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
         <div>
             <div className='lyric_headers'>
-              <RegularButton variant='outlined' sx={{height: "2.5vh"}}  onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography> </RegularButton>
+              <RegularButton disabled = {lyricData.statusCode === 100 ? false : true} variant='outlined' sx={{height: "2.5vh"}}  onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography> </RegularButton>
               
               <Stack direction="row">
                 <RadioGroup
@@ -347,7 +347,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
                 </RadioGroup>
               </Stack>
 
-              <RegularButton variant='outlined' sx={{height: "2.5vh"}} onClick={() => (requestPhonetics())}> <Typography fontSize={"0.75em"}  noWrap component="div"> Romanization </Typography> </RegularButton>
+              <RegularButton disabled = {lyricData.statusCode === 100 ? false : true} variant='outlined' sx={{height: "2.5vh"}} onClick={() => (requestPhonetics())}> <Typography fontSize={"0.75em"}  noWrap component="div"> Romanization </Typography> </RegularButton>
             </div>
             <br/>
             <Divider/> 

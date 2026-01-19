@@ -12,13 +12,17 @@ export class AudioPhonetics{
 
     jyutPingDict: string | undefined; //Cantonese phonetics/romanization
     pinyingDict: string | undefined; //Mandarin phonetics/romanization
+    embreeDict: string | undefined; //Hokkien phonetics/romanization
 
     forcedOveride: boolean;
     forcedOverideOption: SupportedRomanizationOptions;
 
+    allowedSubstution: boolean; //allows substitution from a different romanization dictionary if applicable (i.e use pinyin for jyutping if character not found)
+
     constructor() {
 
         this.forcedOveride = false;
+        this.allowedSubstution = false;
 
         this.forcedOverideOption = SupportedRomanizationOptions.Jyutping;
 
@@ -38,6 +42,14 @@ export class AudioPhonetics{
             console.log("PINYING Dict file does not exists");
         }
 
+        if (fs.existsSync(path.join( RESOURCESDIRECTORY , 'ChhoeTaigi_EmbreeTaiengSutian.csv'))){
+            console.log("Hokkien Dict file DOES exists");
+            this.embreeDict = fs.readFileSync(RESOURCESDIRECTORY + '/ChhoeTaigi_EmbreeTaiengSutian.csv', 'utf-8');
+        }
+        else{
+            console.log("Hokkien Dict file does not exists");
+        }
+
         //var test = {lyrics:["如何面對()TEST 誰問 暗 但 望 曾一起走過的日子", "" , " ", "有你 有我 有情 有天 有海 有地"]} as SongLyricAPIData;
         ////var test = {lyrics:["如 ", "有", "對"]} as SongLyricAPIData;
         //var phoneTest = this.requestPhonetics(test, true);
@@ -54,10 +66,11 @@ export class AudioPhonetics{
         //var count = 0; 
 
         console.log("FORCED OVERRIDE IS : "  + this.forcedOverideOption);
-        console.log("OVERRIDE LANGUAGE IS : " + this.forcedOveride + typeof(this.forcedOveride));
+        console.log("OVERRIDE LANGUAGE IS : " + this.forcedOveride + " " + typeof(this.forcedOveride));
+        console.log("ALLOWED SUBSTITUTION IS : " + this.allowedSubstution);
 
         var romanizationOption = this.forcedOverideOption;
-        
+
         if (this.forcedOveride == false){
             romanizationOption = this._determineRomanization(songData.comments);
             if (romanizationOption == SupportedRomanizationOptions.Indeterminate){ //default to forced option if cannot find
@@ -102,12 +115,20 @@ export class AudioPhonetics{
         return this.forcedOverideOption;
     }
 
-    async setForcedRomanizationOverride(romanizationOverride: boolean){ //cannot be bothered to rename this shit
+    async setForcedRomanizationOverride(romanizationOverride: boolean){
         this.forcedOveride = romanizationOverride;
     }
 
     async getForcedRomanizationOverride(){
         return this.forcedOveride;
+    }
+
+    async setAllowedSubstitution(allowedSubstution: boolean){ 
+        this.allowedSubstution = allowedSubstution;
+    }
+
+    async getAllowedSubstitution(){
+        return this.allowedSubstution;
     }
 
     _determineRomanization(commentString : string): SupportedRomanizationOptions{
@@ -150,18 +171,26 @@ export class AudioPhonetics{
                     var checkedMandarin = false;
 
                     //perform a search checking the mandarin dict if it exists (as a temporary solution to the fact many cantonese words are missing in CC-Canto)
-                    if (index == -1 && this.pinyingDict != undefined){
+                    if (index == -1 && this.pinyingDict != undefined && this.allowedSubstution == true){
+                        //console.log("Checking Mandarin");
                         var index = this.pinyingDict.search(" " + tempCharList[j] + " ");
-                        checkedMandarin = true; //note if true, we implicitly say that the mando dict exists if using this variable
+                        if (index == -1){
+                            var index = this.pinyingDict.search("\n" + tempCharList[j] + " ");
+                        }
+
+                        if (index != -1){
+                            checkedMandarin = true; //note if true, we implicitly say that the mando dict exists if using this variable
+                        }
                     }
 
                     if (index == -1){
                         var index = this.jyutPingDict.search("\n" + tempCharList[j] + " ");
                     }
-                    //console.log(index);
+                    
 
                     if (index != -1){
                         if (checkedMandarin == true){
+                            //console.log("checking: " + tempCharList[j]);
                             tempPhoneticLine += await this._requestSingularPinyin(tempCharList[j], index);
                         }
                         else{
@@ -275,6 +304,14 @@ export class AudioPhonetics{
         
         return phonetics;
     }
+
+    async _requestFullHokkien(lyricData: SongLyricAPIData): Promise<SongLyricAPIData>{ 
+        var phonetics = {lyrics: [] as string[]} as SongLyricAPIData;
+        
+        
+        return phonetics;
+    }
+
 
     async _requestSingularPinyin(char: string, index: number): Promise<string>{
         var char = "";

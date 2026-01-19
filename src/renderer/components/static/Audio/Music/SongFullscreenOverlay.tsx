@@ -38,6 +38,7 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   const [showFullImage, setShowFullImage] = useState(false);
   const [useJyutping, setJyutping] = useState(SupportedRomanizationOptions.Jyutping);
   const [useForcedRomanizationOverride, setForcedRomanizationOverride] = useState(false);
+  const [useAllowedSubstitution, setAllowedSubstitution] = useState(false);
 
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
@@ -79,6 +80,9 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
 
         const resultForced = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.getForcedRomanizationOverride, content: []}) as boolean;
         setForcedRomanizationOverride(resultForced);
+
+        const resultsub = await window.electron.ipcRenderer.invoke(ServicesEnum.audio,  {service: IPCMethodAPI.AudioTwoWayIPC.getAllowedSubstitution, content: []}) as boolean;
+        setForcedRomanizationOverride(resultsub);
     }
     setInitialState()
   }, []);
@@ -92,6 +96,11 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage(ServicesEnum.audio,  {service: IPCMethodAPI.AudioOneWayIPC.setForcedRomanizationOverride, content: [useForcedRomanizationOverride]});
   }, [useForcedRomanizationOverride]);
+
+  //on forced substitution change
+  useEffect(() => {
+    window.electron.ipcRenderer.sendMessage(ServicesEnum.audio,  {service: IPCMethodAPI.AudioOneWayIPC.setAllowedSubstitution, content: [useAllowedSubstitution]});
+  }, [useAllowedSubstitution]);
 
   const handleRomanizationChange = (event: SelectChangeEvent) => {
     var option = SupportedRomanizationOptions.Indeterminate;
@@ -176,6 +185,13 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
               value="check"
               selected={useForcedRomanizationOverride}
               onChange={() => setForcedRomanizationOverride((prevSelected) => !prevSelected)}
+            >
+            </ToggleButton></Typography>
+            <br/>
+            <Typography color="white"> Allow Substitution: <ToggleButton
+              value="check"
+              selected={useAllowedSubstitution}
+              onChange={() => setAllowedSubstitution((prevSelected) => !prevSelected)}
             >
             </ToggleButton></Typography>
             <br/>

@@ -214,7 +214,7 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
             <div style={{height: "8vh"}}>
               <div>
                 <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}> Translated Lyrics </Typography>
-                <RegularButton variant='outlined' className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography></RegularButton>
+                <RegularButton disabled = {lyricData.statusCode === 100 ? false : true} variant='outlined' className='option_button_songlyriccard' onClick={() => (requestTranslation())}><Typography fontSize={"0.75em"} noWrap component="div"> Translate Song </Typography></RegularButton>
               </div>
               
 

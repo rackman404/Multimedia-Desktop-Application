@@ -265,23 +265,33 @@ export class AudioManager{
         return phonetics;
     }
 
-    async PhoneticsSetJyutping(Romanization: SupportedRomanizationOptions){
-        this.audioPhonetics.setJyutping(Romanization);
+    async PhoneticsSetJyutping(romanization: SupportedRomanizationOptions){
+        this.audioPhonetics.setJyutping(romanization);
     }
 
-    async PhoneticsGetJyutping(){
-        var phonetics = this.audioPhonetics.getJyutping();
+    async PhoneticsGetJyutping(): Promise<SupportedRomanizationOptions>{
+        var option = this.audioPhonetics.getJyutping();
 
-        return phonetics;
+        return option;
     }
 
-    async PhoneticsSetForcedRomanizationOverride(RomanizationOveride: boolean){
-        this.audioPhonetics.setForcedRomanizationOverride(RomanizationOveride);
+    async PhoneticsSetForcedRomanizationOverride(romanizationOveride: boolean){
+        this.audioPhonetics.setForcedRomanizationOverride(romanizationOveride);
     }
 
-    async PhoneticsGetForcedRomanizationOverride(){
-        var phonetics = this.audioPhonetics.getForcedRomanizationOverride();
+    async PhoneticsGetForcedRomanizationOverride(): Promise<boolean>{
+        var override = this.audioPhonetics.getForcedRomanizationOverride();
 
-        return phonetics;
+        return override;
+    }
+
+    async PhoneticsSetAllowedSubstitution(allowedSubstitution: boolean){
+        this.audioPhonetics.setAllowedSubstitution(allowedSubstitution);
+    }
+
+    async PhoneticsGetAllowedSubstitution(): Promise<boolean>{
+        var sub = this.audioPhonetics.getAllowedSubstitution();
+
+        return sub;
     }
 }
