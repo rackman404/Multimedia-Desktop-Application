@@ -57,6 +57,9 @@ interface ISelectedSongState {
   currentPhoneticLyricData: SongLyricAPIData
   setCurrentPhoneticLyricData: (currentPhoneticLyricData: SongLyricAPIData) => void
 
+  autoTranslateAndRomanize: boolean
+  setAutoTranslateAndRomanize: (autoTranslateAndRomanize: boolean) => void
+
   analyserNode: AnalyserNode | null
   setAnalyserNode: (analyserNode: AnalyserNode) => void
 }
@@ -107,6 +110,9 @@ export const useSelectedSongStore = create<ISelectedSongState>((set) => ({
   setFullscreenState: (newFullScreenState) =>set((state) => ({ fullscreenState: newFullScreenState })),
   thumbnailString: placeholderImage, 
   setThumbnailString: (newThumbnalString) =>set((state) => ({ thumbnailString: newThumbnalString })),
+
+  autoTranslateAndRomanize: false,
+  setAutoTranslateAndRomanize: (newTranslate) =>set((state) => ({ autoTranslateAndRomanize: newTranslate })),
 
   lyricOffset: 0, 
   setLyricOffset: (newLyricOffset) =>set((state) => ({ lyricOffset: newLyricOffset })),

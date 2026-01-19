@@ -27,6 +27,7 @@ export class AudioDeepLTranslator{
     }
 
     async requestDeepLTranslation(songLyricData: SongLyricAPIData, deepLKey: string): Promise<SongLyricAPIData>{
+        console.log("TRANSLATING : ");
         var lyricData = {} as SongLyricAPIData;
 
         //copy the timestamps
@@ -74,8 +75,8 @@ export class AudioDeepLTranslator{
             
         })();
 
-        console.table(lyricData.timestamps);
-        console.table(lyricData.lyrics);
+        //console.table(lyricData.timestamps);
+        //console.table(lyricData.lyrics);
 
         //console.debug(await this.requestDeepLCharacterLimit(deepLKey));
 

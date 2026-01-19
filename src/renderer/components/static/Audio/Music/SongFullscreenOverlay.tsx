@@ -42,6 +42,11 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
 
   const currentTranslatedLyricData = useSelectedSongStore((state) => state.currentTranslatedLyricData);
   const currentPhoneticsLyricData = useSelectedSongStore((state) => state.currentPhoneticLyricData);
+
+  const autoTranslateAndRomanize = useSelectedSongStore((state) => state.autoTranslateAndRomanize);
+  const setAutoTranslateAndRomanize = useSelectedSongStore((state) => state.setAutoTranslateAndRomanize);
+
+
     
   //check for overflow and set a marquee if it does
   useEffect(() => {
@@ -71,6 +76,8 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
     }
     
   }, [visible]);
+
+  
 
   //on mount and unmount
   useEffect(() => {
@@ -201,6 +208,14 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
               onChange={() => setShowFullImage((prevSelected) => !prevSelected)}
             >
             </ToggleButton> </Typography> 
+            <br/>
+            Frontend Data
+            <br/>
+            <Typography color="white"> Auto Translate and Romanize: <ToggleButton
+              value="check"
+              selected={autoTranslateAndRomanize}
+              onChange={() => setAutoTranslateAndRomanize(!autoTranslateAndRomanize)}
+            ></ToggleButton> </Typography> 
  
           </AccordionDetails>
         </Accordion>

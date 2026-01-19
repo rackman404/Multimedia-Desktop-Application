@@ -46,16 +46,15 @@ export const SongLyricLiveReadout = ({sMetaData}: SongLiveLyricProps) => {
   //get new lyric data on recieving new song meta data
   useEffect(() => {
     var abort = false;
+    setCurrentPhoneticsLyricData({} as SongLyricAPIData);
+    setCurrentTranslatedLyricData({} as SongLyricAPIData);
+    currentLyricData({} as SongLyricAPIData);
+
     (async () => {
       if (sMetaData.songRawPath != ""){
         setCurrentOffset(0);
         setPreviousTimestamp(0);
-
-        currentLyricData({} as SongLyricAPIData);
-        setCurrentTranslatedLyricData({} as SongLyricAPIData);
-        setCurrentPhoneticsLyricData({} as SongLyricAPIData)
-
-        setProgressIndicator(<LinearProgress/>)
+        setProgressIndicator(<LinearProgress/>);
         
         setLyricData({lyrics: [""], timestamps: [0], statusCode: 400} as SongLyricAPIData);
         currentLyricData({lyrics: [""], timestamps: [0], statusCode: 400} as SongLyricAPIData);

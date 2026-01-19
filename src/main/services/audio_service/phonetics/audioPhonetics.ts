@@ -63,12 +63,13 @@ export class AudioPhonetics{
      */
     async requestPhonetics(lyricData: SongLyricAPIData, songData: SongMetaDataSimple): Promise<SongLyricAPIData>{
         var phonetics = {lyrics: [] as string[]} as SongLyricAPIData;
+         
         //var count = 0; 
 
         console.log("FORCED OVERRIDE IS : "  + this.forcedOverideOption);
         console.log("OVERRIDE LANGUAGE IS : " + this.forcedOveride + " " + typeof(this.forcedOveride));
         console.log("ALLOWED SUBSTITUTION IS : " + this.allowedSubstution);
-
+        console.log(lyricData.lyrics.length + " " + songData.name);
         var romanizationOption = this.forcedOverideOption;
 
         if (this.forcedOveride == false){
@@ -98,8 +99,8 @@ export class AudioPhonetics{
            phonetics.romanization = SupportedRomanizationOptions.Pinyin;
            phonetics.language = "Mandarin";
         }
-
-        console.log("LINE COUNT: " + phonetics.lyrics.length);
+ 
+        console.log("LINE COUNT: " + phonetics.lyrics.length + " of song: " + songData.name);
         for (var i = 0; i < phonetics.lyrics.length; i++){ //for each character in lyric line
             //console.log("reading line " + i + " as: " + phonetics.lyrics[i]);
         }

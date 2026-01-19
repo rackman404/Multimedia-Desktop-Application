@@ -68,7 +68,7 @@ export class UtilityManager{
             var data = '';
 
             worker.on('message', (result: any) => {
-                console.log("Result from worker: got ");
+                console.log("Result from worker: got image ");
                 resolve(result);
             });
 

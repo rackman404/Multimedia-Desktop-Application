@@ -48,6 +48,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
   const [canUseBoth, setCanUseBoth] = useState(false);
   
   const lyricData = useSelectedSongStore((state) => state.currentLyricData);
+  const autoTranslateAndRomanize = useSelectedSongStore((state) => state.autoTranslateAndRomanize);
 
   useEffect(() => {
     if (currentTranslatedLyricData.lyrics != undefined && currentPhoneticsLyricData.lyrics != undefined && canUseBoth != true){
@@ -58,6 +59,21 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
     };
   
   }, [currentTranslatedLyricData, currentPhoneticsLyricData]);
+
+  useEffect(() => { //auto translate and romanize songs
+      if (lyricData.statusCode == 100 && (lyricData.lyrics != undefined) && autoTranslateAndRomanize == true && translated == true){// check for translated too since this component is used twice (this use effect wouldd otherwise do this action twice)
+        console.log(lyricData.lyrics);
+        console.log("AUTO TRANSLATING AND ROMANIZING");
+        requestTranslation();
+        requestPhonetics();
+      }
+      else{ //also refresh phonetics data
+        setNextPhoneticsLyrics([] as string[]);
+        setCurrentPhoneticsLyric("");
+      }
+
+    
+  }, [lyricData]);
 
 
   useEffect(() => {
