@@ -54,7 +54,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
     if (currentTranslatedLyricData.lyrics != undefined && currentPhoneticsLyricData.lyrics != undefined && canUseBoth != true){
       setCanUseBoth(true);
     }
-    else if (canUseBoth != false){ //useboth condidition just in case we making unneeded updates to component
+    else if (canUseBoth != false && autoTranslateAndRomanize == false){ //useboth condidition just in case we making unneeded updates to component
       setCanUseBoth(false);
     };
   
