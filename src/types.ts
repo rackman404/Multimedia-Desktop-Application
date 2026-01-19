@@ -235,5 +235,5 @@ export const SongSearchTypeStateMap: Record<SongSearchTypeState, string> = {
 
 
 export enum SupportedRomanizationOptions{
-    Jyutping = "cantonese", Pinyin = "mandarin", Indeterminate = ""
+    Jyutping = "cantonese", Pinyin = "mandarin", Indeterminate = "", Hokkien = "hokkien"
 }

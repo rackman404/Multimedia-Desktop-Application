@@ -19,6 +19,7 @@ export class AudioPhonetics{
     constructor() {
 
         this.forcedOveride = false;
+
         this.forcedOverideOption = SupportedRomanizationOptions.Jyutping;
 
         if (fs.existsSync(path.join( RESOURCESDIRECTORY , 'cccanto-webdist.txt'))){
@@ -52,14 +53,23 @@ export class AudioPhonetics{
         var phonetics = {lyrics: [] as string[]} as SongLyricAPIData;
         //var count = 0; 
 
+        console.log("FORCED OVERRIDE IS : "  + this.forcedOverideOption);
+        console.log("OVERRIDE LANGUAGE IS : " + this.forcedOveride + typeof(this.forcedOveride));
+
         var romanizationOption = this.forcedOverideOption;
+        
         if (this.forcedOveride == false){
             romanizationOption = this._determineRomanization(songData.comments);
-
             if (romanizationOption == SupportedRomanizationOptions.Indeterminate){ //default to forced option if cannot find
                 console.log("COULD NOT FIND ROMANIZATION SPECIFICATION IN COMMENTS");
                 romanizationOption = this.forcedOverideOption;
             }
+            else{
+                console.log("FOUND SPECIFIC ROMANIZATION AS: " + romanizationOption);
+            }
+        }
+        else{
+            console.log("FORCED OVERRIDE WAS ENABLED");
         }
 
         console.log("PERFORMING ROMANISATION: " + romanizationOption);

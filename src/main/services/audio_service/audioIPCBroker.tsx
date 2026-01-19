@@ -27,6 +27,8 @@ export class AudioBroker {
       case IPCMethodAPI.AudioOneWayIPC.setJyutping:
         console.log("setting romanization as: " + arg.content[0] as SupportedRomanizationOptions);
         this.audioManager.PhoneticsSetJyutping(arg.content[0] as SupportedRomanizationOptions);
+        break;
+        
       case IPCMethodAPI.AudioOneWayIPC.setForcedRomanizationOverride:
         console.log("setting romanization override");
         this.audioManager.PhoneticsSetForcedRomanizationOverride(arg.content[0] as boolean);
