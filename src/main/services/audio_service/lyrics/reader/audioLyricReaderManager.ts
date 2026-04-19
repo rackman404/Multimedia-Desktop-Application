@@ -1,4 +1,4 @@
-import { SongLyricAPIData, SongMetaDataSimple } from "../../../../../types";
+import { SongLyricAPIData, SongMetaDataSimple, SupportedRomanizationOptions } from "../../../../../types";
 import { AudioLocalLyricReader } from "./audioLocalLyricReader";
 import { AudioWebLyricReader } from "./audioWebLyricReader";
 const LanguageDetect = require('languagedetect');
@@ -14,6 +14,32 @@ export class AudioLyricReaderManager{
         this.lngDetector = new LanguageDetect();
     }
 
+    _determineRomanization(commentString : string): SupportedRomanizationOptions{
+        if (commentString != undefined){
+            console.log("Determining Romanization: " + commentString);
+
+            //ultra dog shit if else chain
+            if (commentString.includes(SupportedRomanizationOptions.Jyutping)){
+                console.log("Cantonese Detected");
+                return SupportedRomanizationOptions.Jyutping;
+            }
+            else if (commentString.includes(SupportedRomanizationOptions.Pinyin)){
+                console.log("Mandarin Detected");
+                return SupportedRomanizationOptions.Pinyin;
+            }
+            else if (commentString.includes(SupportedRomanizationOptions.Hokkien)){
+                console.log("Hokkien Detected");
+                return SupportedRomanizationOptions.Hokkien;
+            }
+        }
+        else{
+            console.log("No Comment String: " + commentString);
+        }
+
+        return SupportedRomanizationOptions.Indeterminate;
+    }
+            
+
     async requestLyrics(songSearchData: SongMetaDataSimple): Promise<SongLyricAPIData>{
         var lyrics = await this.localLyricReader.requestLyricData(songSearchData);
 
@@ -23,6 +49,7 @@ export class AudioLyricReaderManager{
 
         if (lyrics.statusCode == 100){
             if (lyrics.isInstrumental == false){
+                
                 try{
                     //Asian detection
                     var totalChar = 0;
@@ -55,6 +82,8 @@ export class AudioLyricReaderManager{
                 lyrics.language = "";
             }
         }
+
+        lyrics.romanization = this._determineRomanization(songSearchData.comments); //patched this in specifically so we know to translate to cantonese if manually noted in embedded comments
 
         return lyrics;
 

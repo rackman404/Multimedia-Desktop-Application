@@ -87,6 +87,7 @@ export type NyaaWebData = {
 }
 
 export type SongLyricAPIData = {
+    raw: string
     timestamps: number[]
     lyrics: string[]
     isInstrumental: boolean

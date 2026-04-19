@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_Documentation/Tech Stack.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tech Stack"
+              "title": "README"
             }
           }
         ]
@@ -169,30 +169,33 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "7bd1d0489d670343",
+  "active": "4dcf2c47f539969c",
   "lastOpenFiles": [
-    "src/main/services/audio_service/lyrics/audioRomajiTranslator.ts",
-    "release/build/win-unpacked/music",
-    "release/build/win-unpacked/ffmpeg_conversions",
-    "release/build/win-unpacked/config/misc_data.json",
-    "release/build/win-unpacked/config/database.db",
-    "release/build/win-unpacked/config/config.json",
-    "release/build/win-unpacked/config",
+    "_sample_development_folder/app_resources/ChhoeTaigi_MaryknollTaiengSutian.csv",
+    "_sample_development_folder/sample_music/Test Recursive Folder/Chinese/01 浸春蕪.flac",
     "release/build/latest.yml",
     "release/build/builder-debug.yml",
     "release/build/MultimediaCenter Setup 0.1.0.exe.blockmap",
     "release/build/__uninstaller-nsis-multimedia-center-main.exe",
+    "release/build/MultimediaCenter Setup 0.1.0.exe",
+    "release/build/multimedia-center-main-0.1.0-x64.nsis.7z",
+    "release/build/win-unpacked/MultimediaCenter.exe",
     "release/build/win-unpacked/resources/assets/icons/old/96x96.png",
     "release/build/win-unpacked/resources/assets/icons/old/64x64.png",
     "release/build/win-unpacked/resources/assets/icons/old/512x512.png",
+    "release/build/win-unpacked/resources/assets/icons/old/256x256.png",
     "release/build/win-unpacked/resources/assets/icons/old/48x48.png",
     "release/build/win-unpacked/resources/assets/icons/old/32x32.png",
-    "release/build/win-unpacked/resources/assets/icons/old/256x256.png",
     "release/build/win-unpacked/resources/assets/icons/old/24x24.png",
     "release/build/win-unpacked/resources/assets/icons/old/16x16.png",
-    "release/build/win-unpacked/resources/assets/icons/old/128x128.png",
     "release/build/win-unpacked/resources/assets/icons/old/1024x1024.png",
+    "release/build/win-unpacked/resources/assets/icons/old/128x128.png",
+    "release/build/win-unpacked/resources/app.asar.unpacked/out/Release/node_sqlite3.node",
+    "release/build/win-unpacked/resources/assets/temp/arrayBufferToBase64.js",
+    "cantonese.org/about.html.md",
     "README.md",
+    "_Documentation/Technical/Modules/Audio/FFmpeg/README.md",
+    "_Documentation/Tech Stack.md",
     "node_modules/languagedetect/README.md",
     "node_modules/languagedetect/History.md",
     "node_modules/astral-regex/readme.md",
@@ -202,20 +205,17 @@
     "_Documentation/Technical/Modules/Audio/Music/README.md",
     "_Documentation/Technical/Modules/Discord/README.md",
     "_Documentation/Technical/Modules/Video/Nyaa/README (TBD).md",
-    "_Documentation/Technical/Modules/Audio/FFmpeg/README.md",
     "_Documentation/Technical/Common/Build Process/README.md",
     "_Documentation/Technical/Common/Database and Other Storage/README.md",
     "_Documentation/Technical/Common/Inter Process Communication (IPC)/README.md",
     "_Documentation/Technical/Common/Module Development/README.md",
     "_Documentation/README.md",
-    "_Documentation/Tech Stack.md",
     "_Documentation/Non_Technical/Softwfare.md",
     "_Documentation/Non_Technical/Software.md",
     "_Documentation.md",
     "_Documentation/FAQ.md",
     "license-shield.md",
     "node_modules/mkdirp-classic/README.md",
-    "node_modules/simple-get/README.md",
-    "node_modules/deep-extend/CHANGELOG.md"
+    "node_modules/simple-get/README.md"
   ]
 }

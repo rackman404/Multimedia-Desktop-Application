@@ -43,7 +43,7 @@ export class AudioWebLyricReader{
                 lyricData.isInstrumental = data['instrumental'];
                 lyricData.lyrics = []
                 lyricData.timestamps = []
-
+                
 
                 //code below will fix formatting (i.e remove carriage return), then splits raw synced lyrics into a list of timestamps and corresponding lyrics
                 data['syncedLyrics'] = data['syncedLyrics'].replace(/[\r]/g, ''); //remove carriage return (if any)
@@ -55,6 +55,8 @@ export class AudioWebLyricReader{
                 data['syncedLyrics'] = data['syncedLyrics'].replace(/(\r\n|\r|\n){2}/g, '$1').replace(/(\r\n|\r|\n){3,}/g, '$1\n');
 
                 //console.debug("Raw with stripped extras:" + JSON.stringify(data['syncedLyrics']));
+
+                lyricData.raw = data['syncedLyrics'];
 
                 var lyrics =  data['syncedLyrics'].split(/\n/);
                 

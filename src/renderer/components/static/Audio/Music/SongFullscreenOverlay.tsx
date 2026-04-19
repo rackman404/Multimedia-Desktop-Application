@@ -206,14 +206,15 @@ export const SongFullscreenOverlay = ({visible}:OverlayProps) => {
             >
             </ToggleButton></Typography>
             <br/>
+            Frontend Data
+            <br/>
             <Typography color="white"> Fit Cover to Back: <ToggleButton
               value="check"
               selected={showFullImage}
               onChange={() => setShowFullImage((prevSelected) => !prevSelected)}
             >
             </ToggleButton> </Typography> 
-            <br/>
-            Frontend Data
+
             <br/>
             <Typography color="white"> Auto Translate and Romanize: <ToggleButton
               value="check"

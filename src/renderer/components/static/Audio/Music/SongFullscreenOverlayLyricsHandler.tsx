@@ -74,6 +74,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
       else{ //also refresh phonetics data
         setNextPhoneticsLyrics([] as string[]);
         setCurrentPhoneticsLyric("");
+        setUsePhonetics("translated");
       }
 
     
@@ -345,8 +346,8 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
                 <RadioGroup
                   aria-labelledby="lyric-addon-radio-buttons-group-label"
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      if ((event.target as HTMLInputElement).value == "translation"){
-                        setUsePhonetics("translation");
+                      if ((event.target as HTMLInputElement).value == "translated"){
+                        setUsePhonetics("translated");
                       }
                       else if ((event.target as HTMLInputElement).value == "phonetics"){
                         setUsePhonetics("phonetics");
@@ -361,7 +362,7 @@ export const SongFullscreenOverlayLyricsHandler = ({translated}: SongFullscreenO
 
                    sx={{ height: "5vh", width: "auto", color: "white", textOverflow: "ellipsis"}}
                 >
-                  <FormControlLabel className='lyric_headers_radio' labelPlacement='top' value="translation" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Translation </Typography>} />
+                  <FormControlLabel className='lyric_headers_radio' labelPlacement='top' value="translated" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Translation </Typography>} />
                   <FormControlLabel className='lyric_headers_radio' disabled = {canUseBoth === true ? false : true /*we note we flip the boolean cause we disable instead of enable*/} labelPlacement='top' value="both" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Both </Typography>} />
                   <FormControlLabel className='lyric_headers_radio' labelPlacement='top' value="phonetics" control={<Radio />} label={<Typography fontSize={"0.75em"}  noWrap component="div"> Romanize  </Typography>} />
                 </RadioGroup>

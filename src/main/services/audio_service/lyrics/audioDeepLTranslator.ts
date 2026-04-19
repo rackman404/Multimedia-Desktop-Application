@@ -1,6 +1,7 @@
-import { error } from "console";
-import { DeepLStatistics, SongLyricAPIData } from "../../../../types";
+import { Console, error } from "console";
+import { DeepLStatistics, SongLyricAPIData, SupportedRomanizationOptions } from "../../../../types";
 import * as deepl from 'deepl-node';
+import { loadESLint } from "eslint";
 
 
 
@@ -27,12 +28,96 @@ export class AudioDeepLTranslator{
     }
 
     async requestDeepLTranslation(songLyricData: SongLyricAPIData, deepLKey: string): Promise<SongLyricAPIData>{
-        console.log("TRANSLATING : ");
-        var lyricData = {} as SongLyricAPIData;
+    
 
+        console.log("TRANSLATING : ");
+        console.log(songLyricData);
+        console.log(songLyricData.raw);
+        var lyricData = {} as SongLyricAPIData;
         //copy the timestamps
         lyricData.timestamps = songLyricData.timestamps;
         lyricData.lyrics = [];
+
+
+        //console.log(songLyricData.lyrics);
+
+        const deeplClient = new deepl.DeepLClient(deepLKey, optionsApplication);
+
+        await (async () => {
+            const targetLang: deepl.TargetLanguageCode = 'en-US';
+            const Canto: deepl.SourceLanguageCode = 'yue';
+
+            var lang = null;
+            if (songLyricData.romanization == SupportedRomanizationOptions.Jyutping){
+                lang = Canto;
+                console.log("TRANSLATING USING CANTONESE");
+            }
+
+            
+
+            const results = await deeplClient.translateText(
+                songLyricData.raw,
+                lang,
+                targetLang,
+                {
+                    splitSentences: 'nonewlines',
+                    preserveFormatting: true,
+                    //formality: 'prefer_less',
+                    modelType: 'prefer_quality_optimized',
+                    //context: 'Song Lyrics' //https://developers.deepl.com/docs/learning-how-tos/cookbook/context-parameter-examples#example-context-parameter-examples
+                }
+            ).catch((error) => {
+                console.error(error);
+            });
+
+            if (results == undefined){
+                //lyricData.lyrics = songLyricData.lyrics;  
+               
+            }
+
+            else{
+                console.log(results.text);
+                var text = results.text;
+                var lyrics =  text.split(/\n/);
+                
+                
+                //initialize the arrays
+                var prev = -1;
+                for (var i = 0; i < lyrics.length; i++){
+                    //console.log(lyrics[i]);
+                    var separated = lyrics[i].split("]");
+        
+                    var rawTimestampConversion = separated[0].replace("[", "").replace(":", ".").split(".");
+                    var timestampConversion = (parseFloat(rawTimestampConversion[0]) * 60 + parseFloat(rawTimestampConversion[1]) + parseFloat(rawTimestampConversion[2])/100);
+                    //console.debug(prev + " "+ timestampConversion);
+
+                    //some lyric files may contain duplicate timestamps (for translations of same lyrics or other purposes), this code chunk deals with it
+                    if (prev != timestampConversion){ //push normally     
+                        //min:sec:millisec
+                        lyricData.timestamps.push(timestampConversion);
+                        lyricData.lyrics.push(separated[1]);
+                    }
+                    else{ //if duplicate timestamp, push the duplicated timestamp's lyrics onto the latest lyric index
+                        lyricData.lyrics[(lyricData.lyrics.length - 1)] += " - " + separated[1];
+                    }
+                    prev = timestampConversion;
+                }
+                
+               // console.log("PARSED DEEPL" + lyrics.length);
+                for (var i = 0; i < lyricData.lyrics.length; i++){
+                    //console.log(lyricData.timestamps[i] +  "::" + lyricData.lyrics[i]);
+                }
+
+            }
+            
+            
+        })();
+
+        //version where each line is read without context
+        /*
+
+
+
 
         for (var i = 0; i < songLyricData.lyrics.length; i++){ //must ensure there are no empty strings
             if (songLyricData.lyrics[i] == " " || songLyricData.lyrics[i] == ""){
@@ -40,9 +125,6 @@ export class AudioDeepLTranslator{
             }
         }
 
-        //console.log(songLyricData.lyrics);
-
-        const deeplClient = new deepl.DeepLClient(deepLKey, optionsApplication);
         
         await (async () => {
             const targetLang: deepl.TargetLanguageCode = 'en-US';
@@ -52,7 +134,8 @@ export class AudioDeepLTranslator{
                 targetLang,
                 {
                     splitSentences: 'nonewlines',
-                    formality: 'prefer_less',
+                    preserveFormatting: true,
+                    //formality: 'prefer_less',
                     modelType: 'prefer_quality_optimized',
                     //context: 'Song Lyrics' //https://developers.deepl.com/docs/learning-how-tos/cookbook/context-parameter-examples#example-context-parameter-examples
                 }
@@ -74,6 +157,7 @@ export class AudioDeepLTranslator{
             
             
         })();
+        */
 
         //console.table(lyricData.timestamps);
         //console.table(lyricData.lyrics);

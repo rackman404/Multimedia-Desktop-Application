@@ -32,6 +32,7 @@ export class AudioLocalLyricReader{
             console.log("LRC file Exists: " + lrcPath);
             
             var raw = await this.readLRCFile(lrcPath);
+            lyricData.raw = raw;
 
             var rawArray = raw.split("\n");
 

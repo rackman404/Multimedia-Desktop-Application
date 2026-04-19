@@ -73,7 +73,8 @@ export class AudioPhonetics{
                 if (this.embreeDict != undefined){
                     console.log("Test ROW: " + this.embreeDict[3].PojInput);
                 }
-
+                
+                /*
                 this._requestFullHokkien({
                     lyrics: ["草木生 春耕農忙風吹薄霧 黃鶯歌唱"],
                     timestamps: [],
@@ -83,7 +84,7 @@ export class AudioPhonetics{
                     romanization: undefined,
                     local: false
                 })
-                
+                */
             });
 
 

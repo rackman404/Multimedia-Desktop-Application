@@ -264,7 +264,10 @@ Documentation Resources:
 
 Software Resources
 - [Electron React Boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate) - Preconfigured Electron with React and Typescript support used to scaffold this project.
-- [lrclib](https://github.com/tranxuanthang/lrclib) - Very excellent lyric database hosted by a person on Github
+- [lrclib](https://github.com/tranxuanthang/lrclib) - Very excellent lyric database hosted by a person on Github.
+
+Other Resources
+- [CC-Canto](https://cantonese.org/about.html): Open source Cantonese to English dictionary for written Chinese. 
 ### Attributions
 - <a target="_blank" href="https://www.iconsdb.com/gray-icons/note-icon.html">Placeholder Music Thumbnail</a> icon by iconsdb
 - <a target="_blank" href="https://icons8.com/icon/5KnYEBMsKp29/media">Application Thumbnail</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
