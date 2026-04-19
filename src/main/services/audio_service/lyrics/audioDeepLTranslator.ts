@@ -38,6 +38,8 @@ export class AudioDeepLTranslator{
         lyricData.timestamps = songLyricData.timestamps;
         lyricData.lyrics = [];
 
+        songLyricData.raw = songLyricData.raw.replace(/\[.+?\]/igm, ''); 
+
 
         //console.log(songLyricData.lyrics);
 
@@ -78,29 +80,26 @@ export class AudioDeepLTranslator{
             else{
                 console.log(results.text);
                 var text = results.text;
+
+                
+                //code below will fix formatting (i.e remove carriage return), then splits raw synced lyrics into a list of timestamps and corresponding lyrics
+                text = text.replace(/[\r]/g, ''); //remove carriage return (if any)
+                text = text.replace(/\n\n+$/, ""); //remove trailing new line (if any)
+                text = text.replace(/\n+$/, ""); //remove trailing new line (if any)
+
+
+                //https://stackoverflow.com/questions/22962220/remove-multiple-line-breaks-n-in-javascript
+                //remove double new lines (lrclib may stack 2 which fucks the formatting) (comment line out if bugs occur)
+                text = text.replace(/(\r\n|\r|\n){2}/g, '$1').replace(/(\r\n|\r|\n){3,}/g, '$1\n');
+
+
                 var lyrics =  text.split(/\n/);
                 
                 
                 //initialize the arrays
                 var prev = -1;
                 for (var i = 0; i < lyrics.length; i++){
-                    //console.log(lyrics[i]);
-                    var separated = lyrics[i].split("]");
-        
-                    var rawTimestampConversion = separated[0].replace("[", "").replace(":", ".").split(".");
-                    var timestampConversion = (parseFloat(rawTimestampConversion[0]) * 60 + parseFloat(rawTimestampConversion[1]) + parseFloat(rawTimestampConversion[2])/100);
-                    //console.debug(prev + " "+ timestampConversion);
-
-                    //some lyric files may contain duplicate timestamps (for translations of same lyrics or other purposes), this code chunk deals with it
-                    if (prev != timestampConversion){ //push normally     
-                        //min:sec:millisec
-                        lyricData.timestamps.push(timestampConversion);
-                        lyricData.lyrics.push(separated[1]);
-                    }
-                    else{ //if duplicate timestamp, push the duplicated timestamp's lyrics onto the latest lyric index
-                        lyricData.lyrics[(lyricData.lyrics.length - 1)] += " - " + separated[1];
-                    }
-                    prev = timestampConversion;
+                    lyricData.lyrics.push(lyrics[i]);
                 }
                 
                // console.log("PARSED DEEPL" + lyrics.length);
